@@ -1,18 +1,17 @@
 {
   "name": "datastructuresandalgorithms",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Typescript Data Structures and Algorithms",
   "main": "./dist/index.js",
   "type": "module",
   "repository": {
-    "url": "https://github.com/vincitego/"
+    "url": "https://github.com/vincitego/DataStructuresAndAlgorithms/"
   },
   "scripts": {
     "start": "node .",
     "test": "mocha ./dist/tests/"
   },
   "keywords": [
-    "Typescript",
     "Data Structures",
     "Algorithms",
     "Graphs"

@@ -9,12 +9,12 @@ export enum THROTTLED_QUEUE_MODE {
 
 
 export class ThrottledQueue {
-	protected _maxRequests: number;
-	protected _perMsTimeframe: number;
-	protected _opMode: string;
+	private _maxRequests: number;
+	private _perMsTimeframe: number;
+	private _opMode: string;
 
-	protected _finishedQueue: LinkedList<number>;
-	protected _delayedSize: number;
+	private _finishedQueue: LinkedList<number>;
+	private _delayedSize: number;
 
 
 	constructor(maxRequests: number, perMsTimeframe: number, opMode: THROTTLED_QUEUE_MODE = THROTTLED_QUEUE_MODE.DELAY) {

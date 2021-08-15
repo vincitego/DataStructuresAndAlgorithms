@@ -39,6 +39,16 @@ describe('Test Linked List', () => {
 	});
 
 
+	it('Should error when trying to create Linked List from a non-iterable.', () => {
+		try {
+			const ll = LinkedList.from({} as any);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+	});
+
+
 	it('Should add 1 node after adding calling addBack', () => {
 		const ll = new LinkedList<number>();
 		ll.addBack(1);
@@ -104,19 +114,46 @@ describe('Test Linked List', () => {
 		const ll = new LinkedList<number>();
 
 		try {
-			ll.removeAt(-1) === undefined;
+			ll.removeAt(-1);
 			ok(false);
 		} catch (error) {
 			ok(true);
 		}
 		
 		try {
-			ll.removeAt(0) === undefined;
+			ll.removeAt(0);
 			ok(false);
 		} catch (error) {
 			ok(true);
 		}
 	});
+
+
+	it('Should error when using non-numeric type for functions expecting index.', () => {
+		const ll = new LinkedList<number>();
+
+		try {
+			ll.removeAt('a' as any);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+		
+		try {
+			ll.addAt('a' as any, 8);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+		
+		try {
+			ll.peekAt('a' as any);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+	});
+	
 	
 
 	it('Should return size 0 after removing last node.', () => {

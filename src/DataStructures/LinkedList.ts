@@ -1,3 +1,4 @@
+import { isIterable } from '../utility/utility.js';
 import { LinkedListNode } from './LinkedListNode.js';
 
 
@@ -20,9 +21,12 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Creates a Linked List from and iterable of elements.
-   * @param iterable Iterable to populate elements from.
+   * @param {Object} iterable Iterable to populate elements from.
+   * @returns {LinkedList<T>} A new linked list populated with items from iterable.
    */
   static from<T>(iterable: T[]): LinkedList<T> {
+    if (!isIterable(iterable)) throw new TypeError('Not an iterable');
+
     const newLinkedList = new LinkedList<T>();
 
     for (const element of iterable) {
@@ -34,7 +38,8 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Returns size of list.
+   * Returns size of linked list.
+   * @returns {number} Size of linked list.
    */
   size(): number {
     return this._size;
@@ -42,8 +47,9 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Add new node to beginning of Linked List
-   * @param value Value of new node
+   * Add new node to beginning of Linked List.
+   * @param {T} value Value of new node.
+   * @returns {LinkedList<T>} Returns self.
    */
   addFront(value: T): LinkedList<T> {
     const newNode = new LinkedListNode(value);
@@ -62,8 +68,9 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Add new node to end of Linked List
-   * @param value Value of new node
+   * Add new node to end of Linked List.
+   * @param {T} value Value of new node.
+   * @returns {LinkedList<T>} Returns self.
    */
   addBack(value: T): LinkedList<T> {
     const newNode = new LinkedListNode(value);
@@ -82,14 +89,16 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Add new node to beginning of Linked List
-   * @param index Index to add new node at
-   * @param value Value of new node
+   * Add new node to beginning of Linked List.
+   * @param {number} index Index to add new node at.
+   * @param {T} value Value of new node.
+   * @returns {LinkedList<T>} Returns self.
    */
   addAt(index: number, value: T): LinkedList<T> {
+    if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
     if (index === 0) return this.addFront(value);
     if (index === this._size) return this.addBack(value);
-    if (index > this._size || index < 0) throw new Error('Index out of range.');
+    if (index > this._size || index < 0) throw new RangeError('Index out of range.');
 
 
     const newNode = new LinkedListNode(value);
@@ -109,6 +118,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Get value at front of Linked List without removing the node.
+   * @returns {T | undefined} Value of start node.
    */
   peekFront(): T | undefined {
     return this._head?.value;
@@ -117,6 +127,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Get value at back of Linked List without removing the node.
+   * @returns {T | undefined} Value of end node.
    */
   peekBack(): T | undefined {
     return this._tail?.value;
@@ -125,9 +136,11 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Get value at given index of Linked List without removing the node.
-   * @param index Index of node to peek at.
+   * @param {number} index Index of node to peek at.
+   * @returns {T | undefined} Value of node at given index.
    */
   peekAt(index: number): T | undefined {
+    if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
     if (index >= this._size || index < 0) return undefined;
 
     let node = this._head!;
@@ -142,6 +155,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Get value at front of Linked List and remove the node.
+   * @returns {T | undefined} Value of removed node.
    */
   removeFront(): T | undefined {
     if (this._size === 0) return undefined;
@@ -158,11 +172,13 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Remove node at given index of Linked List.
-   * @param index Index of node to remove.
+   * @param {number} index Index of node to remove.
+   * @returns {T | undefined} Value of removed node.
    */
   removeAt(index: number): T {
-    if (index >= this._size || index < 0) throw new Error('Index out of range.');
+    if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
     if (index === 0) return this.removeFront()!;
+    if (index >= this._size || index < 0) throw new RangeError('Index out of range.');
 
     let previousNode = this._head!;
     let currentNode = this._head!;
@@ -182,6 +198,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Clears all nodes from Linked List.
+   * @returns {LinkedList<T>} Returns self.
    */
   clear(): LinkedList<T> {
     this._head = undefined;

@@ -25,6 +25,15 @@ describe('Test Linked List', () => {
         }
         ok(strValues === '78910');
     });
+    it('Should error when trying to create Linked List from a non-iterable.', () => {
+        try {
+            const ll = LinkedList.from({});
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+    });
     it('Should add 1 node after adding calling addBack', () => {
         const ll = new LinkedList();
         ll.addBack(1);
@@ -74,14 +83,38 @@ describe('Test Linked List', () => {
     it('Should error when removing at negative or out of range index.', () => {
         const ll = new LinkedList();
         try {
-            ll.removeAt(-1) === undefined;
+            ll.removeAt(-1);
             ok(false);
         }
         catch (error) {
             ok(true);
         }
         try {
-            ll.removeAt(0) === undefined;
+            ll.removeAt(0);
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+    });
+    it('Should error when using non-numeric type for functions expecting index.', () => {
+        const ll = new LinkedList();
+        try {
+            ll.removeAt('a');
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            ll.addAt('a', 8);
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            ll.peekAt('a');
             ok(false);
         }
         catch (error) {

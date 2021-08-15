@@ -31,3 +31,13 @@ export function sleep(milliseconds) {
         setTimeout(resolve, milliseconds);
     });
 }
+/**
+ * Tests an object to see if it is iterable.
+ * @param obj Object to test
+ * @returns {boolean} Indicating whether obj is an iterable.
+ */
+export function isIterable(obj) {
+    if (!obj)
+        return false;
+    return typeof obj[Symbol.iterator] === 'function';
+}
