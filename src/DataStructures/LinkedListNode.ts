@@ -1,14 +1,14 @@
 export class LinkedListNode<T> {
-  val: T;
+  value: T;
   next: LinkedListNode<T> | undefined;
 
 
   /**
    * Creates a new node for a Linked List.
-   * @param val Value of node.
+   * @param value Value of node.
    */
-  constructor(val: T) {
-    this.val = val;
+  constructor(value: T) {
+    this.value = value;
     this.next = undefined;
   }
 }

@@ -1,11 +1,11 @@
 import { ok } from 'assert';
-import { ThrottledQueue } from '../DataStructures/ThrottledQueue.js';
+import { ThrottledQueue, THROTTLED_QUEUE_MODE } from '../DataStructures/ThrottledQueue.js';
 import { sleep } from '../utility/utility.js';
 
 
 describe('ThrottledQueue in error mode test 1', () => {
 	it('Should error out after putting too many requests into queue', async () => {
-		const newTQ = new ThrottledQueue(5, 1000, 'error');
+		const newTQ = new ThrottledQueue(5, 1000, THROTTLED_QUEUE_MODE.ERROR);
 
 		for (let i = 1; i <= 10; i++) {
 			try {
@@ -23,7 +23,7 @@ describe('ThrottledQueue in error mode test 1', () => {
 
 describe('ThrottledQueue in error mode test 2', () => {
 	it('Should not error out after putting too many requests into queue due to inserted sleep', async () => {
-		const newTQ = new ThrottledQueue(5, 1000, 'error');
+		const newTQ = new ThrottledQueue(5, 1000, THROTTLED_QUEUE_MODE.ERROR);
 
 		for (let i = 1; i <= 5; i++) {
 			try {
@@ -50,7 +50,7 @@ describe('ThrottledQueue in error mode test 2', () => {
 
 describe('ThrottledQueue in delay mode', () => {
 	it('Should take about a little more than a second to complete', async () => {
-		const newTQ = new ThrottledQueue(5, 1000, 'delay');
+		const newTQ = new ThrottledQueue(5, 1000, THROTTLED_QUEUE_MODE.DELAY);
 		const timeStart = Date.now();
 
 		for (let i = 1; i <= 10; i++) {
