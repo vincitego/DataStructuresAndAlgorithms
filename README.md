@@ -4,11 +4,11 @@ Educating myself. Typescript, JSDoc, Mocha tests.
 
 Done:
 * Singly Linked List
-
-In Progress:
 * Throttled Queue
 
-To Do:
+In Progress:
 * Circular Buffer
+
+To Do:
 * Binary Heap
 * Suffix Array

@@ -3,76 +3,99 @@ import { LinkedList } from './LinkedList.js';
 
 
 export enum THROTTLED_QUEUE_MODE {
-	DELAY = 'delay',
-	ERROR = 'error',
+	DELAY = 0,
+	ERROR = 1,
 }
 
 
 export class ThrottledQueue {
-	private _maxRequests: number;
-	private _perMsTimeframe: number;
-	private _opMode: string;
-
-	private _finishedQueue: LinkedList<number>;
+	private _maxItems: number;
+	private _timeWindow: number;
+	private _mode: THROTTLED_QUEUE_MODE;
 	private _delayedSize: number;
+	private _finishedQueue: LinkedList<number>;
 
 
-	constructor(maxRequests: number, perMsTimeframe: number, opMode: THROTTLED_QUEUE_MODE = THROTTLED_QUEUE_MODE.DELAY) {
-		if (maxRequests <= 0) throw new Error('Max requests must be a positive integer');
-		if (perMsTimeframe <= 0) throw new Error('Timeframe in milliseconds must be a positive integer');
+	/**
+	 * Creates new Throttled Queue
+	 * @param {number} maxItems Max number of items per time window.
+	 * @param {number} timeWindow Length of time window in milliseconds.
+	 * @param {THROTTLED_QUEUE_MODE} mode Indicates whether to error out or delay execution of function when exceeding threshhold.
+	 */
+	constructor(maxItems: number, timeWindow: number, mode: THROTTLED_QUEUE_MODE = THROTTLED_QUEUE_MODE.DELAY) {
+		if (typeof maxItems !== 'number') throw new TypeError('maxItems must be a number.');
+		if (typeof timeWindow !== 'number') throw new TypeError('timeWindow must be a number.');
+		if (maxItems <= 0) throw new RangeError('Max requests must be a positive integer');
+		if (timeWindow <= 0) throw new RangeError('Timeframe in milliseconds must be a positive integer');
 
-		this._maxRequests = maxRequests;
-		this._perMsTimeframe = perMsTimeframe;
-		this._opMode = opMode;
-		this._finishedQueue = new LinkedList();
+		this._maxItems = maxItems;
+		this._timeWindow = timeWindow;
+		this._mode = mode;
 		this._delayedSize = 0;
+		this._finishedQueue = new LinkedList();
 	}
 
 
-	async add<T>(funcToCall: (...args: any[]) => T): Promise<T> {
-		if (this.size() >= this._maxRequests) {
+	/**
+	 * Adds a new function callback to the Throttle Queue.
+	 * Will resovle immediately if limit has not been hit.
+	 * Will error or delay function execution based on operating mode.
+	 * @param {function} callback Function to call.
+	 * @param {any} args Arguments to pass to the function.
+	 * @returns {Promise<T>} Promise of callback results.
+	 */
+	async add<T>(callback: (...args: any[]) => T, ...args: any[]): Promise<T> {
+		this.removeOldRequests();
 
-			if (this._opMode === THROTTLED_QUEUE_MODE.ERROR) {
-				const errMessage = `Throttle limit reached: ${this._maxRequests} per ${this._perMsTimeframe/1000} seconds.`;
-				throw new Error(errMessage);
+		if (this._finishedQueue.size() >= this._maxItems) {
+			if (this._mode === THROTTLED_QUEUE_MODE.ERROR)
+				throw new Error(`Throttle limit reached: ${this._maxItems} per ${this._timeWindow/1000} seconds.`);
 
-			} else {
-				this._delayedSize++;
 
-				do {
-					let timeToNext: number = this._finishedQueue.peekFront()! + this._perMsTimeframe + this._delayedSize - Date.now();
-					if (timeToNext <= 0) timeToNext = 1;
-					await sleep(timeToNext);
-				} while (this.size() >= this._maxRequests);
+			this._delayedSize++;
 
-				this._delayedSize--;
-				this._finishedQueue.addBack(Date.now());
-				return funcToCall();
-			}
+			do {
+				let timeToNext: number = this._finishedQueue.peekFront()! + this._timeWindow + this._delayedSize - Date.now();
+				if (timeToNext <= 0) timeToNext = 1;
+				await sleep(timeToNext);
+				this.removeOldRequests();
+			} while (this._finishedQueue.size() >= this._maxItems);
 
-		} else {
-			this._finishedQueue.addBack(Date.now());
-			return funcToCall();
+			this._delayedSize--;
 		}
+
+		this._finishedQueue.addBack(Date.now());
+		return callback(...args);
 	}
 
 
+	/**
+	 * If operating in delay mode, returns the number of function calls that have been delayed by the throttle.
+	 * @returns {number} Number of function calls delayed
+	 */
+	getDelayedSize(): number {
+		return this._delayedSize;
+	}
+
+
+	/**
+	 * Get number of function calls available before hitting throttle.
+	 * @returns {number} Number of function calls avaiable before hitting throttle.
+	 */
+	getRemainingSize(): number {
+		this.removeOldRequests();
+		return this._maxItems - this._finishedQueue.size();
+	}
+
+
+	/**
+	 * Cleans up processed requests that have exceeded current time window.
+	 */
 	removeOldRequests(): void {
-		const startTimeframe: number = Date.now() - this._perMsTimeframe;
+		const startTimeframe: number = Date.now() - this._timeWindow;
 
 		while (this._finishedQueue.peekFront() !== null && this._finishedQueue.peekFront()! < startTimeframe) {
 			this._finishedQueue.removeFront();
 		}
-	}
-
-
-	size(): number {
-		this.removeOldRequests();
-		return this._finishedQueue.size();
-	}
-
-
-	delayedSize(): number {
-		return this._delayedSize;
 	}
 }

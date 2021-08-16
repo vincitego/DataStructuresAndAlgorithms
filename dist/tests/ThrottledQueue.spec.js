@@ -8,14 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { ok } from 'assert';
-import { ThrottledQueue, THROTTLED_QUEUE_MODE } from '../DataStructures/ThrottledQueue.js';
+import { ThrottledQueue, enums } from '../index.js';
 import { sleep } from '../utility/utility.js';
-describe('ThrottledQueue in error mode test 1', () => {
+describe('Test Throttled Queue', () => {
     it('Should error out after putting too many requests into queue', () => __awaiter(void 0, void 0, void 0, function* () {
-        const newTQ = new ThrottledQueue(5, 1000, THROTTLED_QUEUE_MODE.ERROR);
+        const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.ERROR);
         for (let i = 1; i <= 10; i++) {
             try {
-                yield newTQ.add(console.info.bind(null, i));
+                ok(i === (yield tq.add(val => val, i)));
+                ok(tq.getRemainingSize() === (5 - i));
             }
             catch (err) {
                 ok(true);
@@ -24,13 +25,12 @@ describe('ThrottledQueue in error mode test 1', () => {
         }
         ok(false);
     }));
-});
-describe('ThrottledQueue in error mode test 2', () => {
-    it('Should not error out after putting too many requests into queue due to inserted sleep', () => __awaiter(void 0, void 0, void 0, function* () {
-        const newTQ = new ThrottledQueue(5, 1000, THROTTLED_QUEUE_MODE.ERROR);
+    it('Should not error out after putting too many requests into queue due to manually inserted sleep', () => __awaiter(void 0, void 0, void 0, function* () {
+        const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.ERROR);
         for (let i = 1; i <= 5; i++) {
             try {
-                yield newTQ.add(console.info.bind(null, i));
+                ok(i === (yield tq.add(val => val, i)));
+                ok(tq.getRemainingSize() === (5 - i));
             }
             catch (err) {
                 ok(false);
@@ -39,7 +39,8 @@ describe('ThrottledQueue in error mode test 2', () => {
         yield sleep(1000);
         for (let i = 1; i <= 5; i++) {
             try {
-                yield newTQ.add(console.info.bind(null, i));
+                ok(i === (yield tq.add(val => val, i)));
+                ok(tq.getRemainingSize() !== 5);
             }
             catch (err) {
                 ok(false);
@@ -47,19 +48,30 @@ describe('ThrottledQueue in error mode test 2', () => {
         }
         ok(true);
     }));
-});
-describe('ThrottledQueue in delay mode', () => {
     it('Should take about a little more than a second to complete', () => __awaiter(void 0, void 0, void 0, function* () {
-        const newTQ = new ThrottledQueue(5, 1000, THROTTLED_QUEUE_MODE.DELAY);
-        const timeStart = Date.now();
-        for (let i = 1; i <= 10; i++) {
+        const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.DELAY);
+        const shouldBeDelayedPromises = [];
+        const timeStart = performance.now();
+        for (let i = 1; i <= 5; i++) {
             try {
-                yield newTQ.add(console.info.bind(null, i));
+                ok(i === (yield tq.add(val => val, i)));
+                ok(tq.getRemainingSize() === (5 - i));
             }
             catch (err) {
                 ok(false);
             }
         }
-        ok(Date.now() - timeStart >= 1000);
+        for (let i = 1; i <= 5; i++) {
+            try {
+                shouldBeDelayedPromises.push(tq.add(val => val, i));
+                ok(tq.getDelayedSize() === i);
+                ok(tq.getRemainingSize() === 0);
+            }
+            catch (err) {
+                ok(false);
+            }
+        }
+        yield Promise.all(shouldBeDelayedPromises);
+        ok(performance.now() - timeStart >= 1000);
     }));
 });

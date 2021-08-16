@@ -1,6 +1,6 @@
 export class LinkedListNode<T> {
-  value: T;
-  next: LinkedListNode<T> | undefined;
+  public value: T;
+  public next: LinkedListNode<T> | undefined;
 
 
   /**
