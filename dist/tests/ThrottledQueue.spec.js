@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { ok } from 'assert';
 import { ThrottledQueue, enums } from '../index.js';
 import { sleep } from '../utility/utility.js';
-describe('Test Throttled Queue', () => {
+describe('Test Throttled Queue in Error mode', () => {
     it('Should error out after putting too many requests into queue', () => __awaiter(void 0, void 0, void 0, function* () {
         const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.ERROR);
         for (let i = 1; i <= 10; i++) {
@@ -48,6 +48,8 @@ describe('Test Throttled Queue', () => {
         }
         ok(true);
     }));
+});
+describe('Test Throttled Queue in Delay mode', () => {
     it('Should take about a little more than a second to complete', () => __awaiter(void 0, void 0, void 0, function* () {
         const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.DELAY);
         const shouldBeDelayedPromises = [];
@@ -73,5 +75,42 @@ describe('Test Throttled Queue', () => {
         }
         yield Promise.all(shouldBeDelayedPromises);
         ok(performance.now() - timeStart >= 1000);
+    }));
+    it('Should error out when trying to create invalid throttled queues', () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const tq = new ThrottledQueue(0, 1000, enums.THROTTLED_QUEUE_MODE.DELAY);
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const tq = new ThrottledQueue(5, 0, enums.THROTTLED_QUEUE_MODE.DELAY);
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const tq = new ThrottledQueue('a', 1000, enums.THROTTLED_QUEUE_MODE.DELAY);
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const tq = new ThrottledQueue(5, 'a', enums.THROTTLED_QUEUE_MODE.DELAY);
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const tq = new ThrottledQueue(5, 1000, 3);
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
     }));
 });

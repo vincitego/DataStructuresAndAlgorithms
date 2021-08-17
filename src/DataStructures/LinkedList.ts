@@ -22,7 +22,7 @@ export class LinkedList<T> implements Iterable<T> {
   /**
    * Creates a Linked List from and iterable of elements.
    * @param {Object} iterable Iterable to populate elements from.
-   * @returns {LinkedList<T>} A new linked list populated with items from iterable.
+   * @returns {LinkedList<T>}
    */
   static from<T>(iterable: T[]): LinkedList<T> {
     if (!isIterable(iterable)) throw new TypeError('Not an iterable');
@@ -39,7 +39,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Returns size of linked list.
-   * @returns {number} Size of linked list.
+   * @returns {number}
    */
   size(): number {
     return this._size;
@@ -118,7 +118,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Get value at front of Linked List without removing the node.
-   * @returns {T | undefined} Value of start node.
+   * @returns {T | undefined} 
    */
   peekFront(): T | undefined {
     return this._head?.value;
@@ -127,7 +127,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Get value at back of Linked List without removing the node.
-   * @returns {T | undefined} Value of end node.
+   * @returns {T | undefined} 
    */
   peekBack(): T | undefined {
     return this._tail?.value;
@@ -137,7 +137,7 @@ export class LinkedList<T> implements Iterable<T> {
   /**
    * Get value at given index of Linked List without removing the node.
    * @param {number} index Index of node to peek at.
-   * @returns {T | undefined} Value of node at given index.
+   * @returns {T | undefined} 
    */
   peekAt(index: number): T | undefined {
     if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
@@ -155,7 +155,7 @@ export class LinkedList<T> implements Iterable<T> {
 
   /**
    * Get value at front of Linked List and remove the node.
-   * @returns {T | undefined} Value of removed node.
+   * @returns {T | undefined} 
    */
   removeFront(): T | undefined {
     if (this._size === 0) return undefined;
@@ -173,7 +173,7 @@ export class LinkedList<T> implements Iterable<T> {
   /**
    * Remove node at given index of Linked List.
    * @param {number} index Index of node to remove.
-   * @returns {T | undefined} Value of removed node.
+   * @returns {T | undefined} 
    */
   removeAt(index: number): T {
     if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');

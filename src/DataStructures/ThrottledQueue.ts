@@ -27,6 +27,7 @@ export class ThrottledQueue {
 		if (typeof timeWindow !== 'number') throw new TypeError('timeWindow must be a number.');
 		if (maxItems <= 0) throw new RangeError('Max requests must be a positive integer');
 		if (timeWindow <= 0) throw new RangeError('Timeframe in milliseconds must be a positive integer');
+		if (mode !== THROTTLED_QUEUE_MODE.DELAY && mode !== THROTTLED_QUEUE_MODE.ERROR) throw new TypeError('Invalid throttled queue mode specified');
 
 		this._maxItems = maxItems;
 		this._timeWindow = timeWindow;
@@ -71,7 +72,7 @@ export class ThrottledQueue {
 
 	/**
 	 * If operating in delay mode, returns the number of function calls that have been delayed by the throttle.
-	 * @returns {number} Number of function calls delayed
+	 * @returns {number} 
 	 */
 	getDelayedSize(): number {
 		return this._delayedSize;
@@ -80,7 +81,7 @@ export class ThrottledQueue {
 
 	/**
 	 * Get number of function calls available before hitting throttle.
-	 * @returns {number} Number of function calls avaiable before hitting throttle.
+	 * @returns {number} 
 	 */
 	getRemainingSize(): number {
 		this.removeOldRequests();

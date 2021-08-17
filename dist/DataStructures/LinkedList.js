@@ -13,7 +13,7 @@ export class LinkedList {
     /**
      * Creates a Linked List from and iterable of elements.
      * @param {Object} iterable Iterable to populate elements from.
-     * @returns {LinkedList<T>} A new linked list populated with items from iterable.
+     * @returns {LinkedList<T>}
      */
     static from(iterable) {
         if (!isIterable(iterable))
@@ -26,7 +26,7 @@ export class LinkedList {
     }
     /**
      * Returns size of linked list.
-     * @returns {number} Size of linked list.
+     * @returns {number}
      */
     size() {
         return this._size;
@@ -92,7 +92,7 @@ export class LinkedList {
     }
     /**
      * Get value at front of Linked List without removing the node.
-     * @returns {T | undefined} Value of start node.
+     * @returns {T | undefined}
      */
     peekFront() {
         var _a;
@@ -100,7 +100,7 @@ export class LinkedList {
     }
     /**
      * Get value at back of Linked List without removing the node.
-     * @returns {T | undefined} Value of end node.
+     * @returns {T | undefined}
      */
     peekBack() {
         var _a;
@@ -109,7 +109,7 @@ export class LinkedList {
     /**
      * Get value at given index of Linked List without removing the node.
      * @param {number} index Index of node to peek at.
-     * @returns {T | undefined} Value of node at given index.
+     * @returns {T | undefined}
      */
     peekAt(index) {
         if (typeof index !== 'number')
@@ -124,7 +124,7 @@ export class LinkedList {
     }
     /**
      * Get value at front of Linked List and remove the node.
-     * @returns {T | undefined} Value of removed node.
+     * @returns {T | undefined}
      */
     removeFront() {
         if (this._size === 0)
@@ -139,7 +139,7 @@ export class LinkedList {
     /**
      * Remove node at given index of Linked List.
      * @param {number} index Index of node to remove.
-     * @returns {T | undefined} Value of removed node.
+     * @returns {T | undefined}
      */
     removeAt(index) {
         if (typeof index !== 'number')
