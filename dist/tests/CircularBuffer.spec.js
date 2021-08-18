@@ -12,7 +12,7 @@ import { CircularBuffer, enums } from '../index.js';
 describe('Test Circular Buffer in Error mode', () => {
     it('Initial circular buffer should be empty and fail on attempted read.', () => __awaiter(void 0, void 0, void 0, function* () {
         const cb = new CircularBuffer(5, enums.CIRCULAR_BUFFER_MODE.ERROR);
-        ok(cb.size() === 5);
+        ok(cb.maxSize() === 5);
         ok(cb.amountFilled() === 0);
         ok(cb.isBufferEmpty());
         ok(!cb.isBufferFull());
@@ -31,6 +31,13 @@ describe('Test Circular Buffer in Error mode', () => {
         ok(!cb.isBufferEmpty());
         ok(!cb.isBufferFull());
     }));
+    it('Write to circular buffer followed by call to clear should empty the buffer.', () => __awaiter(void 0, void 0, void 0, function* () {
+        const cb = new CircularBuffer(5, enums.CIRCULAR_BUFFER_MODE.ERROR);
+        cb.write(1);
+        cb.clear();
+        ok(cb.amountFilled() === 0);
+        ok(cb.isBufferEmpty());
+    }));
     it('Write one item followed by read should update values accordingly.', () => __awaiter(void 0, void 0, void 0, function* () {
         const cb = new CircularBuffer(5, enums.CIRCULAR_BUFFER_MODE.ERROR);
         cb.write(1);
@@ -47,6 +54,21 @@ describe('Test Circular Buffer in Error mode', () => {
         }
         ok(!cb.isBufferEmpty());
         ok(cb.isBufferFull());
+    }));
+    it('Write five items and peeking should return or error as expected.', () => __awaiter(void 0, void 0, void 0, function* () {
+        const cb = new CircularBuffer(5, enums.CIRCULAR_BUFFER_MODE.ERROR);
+        for (let i = 0; i < 5; i++) {
+            cb.write(i);
+        }
+        ok(cb.peek() === 0);
+        ok(cb.peekAt(4) === 4);
+        try {
+            cb.peekAt(5);
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
     }));
     it('Attempt to write six items should cause error.', () => __awaiter(void 0, void 0, void 0, function* () {
         const cb = new CircularBuffer(5, enums.CIRCULAR_BUFFER_MODE.ERROR);
@@ -76,9 +98,7 @@ describe('Test Circular Buffer in Error mode', () => {
         for (const value of cb) {
             ok(j === value);
             j++;
-            ok(cb.amountFilled() === 4 - value);
         }
-        ok(cb.isBufferEmpty());
     }));
 });
 describe('Test Circular Buffer in Overwrite mode', () => {

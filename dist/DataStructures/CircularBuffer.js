@@ -6,19 +6,19 @@ export var CIRCULAR_BUFFER_MODE;
 export class CircularBuffer {
     /**
      * Creates a Circular Buffer.
-       * @param {number} size Maximum number of nodes in buffer.
+       * @param {number} maxSize Maximum number of nodes in buffer.
        * @param {CIRCULAR_BUFFER_MODE} mode Whether to throw error or overwrite old data when buffer is full.
      */
-    constructor(size, mode = CIRCULAR_BUFFER_MODE.ERROR) {
-        if (typeof size !== 'number')
+    constructor(maxSize, mode = CIRCULAR_BUFFER_MODE.ERROR) {
+        if (typeof maxSize !== 'number')
             throw new TypeError('Size must be a number.');
-        if (size < 1)
+        if (maxSize < 1)
             throw new RangeError('Size must be greater than 0.');
         if (mode !== CIRCULAR_BUFFER_MODE.OVERWRITE && mode !== CIRCULAR_BUFFER_MODE.ERROR)
             throw new TypeError('Invalid circular buffer mode specified');
-        this._size = size;
+        this._maxSize = maxSize;
         this._mode = mode;
-        this._buffer = new Array(size + 1);
+        this._buffer = new Array(maxSize + 1);
         this._prereadIndex = 0;
         this._writeIndex = 1;
     }
@@ -26,11 +26,11 @@ export class CircularBuffer {
      * Get size of buffer.
      * @returns {number}
      */
-    size() {
-        return this._size;
+    maxSize() {
+        return this._maxSize;
     }
     /**
-     * Get oldest unread data in buffer.
+     * Get oldest unread data in buffer and remove it.
      * @returns {T}
      */
     read() {
@@ -38,6 +38,29 @@ export class CircularBuffer {
             throw new RangeError('Read failed, buffer is empty.');
         this._prereadIndex = this._incrementIndex(this._prereadIndex);
         return this._buffer[this._prereadIndex];
+    }
+    removeAt(index) {
+    }
+    /**
+     * Get oldest unread data in buffer without removing it.
+     * @returns {T}
+     */
+    peek() {
+        if (this.isBufferEmpty())
+            throw new RangeError('Peek failed, buffer is empty.');
+        return this._buffer[this._incrementIndex(this._prereadIndex)];
+    }
+    /**
+     * Get unread data at given index in buffer without removing it.
+     * @param {number} index Index offset from current location to peek at.
+     * @returns {T}
+     */
+    peekAt(index) {
+        if (this.isBufferEmpty())
+            throw new RangeError('Peek failed, buffer is empty.');
+        if (index < 0 || index >= this.amountFilled())
+            throw new RangeError('Index out of range');
+        return this._buffer[this._prereadIndex + 1 + index];
     }
     /**
      * Write data to the buffer.
@@ -54,6 +77,8 @@ export class CircularBuffer {
         this._buffer[this._writeIndex] = value;
         this._writeIndex = this._incrementIndex(this._writeIndex);
         return this;
+    }
+    writeAt(index, value) {
     }
     /**
      * Checks whether all data written so far has already been read.
@@ -78,8 +103,17 @@ export class CircularBuffer {
             return this._writeIndex - this._prereadIndex - 1;
         }
         else {
-            return this._size - this._prereadIndex + this._writeIndex;
+            return this._maxSize - this._prereadIndex + this._writeIndex;
         }
+    }
+    /**
+     * Clears the buffer.
+     * @returns {CircularBuffer<T>} Returns self.
+     */
+    clear() {
+        this._prereadIndex = 0;
+        this._writeIndex = 1;
+        return this;
     }
     /**
      * Utility function to calculate incremented index value without overflowing.
@@ -87,14 +121,15 @@ export class CircularBuffer {
      * @returns {number}
      */
     _incrementIndex(index) {
-        return (index + 1) % (this._size + 1);
+        return (index + 1) % (this._maxSize + 1);
     }
     /**
-     * Iterator to allow looping. Reads until buffer is empty.
+     * Iterator to allow looping.
      */
     *[Symbol.iterator]() {
-        while (!this.isBufferEmpty()) {
-            yield this.read();
+        const amountFilled = this.amountFilled();
+        for (let i = 1; i <= amountFilled; i++) {
+            yield this._buffer[(this._prereadIndex + i) % (this._maxSize + 1)];
         }
     }
 }

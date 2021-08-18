@@ -33,7 +33,7 @@ describe('Test Throttled Queue in Error mode', () => {
 			}
 		}
 
-		await sleep(1000);
+		await sleep(1100);
 
 		for (let i = 1; i <= 5; i++) {
 			try {

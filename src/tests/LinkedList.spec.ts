@@ -17,18 +17,9 @@ describe('Test Linked List', () => {
 	});
 
 
-	it('Should generate Linked List from an array.', () => {
-		const ll = LinkedList.from([7, 8, 9, 10]);
-
-		ok(ll.size() === 4);
-		ok(ll.peekFront() === 7);
-		ok(ll.peekBack() === 10);
-		ok(ll.peekAt(2) === 9);
-	});
-
-
 	it('Should iterate Linked List correctly.', () => {
-		const ll = LinkedList.from([7, 8, 9, 10]);
+		const ll = new LinkedList();
+		ll.addBack(7).addBack(8).addBack(9).addBack(10);
 		let strValues = '';
 
 		for (const nodeValue of ll) {
@@ -36,16 +27,6 @@ describe('Test Linked List', () => {
 		}
 
 		ok(strValues === '78910');
-	});
-
-
-	it('Should error when trying to create Linked List from a non-iterable.', () => {
-		try {
-			const ll = LinkedList.from({} as any);
-			ok(false);
-		} catch (error) {
-			ok(true);
-		}
 	});
 
 
@@ -79,7 +60,7 @@ describe('Test Linked List', () => {
 		ll.addBack(1);
 		ll.addBack(2);
 		ll.addBack(3);
-		ll.removeAt(1);
+		ok(ll.removeAt(1) === 2);
 
 		ok(ll.size() === 2);
 		ok(ll.peekFront() === 1);
@@ -160,8 +141,8 @@ describe('Test Linked List', () => {
 		const ll = new LinkedList<number>();
 		ll.addBack(1);
 		ll.addBack(2);
-		ll.removeFront();
-		ll.removeFront();
+		ok(ll.removeBack() === 2);
+		ok(ll.removeFront() === 1);
 
 		ok(ll.size() === 0);
 		ok(ll.peekFront() === undefined);

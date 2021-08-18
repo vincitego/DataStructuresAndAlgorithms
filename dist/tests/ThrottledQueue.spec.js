@@ -36,7 +36,7 @@ describe('Test Throttled Queue in Error mode', () => {
                 ok(false);
             }
         }
-        yield sleep(1000);
+        yield sleep(1100);
         for (let i = 1; i <= 5; i++) {
             try {
                 ok(i === (yield tq.add(val => val, i)));

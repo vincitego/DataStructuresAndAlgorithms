@@ -1,5 +1,20 @@
-import { isIterable } from '../utility/utility.js';
-import { LinkedListNode } from './LinkedListNode.js';
+import { defaultEquals } from '../utility/utility.js';
+
+
+class LinkedListNode<T> {
+  public value: T;
+  public next: LinkedListNode<T> | undefined;
+
+
+  /**
+   * Creates a new node for a Linked List.
+   * @param value Value of node.
+   */
+  constructor(value: T) {
+    this.value = value;
+    this.next = undefined;
+  }
+}
 
 
 export class LinkedList<T> implements Iterable<T> {
@@ -16,24 +31,6 @@ export class LinkedList<T> implements Iterable<T> {
     this._head = undefined;
     this._tail = undefined;
     this._size = 0;
-  }
-
-
-  /**
-   * Creates a Linked List from and iterable of elements.
-   * @param {Object} iterable Iterable to populate elements from.
-   * @returns {LinkedList<T>}
-   */
-  static from<T>(iterable: T[]): LinkedList<T> {
-    if (!isIterable(iterable)) throw new TypeError('Not an iterable');
-
-    const newLinkedList = new LinkedList<T>();
-
-    for (const element of iterable) {
-      newLinkedList.addBack(element);
-    }
-
-    return newLinkedList;
   }
 
 
@@ -167,6 +164,16 @@ export class LinkedList<T> implements Iterable<T> {
     if (this._size === 0) this._tail = undefined;
 
     return value;
+  }
+
+
+  /**
+   * Get value at back of Linked List and remove the node.
+   * @returns {T | undefined} 
+   */
+  removeBack(): T | undefined {
+    if (this._size === 0) return undefined;
+    return this.removeAt(this._size - 1);
   }
 
 

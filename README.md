@@ -7,9 +7,13 @@ Done:
 * Throttled Queue
 * Circular Buffer
 
-In Progress:
-* TBD
-
 To Do:
 * Binary Heap
+* Union Find
+* Binary Search Tree
+* Hash Table
+* Fenwick Tree
 * Suffix Array
+* AVL Tree
+* Indexed Priority Queue
+* Graph
