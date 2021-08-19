@@ -9,9 +9,9 @@ describe('Test Throttled Queue in Error mode', () => {
 
 		for (let i = 1; i <= 10; i++) {
 			try {
-				ok(i === await tq.add<number>(val => val, i));
+				ok(i === await tq.add<number>(val => val, undefined, i));
 				ok(tq.getRemainingSize() === (5 - i));
-			} catch (err) {
+			} catch (error) {
 				ok(true);
 				return;
 			}
@@ -26,9 +26,9 @@ describe('Test Throttled Queue in Error mode', () => {
 
 		for (let i = 1; i <= 5; i++) {
 			try {
-				ok(i === await tq.add<number>(val => val, i));
+				ok(i === await tq.add<number>(val => val, undefined, i));
 				ok(tq.getRemainingSize() === (5 - i));
-			} catch (err) {
+			} catch (error) {
 				ok(false);
 			}
 		}
@@ -37,9 +37,10 @@ describe('Test Throttled Queue in Error mode', () => {
 
 		for (let i = 1; i <= 5; i++) {
 			try {
-				ok(i === await tq.add<number>(val => val, i));
+				ok(i === await tq.add<number>(val => val, undefined, i));
 				ok(tq.getRemainingSize() !== 5);
-			} catch (err) {
+			} catch (error) {
+
 				ok(false);
 			}
 		}
@@ -57,19 +58,19 @@ describe('Test Throttled Queue in Delay mode', () => {
 
 		for (let i = 1; i <= 5; i++) {
 			try {
-				ok(i === await tq.add<number>(val => val, i));
+				ok(i === await tq.add<number>(val => val, undefined, i));
 				ok(tq.getRemainingSize() === (5 - i));
-			} catch (err) {
+			} catch (error) {
 				ok(false);
 			}
 		}
 
 		for (let i = 1; i <= 5; i++) {
 			try {
-				shouldBeDelayedPromises.push(tq.add<number>(val => val, i));
+				shouldBeDelayedPromises.push(tq.add<number>(val => val, undefined, i));
 				ok(tq.getDelayedSize() === i);
 				ok(tq.getRemainingSize() === 0);
-			} catch (err) {
+			} catch (error) {
 				ok(false);
 			}
 		}

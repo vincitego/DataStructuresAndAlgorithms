@@ -50,8 +50,31 @@ export class CircularBuffer<T> implements Iterable<T> {
   }
 
 
-  removeAt(index: number): T {
+  /**
+   * Remove and return value at given offset from current read position.
+   * @param {number} offset 
+   * @returns {T}
+   */
+  removeAt(offset: number): T {
+    if (typeof offset !== 'number') throw new TypeError('Offset needs to be a number.');
+    if (this.isBufferEmpty()) throw new RangeError('Buffer is empty.');
+    if (offset === 0) return this.read();
 
+    const currentAmountFilled = this.amountFilled();
+    if (offset < 0 || offset >= currentAmountFilled) throw new RangeError('Offset out of range.');
+
+    let deleteIndex = (this._prereadIndex + 1 + offset) % (this._maxSize + 1);
+    const timesToShift = currentAmountFilled - offset - 1;
+    const value = this._buffer[deleteIndex];
+
+    for (let i = 0; i < timesToShift; i++) {
+      const nextIndex = this._incrementIndex(deleteIndex);
+      this._buffer[deleteIndex] = this._buffer[nextIndex];
+      deleteIndex = nextIndex;
+    }
+
+    this._writeIndex = this._decrementIndex(this._writeIndex);
+    return value;
   }
 
 
@@ -71,9 +94,12 @@ export class CircularBuffer<T> implements Iterable<T> {
    * @returns {T}
    */
   peekAt(index: number): T {
+    if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
     if (this.isBufferEmpty()) throw new RangeError('Peek failed, buffer is empty.');
     if (index < 0 || index >= this.amountFilled()) throw new RangeError('Index out of range');
-    return this._buffer[this._prereadIndex + 1 + index];
+    
+    const peekIndex = (this._prereadIndex + 1 + index) % (this._maxSize + 1);
+    return this._buffer[peekIndex];
   }
 
 
@@ -94,8 +120,27 @@ export class CircularBuffer<T> implements Iterable<T> {
   }
 
 
-  writeAt(index: number, value: T): CircularBuffer<T> {
+  writeAt(offset: number, value: T): CircularBuffer<T> {
+    if (typeof offset !== 'number') throw new TypeError('Offset needs to be a number.');
+    if (this.isBufferFull() && this._mode === CIRCULAR_BUFFER_MODE.ERROR) throw new RangeError('Buffer is full.');
 
+    const currentAmountFilled = this.amountFilled();
+    if (offset < 0 || offset > currentAmountFilled) throw new RangeError('Index out of range.');
+    if (currentAmountFilled === offset) return this.write(value);
+
+    let shiftIndex = this._writeIndex;
+    const timesToShift = currentAmountFilled - offset;
+
+    for (let i = 0; i < timesToShift; i++) {
+      const nextIndex = this._decrementIndex(shiftIndex);
+      this._buffer[shiftIndex] = this._buffer[nextIndex];
+      shiftIndex = nextIndex;
+    }
+
+    let insertIndex = (this._prereadIndex + 1 + offset) % (this._maxSize + 1);
+    this._buffer[insertIndex] = value;
+    this._writeIndex = this._incrementIndex(this._writeIndex);
+    return this;
   }
 
 
@@ -148,6 +193,16 @@ export class CircularBuffer<T> implements Iterable<T> {
    */
   private _incrementIndex(index: number): number {
     return (index + 1) % (this._maxSize + 1);
+  }
+
+
+  /**
+   * Utility function to calculate decremented index value without underflowing.
+   * @param {number} index Index value to decrement.
+   * @returns {number}
+   */
+  private _decrementIndex(index: number): number {
+    return index === 0 ? this._maxSize : index - 1;
   }
 
 

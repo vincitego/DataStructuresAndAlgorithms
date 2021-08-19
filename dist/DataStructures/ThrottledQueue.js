@@ -35,8 +35,8 @@ export class ThrottledQueue {
         this._maxItems = maxItems;
         this._timeWindow = timeWindow;
         this._mode = mode;
-        this._delayedSize = 0;
         this._finishedQueue = new LinkedList();
+        this.delayedQueue = new LinkedList();
     }
     /**
      * Adds a new function callback to the Throttle Queue.
@@ -46,24 +46,23 @@ export class ThrottledQueue {
      * @param {any} args Arguments to pass to the function.
      * @returns {Promise<T>} Promise of callback results.
      */
-    add(callback, ...args) {
+    add(callback, thisToBind, ...args) {
         return __awaiter(this, void 0, void 0, function* () {
+            const boundCallback = callback.bind(thisToBind, ...args);
             this.removeOldRequests();
             if (this._finishedQueue.size() >= this._maxItems) {
                 if (this._mode === THROTTLED_QUEUE_MODE.ERROR)
                     throw new Error(`Throttle limit reached: ${this._maxItems} per ${this._timeWindow / 1000} seconds.`);
-                this._delayedSize++;
+                this.delayedQueue.addBack(boundCallback);
                 do {
-                    let timeToNext = this._finishedQueue.peekFront() + this._timeWindow + this._delayedSize - Date.now();
-                    if (timeToNext <= 0)
-                        timeToNext = 1;
+                    const timeToNext = Math.min(1, this._finishedQueue.peekFront() + this._timeWindow - Date.now());
                     yield sleep(timeToNext);
                     this.removeOldRequests();
-                } while (this._finishedQueue.size() >= this._maxItems);
-                this._delayedSize--;
+                } while (this._finishedQueue.size() >= this._maxItems || this.delayedQueue.peekFront() !== boundCallback);
+                this.delayedQueue.removeFront();
             }
             this._finishedQueue.addBack(Date.now());
-            return callback(...args);
+            return boundCallback();
         });
     }
     /**
@@ -71,7 +70,7 @@ export class ThrottledQueue {
      * @returns {number}
      */
     getDelayedSize() {
-        return this._delayedSize;
+        return this.delayedQueue.size();
     }
     /**
      * Get number of function calls available before hitting throttle.

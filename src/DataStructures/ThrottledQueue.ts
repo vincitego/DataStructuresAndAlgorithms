@@ -12,8 +12,8 @@ export class ThrottledQueue {
 	private _maxItems: number;
 	private _timeWindow: number;
 	private _mode: THROTTLED_QUEUE_MODE;
-	private _delayedSize: number;
 	private _finishedQueue: LinkedList<number>;
+	public delayedQueue: LinkedList<any>;
 
 
 	/**
@@ -32,8 +32,8 @@ export class ThrottledQueue {
 		this._maxItems = maxItems;
 		this._timeWindow = timeWindow;
 		this._mode = mode;
-		this._delayedSize = 0;
 		this._finishedQueue = new LinkedList();
+		this.delayedQueue = new LinkedList();
 	}
 
 
@@ -45,28 +45,30 @@ export class ThrottledQueue {
 	 * @param {any} args Arguments to pass to the function.
 	 * @returns {Promise<T>} Promise of callback results.
 	 */
-	async add<T>(callback: (...args: any[]) => T, ...args: any[]): Promise<T> {
+	async add<T>(callback: (...args: any[]) => T, thisToBind: any, ...args: any[]): Promise<T> {
+		const boundCallback = callback.bind(thisToBind, ...args);
 		this.removeOldRequests();
+
 
 		if (this._finishedQueue.size() >= this._maxItems) {
 			if (this._mode === THROTTLED_QUEUE_MODE.ERROR)
 				throw new Error(`Throttle limit reached: ${this._maxItems} per ${this._timeWindow/1000} seconds.`);
 
 
-			this._delayedSize++;
+			this.delayedQueue.addBack(boundCallback);
 
 			do {
-				let timeToNext: number = this._finishedQueue.peekFront()! + this._timeWindow + this._delayedSize - Date.now();
-				if (timeToNext <= 0) timeToNext = 1;
+				const timeToNext: number = Math.min(1, this._finishedQueue.peekFront()! + this._timeWindow - Date.now());
 				await sleep(timeToNext);
 				this.removeOldRequests();
-			} while (this._finishedQueue.size() >= this._maxItems);
+			} while (this._finishedQueue.size() >= this._maxItems || this.delayedQueue.peekFront() !== boundCallback);
 
-			this._delayedSize--;
+			this.delayedQueue.removeFront();
 		}
 
+
 		this._finishedQueue.addBack(Date.now());
-		return callback(...args);
+		return boundCallback();
 	}
 
 
@@ -75,7 +77,7 @@ export class ThrottledQueue {
 	 * @returns {number} 
 	 */
 	getDelayedSize(): number {
-		return this._delayedSize;
+		return this.delayedQueue.size();
 	}
 
 

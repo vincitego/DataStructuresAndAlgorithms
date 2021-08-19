@@ -110,6 +110,108 @@ describe('Test Circular Buffer in Error mode', () => {
 			j++;
 		}
 	});
+
+	
+	it('Remove at should corrently remove item at given offset.', async () => {
+		const cb = new CircularBuffer<number>(5, enums.CIRCULAR_BUFFER_MODE.ERROR);
+		for (let i = 0; i < 5; i++) {
+			cb.write(i);
+		}
+
+		ok(cb.removeAt(0) === 0);
+		ok(cb.removeAt(2) === 3);
+		ok(cb.removeAt(2) === 4);
+		ok(cb.amountFilled() === 2);
+	});
+
+	
+	it('Remove at should error on invalid indexes.', async () => {
+		const cb = new CircularBuffer<number>(5, enums.CIRCULAR_BUFFER_MODE.ERROR);
+
+		try {
+			cb.removeAt(0);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+
+		for (let i = 0; i < 5; i++) {
+			cb.write(i);
+		}
+
+		try {
+			cb.removeAt(-1);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+
+		try {
+			cb.removeAt(5);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+
+		try {
+			cb.removeAt('a' as any);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+	});
+
+	
+	it('Write at should corrently shift items at given offset.', async () => {
+		const cb = new CircularBuffer<number>(5, enums.CIRCULAR_BUFFER_MODE.ERROR);
+		for (let i = 0; i < 3; i++) {
+			cb.write(i);
+		}
+
+		cb.writeAt(1, 4);
+		ok(cb.peekAt(1) === 4);
+		cb.writeAt(4, 5);
+		ok(cb.peekAt(4) === 5);
+		ok(cb.amountFilled() === 5);
+		ok(cb.isBufferFull());
+	});
+
+	
+	it('Write at should error on invalid indexes.', async () => {
+		const cb = new CircularBuffer<number>(5, enums.CIRCULAR_BUFFER_MODE.ERROR);
+
+		try {
+			cb.writeAt(-1, 1);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+
+		try {
+			cb.writeAt(5, 1);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+
+		try {
+			cb.writeAt('a' as any, 1);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+
+		for (let i = 0; i < 5; i++) {
+			cb.write(i);
+		}
+
+		try {
+			cb.writeAt(1, 1);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+	});
 });
 
 
@@ -124,6 +226,35 @@ describe('Test Circular Buffer in Overwrite mode', () => {
 			}
 		}
 
+		ok(cb.isBufferFull());
+		ok(cb.amountFilled() === 5);
+		ok(cb.read() === 1);
+	});
+
+	
+	it('Write at in middle of full buffer should error.', async () => {
+		const cb = new CircularBuffer<number>(5, enums.CIRCULAR_BUFFER_MODE.OVERWRITE);
+		for (let i = 0; i < 5; i++) {
+			cb.write(i);
+		}
+
+		try {
+			cb.writeAt(2, 9);
+			ok(false);
+		} catch (error) {
+			ok(true);
+		}
+	});
+
+	
+	it('Write at at end of full buffer should overwrite oldest entry.', async () => {
+		const cb = new CircularBuffer<number>(5, enums.CIRCULAR_BUFFER_MODE.OVERWRITE);
+		for (let i = 0; i < 5; i++) {
+			cb.write(i);
+		}
+
+		cb.writeAt(5, 8);
+		ok(cb.peekAt(4) === 8);
 		ok(cb.isBufferFull());
 		ok(cb.amountFilled() === 5);
 		ok(cb.read() === 1);

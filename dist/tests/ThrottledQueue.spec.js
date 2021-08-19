@@ -15,10 +15,10 @@ describe('Test Throttled Queue in Error mode', () => {
         const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.ERROR);
         for (let i = 1; i <= 10; i++) {
             try {
-                ok(i === (yield tq.add(val => val, i)));
+                ok(i === (yield tq.add(val => val, undefined, i)));
                 ok(tq.getRemainingSize() === (5 - i));
             }
-            catch (err) {
+            catch (error) {
                 ok(true);
                 return;
             }
@@ -29,20 +29,20 @@ describe('Test Throttled Queue in Error mode', () => {
         const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.ERROR);
         for (let i = 1; i <= 5; i++) {
             try {
-                ok(i === (yield tq.add(val => val, i)));
+                ok(i === (yield tq.add(val => val, undefined, i)));
                 ok(tq.getRemainingSize() === (5 - i));
             }
-            catch (err) {
+            catch (error) {
                 ok(false);
             }
         }
         yield sleep(1100);
         for (let i = 1; i <= 5; i++) {
             try {
-                ok(i === (yield tq.add(val => val, i)));
+                ok(i === (yield tq.add(val => val, undefined, i)));
                 ok(tq.getRemainingSize() !== 5);
             }
-            catch (err) {
+            catch (error) {
                 ok(false);
             }
         }
@@ -56,20 +56,20 @@ describe('Test Throttled Queue in Delay mode', () => {
         const timeStart = performance.now();
         for (let i = 1; i <= 5; i++) {
             try {
-                ok(i === (yield tq.add(val => val, i)));
+                ok(i === (yield tq.add(val => val, undefined, i)));
                 ok(tq.getRemainingSize() === (5 - i));
             }
-            catch (err) {
+            catch (error) {
                 ok(false);
             }
         }
         for (let i = 1; i <= 5; i++) {
             try {
-                shouldBeDelayedPromises.push(tq.add(val => val, i));
+                shouldBeDelayedPromises.push(tq.add(val => val, undefined, i));
                 ok(tq.getDelayedSize() === i);
                 ok(tq.getRemainingSize() === 0);
             }
-            catch (err) {
+            catch (error) {
                 ok(false);
             }
         }
