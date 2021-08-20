@@ -3,7 +3,6 @@ import { LinkedList } from "../index.js";
 import { ok } from 'assert';
 
 
-
 describe('Test Linked List', () => {
 
 	it('Should return size 0 and undefined values for empty linked list.', () => {

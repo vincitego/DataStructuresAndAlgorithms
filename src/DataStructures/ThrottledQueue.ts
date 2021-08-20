@@ -39,13 +39,16 @@ export class ThrottledQueue {
 
 	/**
 	 * Adds a new function callback to the Throttle Queue.
-	 * Will resovle immediately if limit has not been hit.
+	 * Will resolve immediately if limit has not been hit.
 	 * Will error or delay function execution based on operating mode.
 	 * @param {function} callback Function to call.
+	 * @param {any} thisToBind What to bind this as
 	 * @param {any} args Arguments to pass to the function.
 	 * @returns {Promise<T>} Promise of callback results.
 	 */
 	async add<T>(callback: (...args: any[]) => T, thisToBind: any, ...args: any[]): Promise<T> {
+		if (typeof callback !== 'function') throw new TypeError('Callback is not a function.');
+
 		const boundCallback = callback.bind(thisToBind, ...args);
 		this.removeOldRequests();
 

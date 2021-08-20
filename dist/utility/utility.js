@@ -7,11 +7,11 @@ export function defaultEquals(a, b) {
     return a === b;
 }
 /**
- * Default comparison function.
+ * Default minimum first comparison function.
  * @param a First element.
  * @param b Second element.
  */
-export function defaultCompare(a, b) {
+export function defaultMinCompare(a, b) {
     if (a < b) {
         return -1;
     }

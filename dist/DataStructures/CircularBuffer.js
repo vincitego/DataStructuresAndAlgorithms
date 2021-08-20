@@ -76,17 +76,17 @@ export class CircularBuffer {
     }
     /**
      * Get unread data at given index in buffer without removing it.
-     * @param {number} index Index offset from current location to peek at.
+     * @param {number} offset Offset from current read location to peek at.
      * @returns {T}
      */
-    peekAt(index) {
-        if (typeof index !== 'number')
+    peekAt(offset) {
+        if (typeof offset !== 'number')
             throw new TypeError('Index needs to be a number.');
         if (this.isBufferEmpty())
             throw new RangeError('Peek failed, buffer is empty.');
-        if (index < 0 || index >= this.amountFilled())
+        if (offset < 0 || offset >= this.amountFilled())
             throw new RangeError('Index out of range');
-        const peekIndex = (this._prereadIndex + 1 + index) % (this._maxSize + 1);
+        const peekIndex = (this._prereadIndex + 1 + offset) % (this._maxSize + 1);
         return this._buffer[peekIndex];
     }
     /**
@@ -105,6 +105,12 @@ export class CircularBuffer {
         this._writeIndex = this._incrementIndex(this._writeIndex);
         return this;
     }
+    /**
+     * Writes data at given offset from current read location, shifting data forward.
+     * @param {number} offset Offset from current read location to write at.
+     * @param {T} value Value to write
+     * @returns {CircularBuffer<T>} Returns self.
+     */
     writeAt(offset, value) {
         if (typeof offset !== 'number')
             throw new TypeError('Offset needs to be a number.');

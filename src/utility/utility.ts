@@ -19,11 +19,11 @@ export function defaultEquals<T>(a: T, b: T): boolean {
 
 
 /**
- * Default comparison function.
+ * Default minimum first comparison function.
  * @param a First element.
  * @param b Second element.
  */
-export function defaultCompare<T>(a: T, b: T): number {
+export function defaultMinCompare<T>(a: T, b: T): number {
   if (a < b) {
     return -1;
   } else if (a === b) {
