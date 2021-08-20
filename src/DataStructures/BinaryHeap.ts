@@ -21,18 +21,9 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Get size of heap.
-	 * @returns {number}
-	 */
-	size(): number {
-		return this._size;
-	}
-
-
-	/**
 	 * Add new value to the heap.
 	 * @param {T} value 
-	 * @returns BinaryHeap<T> Returns self.
+	 * @returns {BinaryHeap<T>} Returns self.
 	 */
 	add(value: T): BinaryHeap<T> {
 		const addIndex = this._size;
@@ -70,16 +61,70 @@ export class BinaryHeap<T> implements Iterable<T> {
 	}
 
 
-	poll() {
+	poll(): T {
 
+	}
+
+
+	removeAt(): T {
+
+	}
+
+
+	/**
+	 * Get size of heap.
+	 * @returns {number}
+	 */
+	size(): number {
+		return this._size;
+	}
+
+
+	/**
+	 * Clears the binary heap.
+	 * @returns {BinaryHeap<T>} Returns self.
+	 */
+	clear(): BinaryHeap<T> {
+		this._heap = [];
+		this._size = 0;
+		return this;
+	}
+
+
+  /**
+   * Find index of first value matching given value or where given callback evaluates to true.
+   * @param {} valueOrCallback 
+   * @returns {number}
+   */
+	findIndex(valueOrCallback: T | ((node: T) => boolean)): number {
+    if (this._size === 0) return -1;
+
+    let index = 0;
+
+    for (const node of this) {
+      if (typeof valueOrCallback === 'function' && (valueOrCallback as (node: T) => boolean)(node)) {
+        return index;
+      } else if (valueOrCallback === node) {
+        return index;
+      }
+      
+      index++;
+    }
+
+    return -1;
 	}
 
 	
-	private _sink(index: number) {
+	private _sink(index: number): void {
 
 	}
 
 
+	/**
+	 * Utility function to move values up heap based on comparison function.
+	 * @param {number} index 
+	 * @returns 
+	 */
 	private _swim(index: number): void {
 		if (index === 0) return;
 

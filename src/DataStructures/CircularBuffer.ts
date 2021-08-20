@@ -31,15 +31,6 @@ export class CircularBuffer<T> implements Iterable<T> {
 
 
   /**
-   * Get size of buffer.
-   * @returns {number}
-   */
-  maxSize(): number {
-    return this._maxSize;
-  }
-
-
-  /**
    * Get oldest unread data in buffer and remove it.
    * @returns {T}
    */
@@ -151,6 +142,15 @@ export class CircularBuffer<T> implements Iterable<T> {
 
 
   /**
+   * Get size of buffer.
+   * @returns {number}
+   */
+  maxSize(): number {
+    return this._maxSize;
+  }
+
+
+  /**
    * Checks whether all data written so far has already been read.
    * @returns {boolean}
    */
@@ -190,6 +190,30 @@ export class CircularBuffer<T> implements Iterable<T> {
     this._writeIndex = 1;
     return this;
   }
+
+
+  /**
+   * Find index of first value matching given value or where given callback evaluates to true.
+   * @param {} valueOrCallback 
+   * @returns {number}
+   */
+	findIndex(valueOrCallback: T | ((node: T) => boolean)): number {
+    if (this.isBufferEmpty()) return -1;
+
+    let index = 0;
+
+    for (const node of this) {
+      if (typeof valueOrCallback === 'function' && (valueOrCallback as (node: T) => boolean)(node)) {
+        return index;
+      } else if (valueOrCallback === node) {
+        return index;
+      }
+      
+      index++;
+    }
+
+    return -1;
+	}
 
 
   /**

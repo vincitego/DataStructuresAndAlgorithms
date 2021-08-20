@@ -23,13 +23,6 @@ export class CircularBuffer {
         this._writeIndex = 1;
     }
     /**
-     * Get size of buffer.
-     * @returns {number}
-     */
-    maxSize() {
-        return this._maxSize;
-    }
-    /**
      * Get oldest unread data in buffer and remove it.
      * @returns {T}
      */
@@ -134,6 +127,13 @@ export class CircularBuffer {
         return this;
     }
     /**
+     * Get size of buffer.
+     * @returns {number}
+     */
+    maxSize() {
+        return this._maxSize;
+    }
+    /**
      * Checks whether all data written so far has already been read.
      * @returns {boolean}
      */
@@ -167,6 +167,26 @@ export class CircularBuffer {
         this._prereadIndex = 0;
         this._writeIndex = 1;
         return this;
+    }
+    /**
+     * Find index of first value matching given value or where given callback evaluates to true.
+     * @param {} valueOrCallback
+     * @returns {number}
+     */
+    findIndex(valueOrCallback) {
+        if (this.isBufferEmpty())
+            return -1;
+        let index = 0;
+        for (const node of this) {
+            if (typeof valueOrCallback === 'function' && valueOrCallback(node)) {
+                return index;
+            }
+            else if (valueOrCallback === node) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
     }
     /**
      * Utility function to calculate incremented index value without overflowing.

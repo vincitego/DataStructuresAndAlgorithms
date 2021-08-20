@@ -35,15 +35,6 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Returns size of linked list.
-   * @returns {number}
-   */
-  size(): number {
-    return this._size;
-  }
-
-
-  /**
    * Add new node to beginning of Linked List.
    * @param {T} value Value of new node.
    * @returns {LinkedList<T>} Returns self.
@@ -204,6 +195,15 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
+   * Returns size of linked list.
+   * @returns {number}
+   */
+  size(): number {
+    return this._size;
+  }
+
+
+  /**
    * Clears all nodes from Linked List.
    * @returns {LinkedList<T>} Returns self.
    */
@@ -213,6 +213,30 @@ export class LinkedList<T> implements Iterable<T> {
     this._size = 0;
     return this;
   }
+
+
+  /**
+   * Find index of first value matching given value or where given callback evaluates to true.
+   * @param {} valueOrCallback 
+   * @returns {number}
+   */
+	findIndex(valueOrCallback: T | ((node: T) => boolean)): number {
+    if (this._size === 0) return -1;
+
+    let index = 0;
+
+    for (const node of this) {
+      if (typeof valueOrCallback === 'function' && (valueOrCallback as (node: T) => boolean)(node)) {
+        return index;
+      } else if (valueOrCallback === node) {
+        return index;
+      }
+      
+      index++;
+    }
+
+    return -1;
+	}
 
 
   /**

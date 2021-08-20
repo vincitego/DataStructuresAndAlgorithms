@@ -43,29 +43,26 @@ export class ThrottledQueue {
      * Will resolve immediately if limit has not been hit.
      * Will error or delay function execution based on operating mode.
      * @param {function} callback Function to call.
-     * @param {any} thisToBind What to bind this as
-     * @param {any} args Arguments to pass to the function.
      * @returns {Promise<T>} Promise of callback results.
      */
-    add(callback, thisToBind, ...args) {
+    add(callback) {
         return __awaiter(this, void 0, void 0, function* () {
             if (typeof callback !== 'function')
                 throw new TypeError('Callback is not a function.');
-            const boundCallback = callback.bind(thisToBind, ...args);
-            this.removeOldRequests();
+            this._removeOldRequests();
             if (this._finishedQueue.size() >= this._maxItems) {
                 if (this._mode === THROTTLED_QUEUE_MODE.ERROR)
                     throw new Error(`Throttle limit reached: ${this._maxItems} per ${this._timeWindow / 1000} seconds.`);
-                this.delayedQueue.addBack(boundCallback);
+                this.delayedQueue.addBack(callback);
                 do {
                     const timeToNext = Math.min(1, this._finishedQueue.peekFront() + this._timeWindow - Date.now());
                     yield sleep(timeToNext);
-                    this.removeOldRequests();
-                } while (this._finishedQueue.size() >= this._maxItems || this.delayedQueue.peekFront() !== boundCallback);
+                    this._removeOldRequests();
+                } while (this._finishedQueue.size() >= this._maxItems || this.delayedQueue.peekFront() !== callback);
                 this.delayedQueue.removeFront();
             }
             this._finishedQueue.addBack(Date.now());
-            return boundCallback();
+            return callback();
         });
     }
     /**
@@ -80,13 +77,13 @@ export class ThrottledQueue {
      * @returns {number}
      */
     getRemainingSize() {
-        this.removeOldRequests();
+        this._removeOldRequests();
         return this._maxItems - this._finishedQueue.size();
     }
     /**
-     * Cleans up processed requests that have exceeded current time window.
+     * Utility function to clean up processed requests that have exceeded current time window.
      */
-    removeOldRequests() {
+    _removeOldRequests() {
         const startTimeframe = Date.now() - this._timeWindow;
         while (this._finishedQueue.peekFront() !== null && this._finishedQueue.peekFront() < startTimeframe) {
             this._finishedQueue.removeFront();

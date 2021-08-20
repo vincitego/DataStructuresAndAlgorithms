@@ -10,12 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { ok } from 'assert';
 import { ThrottledQueue, enums } from '../index.js';
 import { sleep } from '../utility/utility.js';
+function dummyCallback(value) {
+    return value;
+}
 describe('Test Throttled Queue in Error mode', () => {
     it('Should error out after putting too many requests into queue', () => __awaiter(void 0, void 0, void 0, function* () {
         const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.ERROR);
         for (let i = 1; i <= 10; i++) {
             try {
-                ok(i === (yield tq.add(val => val, undefined, i)));
+                ok(i === (yield tq.add(dummyCallback.bind(undefined, i))));
                 ok(tq.getRemainingSize() === (5 - i));
             }
             catch (error) {
@@ -29,7 +32,7 @@ describe('Test Throttled Queue in Error mode', () => {
         const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.ERROR);
         for (let i = 1; i <= 5; i++) {
             try {
-                ok(i === (yield tq.add(val => val, undefined, i)));
+                ok(i === (yield tq.add(() => i)));
                 ok(tq.getRemainingSize() === (5 - i));
             }
             catch (error) {
@@ -39,7 +42,7 @@ describe('Test Throttled Queue in Error mode', () => {
         yield sleep(1100);
         for (let i = 1; i <= 5; i++) {
             try {
-                ok(i === (yield tq.add(val => val, undefined, i)));
+                ok(i === (yield tq.add(dummyCallback.bind(undefined, i))));
                 ok(tq.getRemainingSize() !== 5);
             }
             catch (error) {
@@ -56,7 +59,7 @@ describe('Test Throttled Queue in Delay mode', () => {
         const timeStart = performance.now();
         for (let i = 1; i <= 5; i++) {
             try {
-                ok(i === (yield tq.add(val => val, undefined, i)));
+                ok(i === (yield tq.add(dummyCallback.bind(undefined, i))));
                 ok(tq.getRemainingSize() === (5 - i));
             }
             catch (error) {
@@ -65,7 +68,7 @@ describe('Test Throttled Queue in Delay mode', () => {
         }
         for (let i = 1; i <= 5; i++) {
             try {
-                shouldBeDelayedPromises.push(tq.add(val => val, undefined, i));
+                shouldBeDelayedPromises.push(tq.add(() => i));
                 ok(tq.getDelayedSize() === i);
                 ok(tq.getRemainingSize() === 0);
             }

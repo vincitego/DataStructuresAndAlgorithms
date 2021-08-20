@@ -3,13 +3,18 @@ import { ThrottledQueue, enums } from '../index.js';
 import { sleep } from '../utility/utility.js';
 
 
+function dummyCallback(value: number): number {
+	return value;
+}
+
+
 describe('Test Throttled Queue in Error mode', () => {
 	it('Should error out after putting too many requests into queue', async () => {
 		const tq = new ThrottledQueue(5, 1000, enums.THROTTLED_QUEUE_MODE.ERROR);
 
 		for (let i = 1; i <= 10; i++) {
 			try {
-				ok(i === await tq.add<number>(val => val, undefined, i));
+				ok(i === await tq.add<number>(dummyCallback.bind(undefined, i)));
 				ok(tq.getRemainingSize() === (5 - i));
 			} catch (error) {
 				ok(true);
@@ -26,7 +31,7 @@ describe('Test Throttled Queue in Error mode', () => {
 
 		for (let i = 1; i <= 5; i++) {
 			try {
-				ok(i === await tq.add<number>(val => val, undefined, i));
+				ok(i === await tq.add<number>(() => i));
 				ok(tq.getRemainingSize() === (5 - i));
 			} catch (error) {
 				ok(false);
@@ -37,7 +42,7 @@ describe('Test Throttled Queue in Error mode', () => {
 
 		for (let i = 1; i <= 5; i++) {
 			try {
-				ok(i === await tq.add<number>(val => val, undefined, i));
+				ok(i === await tq.add<number>(dummyCallback.bind(undefined, i)));
 				ok(tq.getRemainingSize() !== 5);
 			} catch (error) {
 
@@ -58,7 +63,7 @@ describe('Test Throttled Queue in Delay mode', () => {
 
 		for (let i = 1; i <= 5; i++) {
 			try {
-				ok(i === await tq.add<number>(val => val, undefined, i));
+				ok(i === await tq.add<number>(dummyCallback.bind(undefined, i)));
 				ok(tq.getRemainingSize() === (5 - i));
 			} catch (error) {
 				ok(false);
@@ -67,7 +72,7 @@ describe('Test Throttled Queue in Delay mode', () => {
 
 		for (let i = 1; i <= 5; i++) {
 			try {
-				shouldBeDelayedPromises.push(tq.add<number>(val => val, undefined, i));
+				shouldBeDelayedPromises.push(tq.add<number>(() => i));
 				ok(tq.getDelayedSize() === i);
 				ok(tq.getRemainingSize() === 0);
 			} catch (error) {

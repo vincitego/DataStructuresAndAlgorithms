@@ -259,4 +259,24 @@ describe('Test Circular Buffer in Overwrite mode', () => {
 		ok(cb.amountFilled() === 5);
 		ok(cb.read() === 1);
 	});
+
+	
+	it('Find index with primitive should return correct index.', async () => {
+		const cb = new CircularBuffer<number>(5, enums.CIRCULAR_BUFFER_MODE.OVERWRITE);
+		for (let i = 0; i < 6; i++) {
+			cb.write(i);
+		}
+
+		ok(cb.findIndex(3) === 2);
+	});
+
+	
+	it('Find index with callback function should return correct index.', async () => {
+		const cb = new CircularBuffer<{foo: number}>(5, enums.CIRCULAR_BUFFER_MODE.OVERWRITE);
+		for (let i = 0; i < 6; i++) {
+			cb.write({ foo: i });
+		}
+
+		ok(cb.findIndex(node => node.foo === 3) === 2);
+	});
 });

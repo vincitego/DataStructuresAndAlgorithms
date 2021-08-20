@@ -127,5 +127,13 @@ describe('Test Linked List', () => {
         ok(ll.peekFront() === 1);
         ok(ll.peekBack() === 2);
         ok(ll.peekAt(1) === 3);
+        ok(ll.findIndex(3) === 1);
+    });
+    it('Should correctly find index of object given callback function.', () => {
+        const ll = new LinkedList();
+        ll.addAt(0, { foo: 1 });
+        ll.addAt(1, { foo: 2 });
+        ll.addAt(1, { foo: 3 });
+        ok(ll.findIndex((node) => node.foo === 3) === 1);
     });
 });

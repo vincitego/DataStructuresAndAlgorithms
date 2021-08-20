@@ -13,16 +13,9 @@ export class BinaryHeap {
         this._comparisonFunction = comparisonFunction;
     }
     /**
-     * Get size of heap.
-     * @returns {number}
-     */
-    size() {
-        return this._size;
-    }
-    /**
      * Add new value to the heap.
      * @param {T} value
-     * @returns BinaryHeap<T> Returns self.
+     * @returns {BinaryHeap<T>} Returns self.
      */
     add(value) {
         const addIndex = this._size;
@@ -57,8 +50,51 @@ export class BinaryHeap {
     }
     poll() {
     }
+    removeAt() {
+    }
+    /**
+     * Get size of heap.
+     * @returns {number}
+     */
+    size() {
+        return this._size;
+    }
+    /**
+     * Clears the binary heap.
+     * @returns {BinaryHeap<T>} Returns self.
+     */
+    clear() {
+        this._heap = [];
+        this._size = 0;
+        return this;
+    }
+    /**
+     * Find index of first value matching given value or where given callback evaluates to true.
+     * @param {} valueOrCallback
+     * @returns {number}
+     */
+    findIndex(valueOrCallback) {
+        if (this._size === 0)
+            return -1;
+        let index = 0;
+        for (const node of this) {
+            if (typeof valueOrCallback === 'function' && valueOrCallback(node)) {
+                return index;
+            }
+            else if (valueOrCallback === node) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
     _sink(index) {
     }
+    /**
+     * Utility function to move values up heap based on comparison function.
+     * @param {number} index
+     * @returns
+     */
     _swim(index) {
         if (index === 0)
             return;

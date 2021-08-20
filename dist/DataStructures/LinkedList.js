@@ -19,13 +19,6 @@ export class LinkedList {
         this._size = 0;
     }
     /**
-     * Returns size of linked list.
-     * @returns {number}
-     */
-    size() {
-        return this._size;
-    }
-    /**
      * Add new node to beginning of Linked List.
      * @param {T} value Value of new node.
      * @returns {LinkedList<T>} Returns self.
@@ -164,6 +157,13 @@ export class LinkedList {
         return currentNode.value;
     }
     /**
+     * Returns size of linked list.
+     * @returns {number}
+     */
+    size() {
+        return this._size;
+    }
+    /**
      * Clears all nodes from Linked List.
      * @returns {LinkedList<T>} Returns self.
      */
@@ -172,6 +172,26 @@ export class LinkedList {
         this._tail = undefined;
         this._size = 0;
         return this;
+    }
+    /**
+     * Find index of first value matching given value or where given callback evaluates to true.
+     * @param {} valueOrCallback
+     * @returns {number}
+     */
+    findIndex(valueOrCallback) {
+        if (this._size === 0)
+            return -1;
+        let index = 0;
+        for (const node of this) {
+            if (typeof valueOrCallback === 'function' && valueOrCallback(node)) {
+                return index;
+            }
+            else if (valueOrCallback === node) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
     }
     /**
      * Iterator to allow looping.
