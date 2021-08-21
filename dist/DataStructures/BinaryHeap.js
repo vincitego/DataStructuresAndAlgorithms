@@ -1,8 +1,9 @@
 import { defaultMinCompare } from "../utility/utility.js";
 export class BinaryHeap {
     /**
-     * Creates a new binary heap with a given comparison.
+     * Creates a new binary heap with a given comparison function.
      * Default comparison function is a min heap.
+     * Can be used as a priority queue.
      * @param {function} comparisonFunction Function to use to compare node values.
      */
     constructor(comparisonFunction = defaultMinCompare) {
@@ -63,7 +64,25 @@ export class BinaryHeap {
         this._sink(0);
         return value;
     }
-    removeAt() {
+    /**
+     * Returns value at given index and removes the node.
+     * @param index
+     * @returns {T | undefined}
+     */
+    removeAt(index) {
+        if (typeof index !== 'number')
+            throw new TypeError('Index needs to be a number.');
+        if (index < 0 || index >= this._size)
+            throw new RangeError('Index out of range.');
+        if (index === 0)
+            return this.poll();
+        const value = this._heap[index];
+        this._size--;
+        this._heap[index] = this._heap[this._size];
+        if (this._swim(index) === index) {
+            this._sink(index);
+        }
+        return value;
     }
     /**
      * Get size of heap.
@@ -104,7 +123,7 @@ export class BinaryHeap {
     /**
      * Utility function to move values down heap based on comparison function.
      * @param {number} index
-     * @returns
+     * @returns {number}
      */
     _sink(index) {
         const value = this._heap[index];
@@ -130,15 +149,16 @@ export class BinaryHeap {
             }
         } while (currentIndex !== bottomIndex);
         this._heap[currentIndex] = value;
+        return currentIndex;
     }
     /**
      * Utility function to move values up heap based on comparison function.
      * @param {number} index
-     * @returns
+     * @returns {number}
      */
     _swim(index) {
         if (index === 0)
-            return;
+            return 0;
         const value = this._heap[index];
         let childIndex = index;
         do {
@@ -153,6 +173,7 @@ export class BinaryHeap {
             }
         } while (childIndex !== 0);
         this._heap[childIndex] = value;
+        return childIndex;
     }
     /**
      * Utility function to calculate parent index for a given child index.

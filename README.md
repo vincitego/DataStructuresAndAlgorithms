@@ -2,18 +2,25 @@
 
 Educating myself. Typescript, JSDoc, Mocha tests.
 
-Done:
+
+Data Structures Implemented:
 * Singly Linked List
-* Throttled Queue
 * Circular Buffer
+* Binary Heap
+
+
+Algorithms Implemented:
+* Throttled Queue
+
 
 To Do:
-* Binary Heap
 * Union Find
+	* Kruskal's Minimum Spanning Tree
 * Binary Search Tree
-* Hash Table
 * Fenwick Tree
 * Suffix Array
+* Longest Common Prefix Array
+	* Longest Common Substring
 * AVL Tree
 * Indexed Priority Queue
-* Graph
+* Graphs

@@ -3,15 +3,16 @@ import { defaultMinCompare } from "../utility/utility.js";
 export class BinaryHeap<T> implements Iterable<T> {
 	private _heap: T[];
 	private _size: number;
-	private _comparisonFunction: <T>(a: T, b: T) => number;
+	private _comparisonFunction: (a: T, b: T) => number;
 
 
 	/**
-	 * Creates a new binary heap with a given comparison.
+	 * Creates a new binary heap with a given comparison function.
 	 * Default comparison function is a min heap.
+	 * Can be used as a priority queue.
 	 * @param {function} comparisonFunction Function to use to compare node values.
 	 */
-	constructor(comparisonFunction: <T>(a: T, b: T) => number = defaultMinCompare) {
+	constructor(comparisonFunction: (a: T, b: T) => number = defaultMinCompare) {
 		if (typeof comparisonFunction !== 'function') throw new TypeError('comparisonFunction needs to be a function');
 
 		this._heap = [];
@@ -78,8 +79,25 @@ export class BinaryHeap<T> implements Iterable<T> {
 	}
 
 
-	removeAt(): T {
+	/**
+	 * Returns value at given index and removes the node.
+	 * @param index 
+	 * @returns {T | undefined}
+	 */
+	removeAt(index: number): T | undefined {
+		if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
+		if (index < 0 || index >= this._size) throw new RangeError('Index out of range.');
+		if (index === 0) return this.poll();
 
+		const value = this._heap[index];
+		this._size--;
+		this._heap[index] = this._heap[this._size];
+
+		if (this._swim(index) === index) {
+			this._sink(index);
+		}
+
+		return value;
 	}
 
 
@@ -130,9 +148,9 @@ export class BinaryHeap<T> implements Iterable<T> {
 	/**
 	 * Utility function to move values down heap based on comparison function.
 	 * @param {number} index 
-	 * @returns 
+	 * @returns {number}
 	 */
-	private _sink(index: number): void {
+	private _sink(index: number): number {
 		const value = this._heap[index];
 		const bottomIndex = this._size - 1;
 		let currentIndex = index;
@@ -145,13 +163,13 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 			if (
 				leftChildIndex <= bottomIndex && 
-				this._comparisonFunction<T>(value, leftChildValue) > 0 &&
-				this._comparisonFunction<T>(leftChildValue, rightChildValue) <= 0
+				this._comparisonFunction(value, leftChildValue) > 0 &&
+				this._comparisonFunction(leftChildValue, rightChildValue) <= 0
 			) {
 				this._heap[currentIndex] = leftChildValue;
 				currentIndex = leftChildIndex;
 
-			} else if (rightChildIndex <= bottomIndex && this._comparisonFunction<T>(value, rightChildValue) > 0) {
+			} else if (rightChildIndex <= bottomIndex && this._comparisonFunction(value, rightChildValue) > 0) {
 				this._heap[currentIndex] = rightChildValue;
 				currentIndex = rightChildIndex;
 
@@ -162,16 +180,17 @@ export class BinaryHeap<T> implements Iterable<T> {
 		} while (currentIndex !== bottomIndex);
 
 		this._heap[currentIndex] = value;
+		return currentIndex;
 	}
 
 
 	/**
 	 * Utility function to move values up heap based on comparison function.
 	 * @param {number} index 
-	 * @returns 
+	 * @returns {number}
 	 */
-	private _swim(index: number): void {
-		if (index === 0) return;
+	private _swim(index: number): number {
+		if (index === 0) return 0;
 
 		const value = this._heap[index];
 		let childIndex = index;
@@ -180,7 +199,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 			const parentIndex = this._calcParentIndex(childIndex)!;
 			const parentValue = this._heap[parentIndex];
 
-			if (this._comparisonFunction<T>(value, parentValue) < 0) {
+			if (this._comparisonFunction(value, parentValue) < 0) {
 				this._heap[childIndex] = parentValue;
 				childIndex = parentIndex;
 			} else {
@@ -189,6 +208,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 		} while (childIndex !== 0);
 
 		this._heap[childIndex] = value;
+		return childIndex;
 	}
 
 

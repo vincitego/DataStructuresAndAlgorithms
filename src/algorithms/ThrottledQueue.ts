@@ -1,5 +1,5 @@
 import { sleep } from '../utility/utility.js';
-import { LinkedList } from './LinkedList.js';
+import { LinkedList } from '../DataStructures/LinkedList.js';
 
 
 export enum THROTTLED_QUEUE_MODE {

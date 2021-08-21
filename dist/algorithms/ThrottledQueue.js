@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { sleep } from '../utility/utility.js';
-import { LinkedList } from './LinkedList.js';
+import { LinkedList } from '../DataStructures/LinkedList.js';
 export var THROTTLED_QUEUE_MODE;
 (function (THROTTLED_QUEUE_MODE) {
     THROTTLED_QUEUE_MODE[THROTTLED_QUEUE_MODE["DELAY"] = 0] = "DELAY";

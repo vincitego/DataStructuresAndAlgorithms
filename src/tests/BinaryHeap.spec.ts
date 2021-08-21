@@ -62,7 +62,7 @@ describe('Test Binary Heap', () => {
 
 	
 	it('Should correctly add nodes to binary heap with custom comparison', () => {
-		const bh = new BinaryHeap<{foo: number}>((a: any, b: any) => {
+		const bh = new BinaryHeap<{foo: number}>((a, b) => {
 			if (a.foo < b.foo) return -1;
 			if (a.foo > b.foo) return 1;
 			return 0;
@@ -111,6 +111,54 @@ describe('Test Binary Heap', () => {
 		} catch (error) {
 			ok(true);
 		}
+	});
+
+
+	it('Should clear the heap', () => {
+		const bh = new BinaryHeap<number>();
+		bh.add(3);
+		ok(bh.size() === 1);
+		bh.clear();
+		ok(bh.size() === 0);
+	});
+
+	
+	it('Should correctly find value in middle of heap', () => {
+		const bh = new BinaryHeap<number>();
+		bh.add(1).add(5).add(1).add(8).add(6).add(2).add(2).add(13).add(12).add(11).add(7).add(2).add(15).add(3).add(10);
+		ok(bh.findIndex(12) === 8);
+	});
+
+	
+	it('Should correctly find object in middle of heap', () => {
+		const bh = new BinaryHeap<{foo: number}>((a, b) => {
+			if (a.foo < b.foo) return -1;
+			if (a.foo > b.foo) return 1;
+			return 0;
+		});
+
+		bh.add({foo: 1});
+		bh.add({foo: 5});
+		bh.add({foo: 1});
+
+		ok(bh.findIndex(node => node.foo === 5) === 1);
+	});
+
+	
+	it('Should correctly remove at middle of heap', () => {
+		const bh = new BinaryHeap<number>();
+		bh.add(1).add(5).add(1).add(8).add(6).add(2).add(2).add(13).add(12).add(11).add(7).add(2).add(15).add(3).add(10);
+
+		ok(bh.removeAt(4) === 6);
+		ok(bh.peekAt(4) === 7);
+		ok(bh.peekAt(10) === 10);
+
+		ok(bh.removeAt(7) === 13);
+		ok(bh.peekAt(1) === 3);
+		ok(bh.peekAt(3) === 5);
+		ok(bh.peekAt(7) === 8)
+
+		ok(bh.size() === 13);
 	});
 
 });
