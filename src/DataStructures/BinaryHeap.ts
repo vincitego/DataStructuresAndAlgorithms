@@ -61,8 +61,20 @@ export class BinaryHeap<T> implements Iterable<T> {
 	}
 
 
-	poll(): T {
+	/**
+	 * Returns value at top of heap and removes the node.
+	 * @returns {T | undefined}
+	 */
+	poll(): T | undefined {
+		if (this._size === 0) return undefined;
 
+		const value = this._heap[0];
+		this._size--;
+		this._heap[0] = this._heap[this._size];
+
+		if (this._size === 0) return value;
+		this._sink(0);
+		return value;
 	}
 
 
@@ -115,8 +127,41 @@ export class BinaryHeap<T> implements Iterable<T> {
 	}
 
 	
+	/**
+	 * Utility function to move values down heap based on comparison function.
+	 * @param {number} index 
+	 * @returns 
+	 */
 	private _sink(index: number): void {
+		const value = this._heap[index];
+		const bottomIndex = this._size - 1;
+		let currentIndex = index;
 
+		do {
+			const leftChildIndex = this._calcLeftChildIndex(currentIndex);
+			const leftChildValue = this._heap[leftChildIndex];
+			const rightChildIndex = this._calcRightChildIndex(currentIndex);
+			const rightChildValue = this._heap[rightChildIndex];
+
+			if (
+				leftChildIndex <= bottomIndex && 
+				this._comparisonFunction<T>(value, leftChildValue) > 0 &&
+				this._comparisonFunction<T>(leftChildValue, rightChildValue) <= 0
+			) {
+				this._heap[currentIndex] = leftChildValue;
+				currentIndex = leftChildIndex;
+
+			} else if (rightChildIndex <= bottomIndex && this._comparisonFunction<T>(value, rightChildValue) > 0) {
+				this._heap[currentIndex] = rightChildValue;
+				currentIndex = rightChildIndex;
+
+			} else {
+				break;
+			}
+
+		} while (currentIndex !== bottomIndex);
+
+		this._heap[currentIndex] = value;
 	}
 
 

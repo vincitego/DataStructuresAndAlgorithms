@@ -12,15 +12,23 @@ export function defaultEquals(a, b) {
  * @param b Second element.
  */
 export function defaultMinCompare(a, b) {
-    if (a < b) {
+    if (a < b)
         return -1;
-    }
-    else if (a === b) {
-        return 0;
-    }
-    else {
+    if (a > b)
         return 1;
-    }
+    return 0;
+}
+/**
+ * Default maximum first comparison function.
+ * @param a First element.
+ * @param b Second element.
+ */
+export function defaultMaxCompare(a, b) {
+    if (a < b)
+        return 1;
+    if (a > b)
+        return -1;
+    return 0;
 }
 /**
  * Promisified setTimeout to asynchronously pause execution.

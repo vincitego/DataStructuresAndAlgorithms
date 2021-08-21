@@ -1,13 +1,3 @@
-export interface EqualsFunction<T> {
-  (a: T, b: T): boolean;
-}
-
-
-export interface CompareFunction<T> {
-  (a: T, b: T): number;
-}
-
-
 /**
  * Default equality function.
  * @param a First element.
@@ -24,13 +14,21 @@ export function defaultEquals<T>(a: T, b: T): boolean {
  * @param b Second element.
  */
 export function defaultMinCompare<T>(a: T, b: T): number {
-  if (a < b) {
-    return -1;
-  } else if (a === b) {
-    return 0;
-  } else {
-    return 1;
-  }
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
+}
+
+
+/**
+ * Default maximum first comparison function.
+ * @param a First element.
+ * @param b Second element.
+ */
+export function defaultMaxCompare<T>(a: T, b: T): number {
+  if (a < b) return 1;
+  if (a > b) return -1;
+  return 0;
 }
 
 

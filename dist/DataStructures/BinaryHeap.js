@@ -48,7 +48,20 @@ export class BinaryHeap {
             throw new RangeError('Index out of range.');
         return this._heap[index];
     }
+    /**
+     * Returns value at top of heap and removes the node.
+     * @returns {T | undefined}
+     */
     poll() {
+        if (this._size === 0)
+            return undefined;
+        const value = this._heap[0];
+        this._size--;
+        this._heap[0] = this._heap[this._size];
+        if (this._size === 0)
+            return value;
+        this._sink(0);
+        return value;
     }
     removeAt() {
     }
@@ -88,7 +101,35 @@ export class BinaryHeap {
         }
         return -1;
     }
+    /**
+     * Utility function to move values down heap based on comparison function.
+     * @param {number} index
+     * @returns
+     */
     _sink(index) {
+        const value = this._heap[index];
+        const bottomIndex = this._size - 1;
+        let currentIndex = index;
+        do {
+            const leftChildIndex = this._calcLeftChildIndex(currentIndex);
+            const leftChildValue = this._heap[leftChildIndex];
+            const rightChildIndex = this._calcRightChildIndex(currentIndex);
+            const rightChildValue = this._heap[rightChildIndex];
+            if (leftChildIndex <= bottomIndex &&
+                this._comparisonFunction(value, leftChildValue) > 0 &&
+                this._comparisonFunction(leftChildValue, rightChildValue) <= 0) {
+                this._heap[currentIndex] = leftChildValue;
+                currentIndex = leftChildIndex;
+            }
+            else if (rightChildIndex <= bottomIndex && this._comparisonFunction(value, rightChildValue) > 0) {
+                this._heap[currentIndex] = rightChildValue;
+                currentIndex = rightChildIndex;
+            }
+            else {
+                break;
+            }
+        } while (currentIndex !== bottomIndex);
+        this._heap[currentIndex] = value;
     }
     /**
      * Utility function to move values up heap based on comparison function.
