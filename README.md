@@ -14,7 +14,7 @@ Algorithms Implemented:
 
 
 To Do:
-* Union Find
+* Disjoint Set
 	* Kruskal's Minimum Spanning Tree
 * Binary Search Tree
 * Fenwick Tree

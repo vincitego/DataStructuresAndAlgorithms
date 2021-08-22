@@ -16,7 +16,7 @@ export var THROTTLED_QUEUE_MODE;
 })(THROTTLED_QUEUE_MODE || (THROTTLED_QUEUE_MODE = {}));
 export class ThrottledQueue {
     /**
-     * Creates new Throttled Queue
+     * Creates new Throttled Queue that will only allow N number of function executions per MS time window.
      * @param {number} maxItems Max number of items per time window.
      * @param {number} timeWindow Length of time window in milliseconds.
      * @param {THROTTLED_QUEUE_MODE} mode Indicates whether to error out or delay execution of function when exceeding threshhold.
