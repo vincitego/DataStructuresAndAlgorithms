@@ -1,36 +1,46 @@
 import { isIterable } from "../utility/utility";
 
-export class DisjointSet implements Iterable<number> {
+export class DisjointSet<T> implements Iterable<T> {
 	private _nodes: number[];
+	private _values: Map<T, number>;
+	private _size: number;
 	private _componentSizes: number[];
 	private _componentCount: number;
 
 	
 	/**
 	 * Creates a new Disjoint Set from a given list of values.
-	 * @param {number} size Size of set.
 	 */
-	constructor(size: number) {
-		if (typeof size !== 'number') throw new TypeError('Size need to be number.');
-		if (size <= 1) throw new RangeError('Minimum size is 2.');
-
+	constructor() {
 		this._nodes = [];
-		this._componentCount = size;
-		this._componentSizes = new Array(size).fill(1);
+		this._values = new Map<T, number>();
+		this._componentSizes = [];
+		this._size = 0;
+		this._componentCount = 0;
+	}
 
-		for (let i = 0; i < size; i++) {
-			this._nodes.push(i);
-		}
 
+	/**
+	 * Add new value to set.
+	 * @param {T} value 
+	 * @returns {DisjointSet<T>} Returns self.
+	 */
+	add(value: T): DisjointSet<T> {
+		this._nodes.push(this._size);
+		this._values.set(value, this._size);
+		this._componentSizes.push(1);
+		this._componentCount++;
+		this._size++;
+		return this;
 	}
 
 
 	/**
 	 * Find root node of component.
-	 * @param {number} index Index of set item to find root node of.
+	 * @param {number} index Index of item to find root node of.
 	 * @returns {number}
 	 */
-	find(index: number): number {
+	getRoot(index: number): number {
 		let parentIndex = index;
 		let currentIndex = index;
 
@@ -49,7 +59,19 @@ export class DisjointSet implements Iterable<number> {
 
 
 	/**
-	 * Attempts to union two nodes together.
+	 * Find root node of component given a value in the set.
+	 * @param {T} value Value to use to find root node of.
+	 * @returns {number}
+	 */
+	getRootByValue(value: T): number {
+		const index = this.findIndex(value);
+		if (index === undefined) throw new Error('Value not found in set.');
+		return this.getRoot(index);
+	}
+
+
+	/**
+	 * Attempts to union two nodes together by index.
 	 * @param {number} index1 Index of first node to union.
 	 * @param {number} index2 Index of second node to union.
 	 * @returns {boolean} Indicates whether the union was successful.
@@ -59,8 +81,8 @@ export class DisjointSet implements Iterable<number> {
 		if (index1 === index2) throw new SyntaxError('Indexes should not be the same');
 		if (index1 < 0 || index1 >= this.size() || index2 < 0 || index2 >= this.size()) throw new RangeError('Index out of range.');
 		
-		const root1 = this.find(index1);
-		const root2 = this.find(index2);
+		const root1 = this.getRoot(index1);
+		const root2 = this.getRoot(index2);
 		if (root1 === root2) return false;
 		
 		this._componentCount--;
@@ -86,10 +108,54 @@ export class DisjointSet implements Iterable<number> {
 			this._componentSizes[root1] = 0;
 			
 		} else { 
-			throw new Error('This should not happen');
+			throw new Error('Catch all failure. This should not happen.');
 		}
 
 		return true;
+	}
+
+
+	/**
+	 * Attempts to union two nodes together by value.
+	 * @param {T} value1 Value of first node to union.
+	 * @param {T} value2 Value of second node to union.
+	 * @returns {boolean} Indicates whether the union was successful.
+	 */
+	unionByValue(value1: T, value2: T): boolean {
+		const index1 = this.findIndex(value1);
+		const index2 = this.findIndex(value2);
+		if (index1 === undefined) throw new Error('Value not found in set.');
+		if (index2 === undefined) throw new Error('Value not found in set.');
+		return this.union(index1, index2);
+	}
+
+
+	/**
+	 * Peek at value at a given index in the set.
+	 * @param index Index to peek at.
+	 * @returns {T}
+	 */
+	peek(index: number): T | undefined {
+		if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
+		if (index < 0 || index >= this._size) throw new RangeError('Index out of range.');
+
+		let i = 0;
+		for (const value of this._values.keys()) {
+			if (i === index) return value;
+			i++;
+		}
+	}
+
+
+	/**
+	 * Find index of value in set.
+	 * @param {T} value Value to find in set
+	 * @returns {number}
+	 */
+	findIndex(value: T): number {
+		const index = this._values.get(value);
+		if (index === undefined) throw new Error('Value not found in set.');
+		return index;
 	}
 
 
@@ -98,7 +164,7 @@ export class DisjointSet implements Iterable<number> {
 	 * @returns {number}
 	 */
 	size(): number {
-		return this._nodes.length;
+		return this._size;
 	}
 
 
@@ -120,7 +186,7 @@ export class DisjointSet implements Iterable<number> {
 		if (typeof index !== 'number') throw new TypeError('Index need to be number.');
 		if (index < 0 || index >= this.size()) throw new RangeError('Index out of range.');
 
-		const root = this.find(index);
+		const root = this.getRoot(index);
 		return this._componentSizes[root];
 	}
 
@@ -128,9 +194,9 @@ export class DisjointSet implements Iterable<number> {
   /**
    * Iterator to allow looping.
    */
-	 *[Symbol.iterator](): Iterator<number> {
-    for (const value of this._nodes) {
-      yield value;
+	 *[Symbol.iterator](): Iterator<T> {
+    for (const value of this._values) {
+      yield value[0];
     }
   }
 }
