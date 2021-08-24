@@ -2,7 +2,8 @@ import { DisjointSet } from "../index.js";
 
 
 export class MinSpanTree<T> extends DisjointSet<T> {
-	private _edges: [number, number][];
+	private _data: DisjointSet<T>;
+	private _edges: [T, T][];
 	private _weights: number[];
 	private _edgeInForest: boolean[];
 
@@ -13,6 +14,7 @@ export class MinSpanTree<T> extends DisjointSet<T> {
 	constructor() {
 		super();
 
+		this._data = new DisjointSet<T>();
 		this._edges = [];
 		this._weights = [];
 		this._edgeInForest = [];

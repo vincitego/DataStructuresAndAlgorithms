@@ -5,6 +5,7 @@ export class MinSpanTree extends DisjointSet {
      */
     constructor() {
         super();
+        this._data = new DisjointSet();
         this._edges = [];
         this._weights = [];
         this._edgeInForest = [];

@@ -7,6 +7,7 @@ Data Structures Implemented:
 * Singly Linked List
 * Circular Buffer
 * Binary Heap
+* Disjoint Set
 
 
 Algorithms Implemented:
@@ -14,8 +15,7 @@ Algorithms Implemented:
 
 
 To Do:
-* Disjoint Set
-	* Kruskal's Minimum Spanning Tree
+* Kruskal's Minimum Spanning Tree
 * Binary Search Tree
 * Fenwick Tree
 * Suffix Array
