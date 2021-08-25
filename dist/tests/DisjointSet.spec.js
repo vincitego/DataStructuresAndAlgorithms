@@ -68,6 +68,13 @@ describe('Test Disjoint Set', () => {
         ok(ds.componentCount() === 1);
         ok(ds.componentSize(11) === 12);
         ok(ds.componentSize(10) === 12);
+        ds.add(99);
+        ok(ds.componentCount() === 2);
+        ok(ds.componentSize(12) === 1);
+        ok(ds.findIndex(99) === 12);
+        ok(ds.union(12, 0));
+        ok(ds.componentCount() === 1);
+        ok(ds.componentSize(12) === 13);
     });
     it('Should be able to use disjoint set with objects', () => {
         const ds = new DisjointSet();

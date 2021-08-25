@@ -12,10 +12,10 @@ Data Structures Implemented:
 
 Algorithms Implemented:
 * Throttled Queue
+* Kruskal's Minimum Spanning Tree
 
 
 To Do:
-* Kruskal's Minimum Spanning Tree
 * Binary Search Tree
 * Fenwick Tree
 * Suffix Array
