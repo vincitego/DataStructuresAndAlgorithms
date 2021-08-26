@@ -38,7 +38,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Add new node to beginning of Linked List.
+   * Add new node to beginning of Linked List. O(1)
    * @param {T} value Value of new node.
    * @returns {LinkedList<T>} Returns self.
    */
@@ -59,7 +59,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Add new node to end of Linked List.
+   * Add new node to end of Linked List. O(1)
    * @param {T} value Value of new node.
    * @returns {LinkedList<T>} Returns self.
    */
@@ -80,7 +80,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Add new node to beginning of Linked List.
+   * Add new node to beginning of Linked List. O(n)
    * @param {number} index Index to add new node at.
    * @param {T} value Value of new node.
    * @returns {LinkedList<T>} Returns self.
@@ -108,7 +108,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Get value at front of Linked List without removing the node.
+   * Get value at front of Linked List without removing the node. O(1)
    * @returns {T | undefined} 
    */
   peekFront(): T | undefined {
@@ -117,7 +117,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Get value at back of Linked List without removing the node.
+   * Get value at back of Linked List without removing the node. O(1)
    * @returns {T | undefined} 
    */
   peekBack(): T | undefined {
@@ -126,7 +126,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Get value at given index of Linked List without removing the node.
+   * Get value at given index of Linked List without removing the node. O(n)
    * @param {number} index Index of node to peek at.
    * @returns {T | undefined} 
    */
@@ -145,7 +145,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Get value at front of Linked List and remove the node.
+   * Get value at front of Linked List and remove the node. O(1)
    * @returns {T | undefined} 
    */
   removeFront(): T | undefined {
@@ -162,7 +162,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Get value at back of Linked List and remove the node.
+   * Get value at back of Linked List and remove the node. O(n)
    * @returns {T | undefined} 
    */
   removeBack(): T | undefined {
@@ -172,7 +172,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Remove node at given index of Linked List.
+   * Remove node at given index of Linked List. O(n)
    * @param {number} index Index of node to remove.
    * @returns {T | undefined} 
    */
@@ -198,7 +198,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Returns size of linked list.
+   * Returns size of linked list. O(1)
    * @returns {number}
    */
   size(): number {
@@ -207,7 +207,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Clears all nodes from Linked List.
+   * Clears all nodes from Linked List. O(1)
    * @returns {LinkedList<T>} Returns self.
    */
   clear(): LinkedList<T> {
@@ -219,7 +219,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Find index of first value matching given value or where given callback evaluates to true.
+   * Find index of first value matching given value or where given callback evaluates to true. O(n)
    * @param {} valueOrCallback 
    * @returns {number}
    */

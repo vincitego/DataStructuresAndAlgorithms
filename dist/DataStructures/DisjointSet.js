@@ -13,7 +13,7 @@ export class DisjointSet {
         this._componentCount = 0;
     }
     /**
-     * Add new value to set.
+     * Add new value to set. O(1)
      * @param {T} value
      * @returns {DisjointSet<T>} Returns self.
      */
@@ -26,7 +26,7 @@ export class DisjointSet {
         return this;
     }
     /**
-     * Attempts to union two nodes together by index.
+     * Attempts to union two nodes together by index. O(1) amortized
      * @param {number} index1 Index of first node to union.
      * @param {number} index2 Index of second node to union.
      * @returns {boolean} Indicates whether the union was successful.
@@ -59,7 +59,7 @@ export class DisjointSet {
         return true;
     }
     /**
-     * Peek at value at a given index in the set.
+     * Peek at value at a given index in the set. O(n)
      * @param index Index to peek at.
      * @returns {T}
      */
@@ -76,7 +76,7 @@ export class DisjointSet {
         }
     }
     /**
-   * Find index of first value matching given value or where given callback evaluates to true.
+   * Find index of first value matching given value or where given callback evaluates to true. O(n)
    * @param {} valueOrCallback
    * @returns {number}
      */
@@ -96,21 +96,21 @@ export class DisjointSet {
         return -1;
     }
     /**
-     * Return size of set.
+     * Return size of set. O(1)
      * @returns {number}
      */
     size() {
         return this._size;
     }
     /**
-     * Returns number of components.
+     * Returns number of components. O(1)
      * @returns {number}
      */
     componentCount() {
         return this._componentCount;
     }
     /**
-     * Get the size of the component that the given index belongs to.
+     * Get the size of the component that the given index belongs to. O(1) amortized
      * @param {number} index Index of item whose component size you're looking for.
      * @returns {number}
      */
@@ -123,7 +123,7 @@ export class DisjointSet {
         return this._componentSizes[root];
     }
     /**
-     * Utility function to find root node of component.
+     * Utility function to find root node of component. O(1) amortized
      * @param {number} index Index of item to find root node of.
      * @returns {number}
      */

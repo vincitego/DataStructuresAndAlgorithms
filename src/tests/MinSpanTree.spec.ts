@@ -26,6 +26,14 @@ describe('Test Minimum Spanning Tree', () => {
 	
 	it('Pass through functions to disjoint set should work normally', () => {
 		const mst = new MinSpanTree<number>();
+
+		mst.addNode(1);
+		ok(mst.peekNode(0) === 1);
+		ok(mst.findNodeIndex(1) === 0);
+		ok(mst.nodeCount() === 1);
+		ok(mst.componentCount() === 1);
+		ok(mst.componentSize(0) === 1);
+		ok(mst.getNodes()[0] === 1);
 	});
 
 	

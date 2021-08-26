@@ -26,7 +26,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Add new value to the heap.
+	 * Add new value to the heap. O(logn)
 	 * @param {T} value 
 	 * @returns {BinaryHeap<T>} Returns self.
 	 */
@@ -46,7 +46,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Peek at value at top of heap.
+	 * Peek at value at top of heap. O(1)
 	 * @returns {T}
 	 */
 	peek(): T {
@@ -55,7 +55,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Peek at value of heap at given index.
+	 * Peek at value of heap at given index. O(1)
 	 * @param {number} index Index of heap to peek at.
 	 * @returns {T}
 	 */
@@ -67,7 +67,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Returns value at top of heap and removes the node.
+	 * Returns value at top of heap and removes the node. O(logn)
 	 * @returns {T | undefined}
 	 */
 	poll(): T | undefined {
@@ -84,7 +84,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Returns value at given index and removes the node.
+	 * Returns value at given index and removes the node. O(logn)
 	 * @param index 
 	 * @returns {T | undefined}
 	 */
@@ -106,7 +106,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Get size of heap.
+	 * Get size of heap. O(1)
 	 * @returns {number}
 	 */
 	size(): number {
@@ -115,7 +115,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Clears the binary heap.
+	 * Clears the binary heap. O(1)
 	 * @returns {BinaryHeap<T>} Returns self.
 	 */
 	clear(): BinaryHeap<T> {
@@ -126,7 +126,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
   /**
-   * Find index of first value matching given value or where given callback evaluates to true.
+   * Find index of first value matching given value or where given callback evaluates to true. O(n)
    * @param {} valueOrCallback 
    * @returns {number}
    */
@@ -150,7 +150,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 	
 	/**
-	 * Utility function to move values down heap based on comparison function.
+	 * Utility function to move values down heap based on comparison function. O(logn)
 	 * @param {number} index 
 	 * @returns {number}
 	 */
@@ -189,7 +189,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Utility function to move values up heap based on comparison function.
+	 * Utility function to move values up heap based on comparison function. O(logn)
 	 * @param {number} index 
 	 * @returns {number}
 	 */
@@ -217,7 +217,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Utility function to calculate parent index for a given child index.
+	 * Utility function to calculate parent index for a given child index. O(1)
 	 * @param {number} index Index to calculate parent of.
 	 * @returns {number}
 	 */
@@ -227,7 +227,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Utility function to calculate index of the left child of the given index.
+	 * Utility function to calculate index of the left child of the given index. O(1)
 	 * @param {number} index Index to calculate left child of.
 	 * @returns {number}
 	 */
@@ -237,7 +237,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Utility function to calculate index of the right child of the given index.
+	 * Utility function to calculate index of the right child of the given index. O(1)
 	 * @param {number} index Index to calculate right child of.
 	 * @returns {number}
 	 */

@@ -17,7 +17,7 @@ export class BinaryHeap {
         this._comparisonFunction = comparisonFunction;
     }
     /**
-     * Add new value to the heap.
+     * Add new value to the heap. O(logn)
      * @param {T} value
      * @returns {BinaryHeap<T>} Returns self.
      */
@@ -34,14 +34,14 @@ export class BinaryHeap {
         return this;
     }
     /**
-     * Peek at value at top of heap.
+     * Peek at value at top of heap. O(1)
      * @returns {T}
      */
     peek() {
         return this._heap[0];
     }
     /**
-     * Peek at value of heap at given index.
+     * Peek at value of heap at given index. O(1)
      * @param {number} index Index of heap to peek at.
      * @returns {T}
      */
@@ -53,7 +53,7 @@ export class BinaryHeap {
         return this._heap[index];
     }
     /**
-     * Returns value at top of heap and removes the node.
+     * Returns value at top of heap and removes the node. O(logn)
      * @returns {T | undefined}
      */
     poll() {
@@ -68,7 +68,7 @@ export class BinaryHeap {
         return value;
     }
     /**
-     * Returns value at given index and removes the node.
+     * Returns value at given index and removes the node. O(logn)
      * @param index
      * @returns {T | undefined}
      */
@@ -88,14 +88,14 @@ export class BinaryHeap {
         return value;
     }
     /**
-     * Get size of heap.
+     * Get size of heap. O(1)
      * @returns {number}
      */
     size() {
         return this._size;
     }
     /**
-     * Clears the binary heap.
+     * Clears the binary heap. O(1)
      * @returns {BinaryHeap<T>} Returns self.
      */
     clear() {
@@ -104,7 +104,7 @@ export class BinaryHeap {
         return this;
     }
     /**
-     * Find index of first value matching given value or where given callback evaluates to true.
+     * Find index of first value matching given value or where given callback evaluates to true. O(n)
      * @param {} valueOrCallback
      * @returns {number}
      */
@@ -124,7 +124,7 @@ export class BinaryHeap {
         return -1;
     }
     /**
-     * Utility function to move values down heap based on comparison function.
+     * Utility function to move values down heap based on comparison function. O(logn)
      * @param {number} index
      * @returns {number}
      */
@@ -155,7 +155,7 @@ export class BinaryHeap {
         return currentIndex;
     }
     /**
-     * Utility function to move values up heap based on comparison function.
+     * Utility function to move values up heap based on comparison function. O(logn)
      * @param {number} index
      * @returns {number}
      */
@@ -179,7 +179,7 @@ export class BinaryHeap {
         return childIndex;
     }
     /**
-     * Utility function to calculate parent index for a given child index.
+     * Utility function to calculate parent index for a given child index. O(1)
      * @param {number} index Index to calculate parent of.
      * @returns {number}
      */
@@ -187,7 +187,7 @@ export class BinaryHeap {
         return Math.floor((index - 1) / 2);
     }
     /**
-     * Utility function to calculate index of the left child of the given index.
+     * Utility function to calculate index of the left child of the given index. O(1)
      * @param {number} index Index to calculate left child of.
      * @returns {number}
      */
@@ -195,7 +195,7 @@ export class BinaryHeap {
         return index * 2 + 1;
     }
     /**
-     * Utility function to calculate index of the right child of the given index.
+     * Utility function to calculate index of the right child of the given index. O(1)
      * @param {number} index Index to calculate right child of.
      * @returns {number}
      */

@@ -44,6 +44,7 @@ export class ThrottledQueue {
 	 * Adds a new function callback to the Throttle Queue.
 	 * Will resolve immediately if limit has not been hit.
 	 * Will error or delay function execution based on operating mode.
+	 * O(1)
 	 * @param {function} callback Function to call.
 	 * @returns {Promise<T>} Promise of callback results.
 	 */
@@ -76,7 +77,7 @@ export class ThrottledQueue {
 
 
 	/**
-	 * If operating in delay mode, returns the number of function calls that have been delayed by the throttle.
+	 * If operating in delay mode, returns the number of function calls that have been delayed by the throttle. O(1)
 	 * @returns {number} 
 	 */
 	getDelayedSize(): number {
@@ -85,7 +86,7 @@ export class ThrottledQueue {
 
 
 	/**
-	 * Get number of function calls available before hitting throttle.
+	 * Get number of function calls available before hitting throttle. O(1)
 	 * @returns {number} 
 	 */
 	getRemainingSize(): number {
@@ -95,7 +96,7 @@ export class ThrottledQueue {
 
 
 	/**
-	 * Utility function to clean up processed requests that have exceeded current time window.
+	 * Utility function to clean up processed requests that have exceeded current time window. O(n)
 	 */
 	private _removeOldRequests(): void {
 		const startTimeframe: number = Date.now() - this._timeWindow;

@@ -26,7 +26,7 @@ export class MinimumSpanningTree<T> implements Iterable<[number, number, number,
 
 	/**
 	 * Adds an edge with a weight to the potential minimum spanning tree.
-	 * You can not add any edges after calling the method getMinimum().
+	 * You can not add any edges after calling the method getMinimum(). O(1)
 	 * @param {number} index1 Index of first node in edge.
 	 * @param {number} index2 Index of second node in edge.
 	 * @param {number} weight Weight of edge.
@@ -45,7 +45,7 @@ export class MinimumSpanningTree<T> implements Iterable<[number, number, number,
 
 
 	/**
-	 * Calculates the minimum spanning tree given the edge data.
+	 * Calculates the minimum spanning tree given the edge data. O(nlogn)
 	 * @returns {[number, number, number, boolean][]} An array of the edge data in the minimum spanning tree. [index1, index2, weight, isInMinimumSpanningTree]
 	 */
 	findMinimum(): [number, number, number, boolean][] {
@@ -69,7 +69,7 @@ export class MinimumSpanningTree<T> implements Iterable<[number, number, number,
 
 
 	/**
-	 * Gets all edges that have been added.
+	 * Gets all edges that have been added. O(1)
 	 * @returns [number, number, number, boolean][] An array of all edge data. [index1, index2, weight, isInMinimumSpanningTree]
 	 */
 	getEdges(): [number, number, number, boolean][] {
@@ -78,7 +78,7 @@ export class MinimumSpanningTree<T> implements Iterable<[number, number, number,
 
 
 	/**
-	 * Get count of all edges.
+	 * Get count of all edges. O(1)
 	 * @returns {number}
 	 */
 	edgeCount(): number {
@@ -87,7 +87,7 @@ export class MinimumSpanningTree<T> implements Iterable<[number, number, number,
 
 
 	/**
-	 * Get count of edges in minimum spanning tree.
+	 * Get count of edges in minimum spanning tree. O(1)
 	 * @returns {number}
 	 */
 	minEdgeCount(): number {
@@ -97,7 +97,7 @@ export class MinimumSpanningTree<T> implements Iterable<[number, number, number,
 
 
 	/**
-	 * Get total weight of the minimum spanning tree.
+	 * Get total weight of the minimum spanning tree. O(1)
 	 * @returns {number}
 	 */
 	treeWeight(): number {
@@ -107,7 +107,7 @@ export class MinimumSpanningTree<T> implements Iterable<[number, number, number,
 
 
 	/**
-	 * Pass through function to add a value to disjoint set.
+	 * Pass through function to add a value to disjoint set. O(1)
 	 * @param value 
 	 * @returns {MinimumSpanningTree<T>} Returns self.
 	 */
@@ -117,33 +117,60 @@ export class MinimumSpanningTree<T> implements Iterable<[number, number, number,
 	}
 
 
-	peekNode() {
-
+	/**
+	 * Peek at value at a given index in the disjoint set. O(n)
+	 * @param index Index to peek at.
+	 * @returns {T}
+	 */
+	peekNode(index: number): T | undefined {
+		return this._disjointSet.peek(index);
 	}
 
 
-	findNodeIndex() {
-
+	/**
+   * Find index of first value matching given value or where given callback evaluates to true. O(n)
+   * @param {} valueOrCallback 
+   * @returns {number}
+	 */
+	findNodeIndex(valueOrCallback: T | ((node: T) => boolean)): number {
+		return this._disjointSet.findIndex(valueOrCallback);
 	}
 
 
-	nodeCount() {
-
+	/**
+	 * Return number of nodes in disjoint set. O(1)
+	 * @returns {number}
+	 */
+	nodeCount(): number {
+		return this._disjointSet.size();
 	}
 
 
-	componentCount() {
-
+	/**
+	 * Returns number of components. O(1)
+	 * @returns {number}
+	 */
+	componentCount(): number {
+		return this._disjointSet.componentCount();
 	}
 
 
-	componentSize() {
-
+	/**
+	 * Get the size of the component that the given index belongs to. O(1) amortized
+	 * @param {number} index Index of item whose component size you're looking for.
+	 * @returns {number}
+	 */
+	componentSize(index: number): number {
+		return this._disjointSet.componentSize(index);
 	}
 
 
-	getNodes() {
-
+	/**
+	 * Returns array of all nodes of the disjoint set.
+	 * @returns {T[]}
+	 */
+	getNodes(): T[] {
+		return Array.from(this._disjointSet);
 	}
 
 

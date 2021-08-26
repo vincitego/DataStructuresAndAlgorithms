@@ -16,7 +16,7 @@ export class MinimumSpanningTree {
     }
     /**
      * Adds an edge with a weight to the potential minimum spanning tree.
-     * You can not add any edges after calling the method getMinimum().
+     * You can not add any edges after calling the method getMinimum(). O(1)
      * @param {number} index1 Index of first node in edge.
      * @param {number} index2 Index of second node in edge.
      * @param {number} weight Weight of edge.
@@ -37,7 +37,7 @@ export class MinimumSpanningTree {
         return this;
     }
     /**
-     * Calculates the minimum spanning tree given the edge data.
+     * Calculates the minimum spanning tree given the edge data. O(nlogn)
      * @returns {[number, number, number, boolean][]} An array of the edge data in the minimum spanning tree. [index1, index2, weight, isInMinimumSpanningTree]
      */
     findMinimum() {
@@ -57,21 +57,21 @@ export class MinimumSpanningTree {
         return this._edgesInForest;
     }
     /**
-     * Gets all edges that have been added.
+     * Gets all edges that have been added. O(1)
      * @returns [number, number, number, boolean][] An array of all edge data. [index1, index2, weight, isInMinimumSpanningTree]
      */
     getEdges() {
         return this._edges;
     }
     /**
-     * Get count of all edges.
+     * Get count of all edges. O(1)
      * @returns {number}
      */
     edgeCount() {
         return this._edges.length;
     }
     /**
-     * Get count of edges in minimum spanning tree.
+     * Get count of edges in minimum spanning tree. O(1)
      * @returns {number}
      */
     minEdgeCount() {
@@ -80,7 +80,7 @@ export class MinimumSpanningTree {
         return this._edgesInForest.length;
     }
     /**
-     * Get total weight of the minimum spanning tree.
+     * Get total weight of the minimum spanning tree. O(1)
      * @returns {number}
      */
     treeWeight() {
@@ -89,7 +89,7 @@ export class MinimumSpanningTree {
         return this._treeWeight;
     }
     /**
-     * Pass through function to add a value to disjoint set.
+     * Pass through function to add a value to disjoint set. O(1)
      * @param value
      * @returns {MinimumSpanningTree<T>} Returns self.
      */
@@ -97,17 +97,50 @@ export class MinimumSpanningTree {
         this._disjointSet.add(value);
         return this;
     }
-    peekNode() {
+    /**
+     * Peek at value at a given index in the disjoint set. O(n)
+     * @param index Index to peek at.
+     * @returns {T}
+     */
+    peekNode(index) {
+        return this._disjointSet.peek(index);
     }
-    findNodeIndex() {
+    /**
+   * Find index of first value matching given value or where given callback evaluates to true. O(n)
+   * @param {} valueOrCallback
+   * @returns {number}
+     */
+    findNodeIndex(valueOrCallback) {
+        return this._disjointSet.findIndex(valueOrCallback);
     }
+    /**
+     * Return number of nodes in disjoint set. O(1)
+     * @returns {number}
+     */
     nodeCount() {
+        return this._disjointSet.size();
     }
+    /**
+     * Returns number of components. O(1)
+     * @returns {number}
+     */
     componentCount() {
+        return this._disjointSet.componentCount();
     }
-    componentSize() {
+    /**
+     * Get the size of the component that the given index belongs to. O(1) amortized
+     * @param {number} index Index of item whose component size you're looking for.
+     * @returns {number}
+     */
+    componentSize(index) {
+        return this._disjointSet.componentSize(index);
     }
+    /**
+     * Returns array of all nodes of the disjoint set.
+     * @returns {T[]}
+     */
     getNodes() {
+        return Array.from(this._disjointSet);
     }
     /**
      * Iterator to allow looping of edges.

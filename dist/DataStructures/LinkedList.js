@@ -25,7 +25,7 @@ export class LinkedList {
         this._size = 0;
     }
     /**
-     * Add new node to beginning of Linked List.
+     * Add new node to beginning of Linked List. O(1)
      * @param {T} value Value of new node.
      * @returns {LinkedList<T>} Returns self.
      */
@@ -42,7 +42,7 @@ export class LinkedList {
         return this;
     }
     /**
-     * Add new node to end of Linked List.
+     * Add new node to end of Linked List. O(1)
      * @param {T} value Value of new node.
      * @returns {LinkedList<T>} Returns self.
      */
@@ -59,7 +59,7 @@ export class LinkedList {
         return this;
     }
     /**
-     * Add new node to beginning of Linked List.
+     * Add new node to beginning of Linked List. O(n)
      * @param {number} index Index to add new node at.
      * @param {T} value Value of new node.
      * @returns {LinkedList<T>} Returns self.
@@ -84,7 +84,7 @@ export class LinkedList {
         return this;
     }
     /**
-     * Get value at front of Linked List without removing the node.
+     * Get value at front of Linked List without removing the node. O(1)
      * @returns {T | undefined}
      */
     peekFront() {
@@ -92,7 +92,7 @@ export class LinkedList {
         return (_a = this._head) === null || _a === void 0 ? void 0 : _a.value;
     }
     /**
-     * Get value at back of Linked List without removing the node.
+     * Get value at back of Linked List without removing the node. O(1)
      * @returns {T | undefined}
      */
     peekBack() {
@@ -100,7 +100,7 @@ export class LinkedList {
         return (_a = this._tail) === null || _a === void 0 ? void 0 : _a.value;
     }
     /**
-     * Get value at given index of Linked List without removing the node.
+     * Get value at given index of Linked List without removing the node. O(n)
      * @param {number} index Index of node to peek at.
      * @returns {T | undefined}
      */
@@ -116,7 +116,7 @@ export class LinkedList {
         return node.value;
     }
     /**
-     * Get value at front of Linked List and remove the node.
+     * Get value at front of Linked List and remove the node. O(1)
      * @returns {T | undefined}
      */
     removeFront() {
@@ -130,7 +130,7 @@ export class LinkedList {
         return value;
     }
     /**
-     * Get value at back of Linked List and remove the node.
+     * Get value at back of Linked List and remove the node. O(n)
      * @returns {T | undefined}
      */
     removeBack() {
@@ -139,7 +139,7 @@ export class LinkedList {
         return this.removeAt(this._size - 1);
     }
     /**
-     * Remove node at given index of Linked List.
+     * Remove node at given index of Linked List. O(n)
      * @param {number} index Index of node to remove.
      * @returns {T | undefined}
      */
@@ -163,14 +163,14 @@ export class LinkedList {
         return currentNode.value;
     }
     /**
-     * Returns size of linked list.
+     * Returns size of linked list. O(1)
      * @returns {number}
      */
     size() {
         return this._size;
     }
     /**
-     * Clears all nodes from Linked List.
+     * Clears all nodes from Linked List. O(1)
      * @returns {LinkedList<T>} Returns self.
      */
     clear() {
@@ -180,7 +180,7 @@ export class LinkedList {
         return this;
     }
     /**
-     * Find index of first value matching given value or where given callback evaluates to true.
+     * Find index of first value matching given value or where given callback evaluates to true. O(n)
      * @param {} valueOrCallback
      * @returns {number}
      */

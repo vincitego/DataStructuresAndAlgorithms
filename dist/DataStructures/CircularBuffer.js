@@ -26,7 +26,7 @@ export class CircularBuffer {
         this._writeIndex = 1;
     }
     /**
-     * Get oldest unread data in buffer and remove it.
+     * Get oldest unread data in buffer and remove it. O(1)
      * @returns {T}
      */
     read() {
@@ -36,7 +36,7 @@ export class CircularBuffer {
         return this._buffer[this._prereadIndex];
     }
     /**
-     * Remove and return value at given offset from current read position.
+     * Remove and return value at given offset from current read position. O(n)
      * @param {number} offset
      * @returns {T}
      */
@@ -62,7 +62,7 @@ export class CircularBuffer {
         return value;
     }
     /**
-     * Get oldest unread data in buffer without removing it.
+     * Get oldest unread data in buffer without removing it. O(1)
      * @returns {T}
      */
     peek() {
@@ -71,7 +71,7 @@ export class CircularBuffer {
         return this._buffer[this._incrementIndex(this._prereadIndex)];
     }
     /**
-     * Get unread data at given index in buffer without removing it.
+     * Get unread data at given index in buffer without removing it. O(1)
      * @param {number} offset Offset from current read location to peek at.
      * @returns {T}
      */
@@ -86,7 +86,7 @@ export class CircularBuffer {
         return this._buffer[peekIndex];
     }
     /**
-     * Write data to the buffer.
+     * Write data to the buffer. O(1)
      * @param {T} value Value to write.
      * @returns {CircularBuffer<T>} Returns self.
      */
@@ -102,7 +102,7 @@ export class CircularBuffer {
         return this;
     }
     /**
-     * Writes data at given offset from current read location, shifting data forward.
+     * Writes data at given offset from current read location, shifting data forward. O(n)
      * @param {number} offset Offset from current read location to write at.
      * @param {T} value Value to write
      * @returns {CircularBuffer<T>} Returns self.
@@ -130,28 +130,28 @@ export class CircularBuffer {
         return this;
     }
     /**
-     * Get size of buffer.
+     * Get size of buffer. O(1)
      * @returns {number}
      */
     maxSize() {
         return this._maxSize;
     }
     /**
-     * Checks whether all data written so far has already been read.
+     * Checks whether all data written so far has already been read. O(1)
      * @returns {boolean}
      */
     isBufferEmpty() {
         return this._incrementIndex(this._prereadIndex) === this._writeIndex;
     }
     /**
-     * Checks whether buffer has been filled with written data that has not been read yet.
+     * Checks whether buffer has been filled with written data that has not been read yet. O(1)
      * @returns {boolean}
      */
     isBufferFull() {
         return this._writeIndex === this._prereadIndex;
     }
     /**
-     * Get amount of items in buffer that have not been read yet.
+     * Get amount of items in buffer that have not been read yet. O(1)
      * @returns {number}
      */
     amountFilled() {
@@ -163,7 +163,7 @@ export class CircularBuffer {
         }
     }
     /**
-     * Clears the buffer.
+     * Clears the buffer. O(1)
      * @returns {CircularBuffer<T>} Returns self.
      */
     clear() {
@@ -172,7 +172,7 @@ export class CircularBuffer {
         return this;
     }
     /**
-     * Find index of first value matching given value or where given callback evaluates to true.
+     * Find index of first value matching given value or where given callback evaluates to true. O(n)
      * @param {} valueOrCallback
      * @returns {number}
      */
@@ -192,7 +192,7 @@ export class CircularBuffer {
         return -1;
     }
     /**
-     * Utility function to calculate incremented index value without overflowing.
+     * Utility function to calculate incremented index value without overflowing. O(1)
      * @param {number} index Index value to increment.
      * @returns {number}
      */
@@ -200,7 +200,7 @@ export class CircularBuffer {
         return (index + 1) % (this._maxSize + 1);
     }
     /**
-     * Utility function to calculate decremented index value without underflowing.
+     * Utility function to calculate decremented index value without underflowing. O(1)
      * @param {number} index Index value to decrement.
      * @returns {number}
      */
