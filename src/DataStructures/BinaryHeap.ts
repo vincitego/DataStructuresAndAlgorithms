@@ -1,5 +1,9 @@
 import { defaultMinCompare } from "../utility/utility.js";
 
+
+/**
+ * Binary Heap implementation.
+ */
 export class BinaryHeap<T> implements Iterable<T> {
 	private _heap: T[];
 	private _size: number;
@@ -7,9 +11,9 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Creates a new binary heap with a given comparison function.
-	 * Default comparison function is a min heap.
-	 * Can be used as a priority queue.
+	 * Creates a new binary heap.
+ 	 * Default comparison function is a min heap.
+ 	 * Can be used as a priority queue.
 	 * @param {function} comparisonFunction Function to use to compare node values.
 	 */
 	constructor(comparisonFunction: (a: T, b: T) => number = defaultMinCompare) {

@@ -4,6 +4,9 @@ export enum CIRCULAR_BUFFER_MODE {
 }
 
 
+/**
+ * Circular Buffer implementation that contains a fixed number of items.
+ */
 export class CircularBuffer<T> implements Iterable<T> {
   private _maxSize: number;
   private _mode: CIRCULAR_BUFFER_MODE;
@@ -13,7 +16,7 @@ export class CircularBuffer<T> implements Iterable<T> {
 
 
   /**
-   * Creates a Circular Buffer.
+   * Creates a new Circular Buffer.
 	 * @param {number} maxSize Maximum number of nodes in buffer.
 	 * @param {CIRCULAR_BUFFER_MODE} mode Whether to throw error or overwrite old data when buffer is full.
    */

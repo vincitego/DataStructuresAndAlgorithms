@@ -1,6 +1,6 @@
-import { defaultEquals } from '../utility/utility.js';
-
-
+/**
+ * Linked List Node class to contain the data in a node.
+ */
 class LinkedListNode<T> {
   public value: T;
   public next: LinkedListNode<T> | undefined;
@@ -17,6 +17,9 @@ class LinkedListNode<T> {
 }
 
 
+/**
+ * Singly Linked List implementation that can also be used as a queue.
+ */
 export class LinkedList<T> implements Iterable<T> {
   private _head: LinkedListNode<T> | undefined;
   private _tail: LinkedListNode<T> | undefined;
@@ -24,7 +27,7 @@ export class LinkedList<T> implements Iterable<T> {
 
 
   /**
-   * Creates a Linked List.
+   * Creates a new Linked List.
    * Can be used as a Queue. For a Stack, use an Array.
    */
   constructor() {

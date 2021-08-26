@@ -3,9 +3,12 @@ export var CIRCULAR_BUFFER_MODE;
     CIRCULAR_BUFFER_MODE[CIRCULAR_BUFFER_MODE["OVERWRITE"] = 0] = "OVERWRITE";
     CIRCULAR_BUFFER_MODE[CIRCULAR_BUFFER_MODE["ERROR"] = 1] = "ERROR";
 })(CIRCULAR_BUFFER_MODE || (CIRCULAR_BUFFER_MODE = {}));
+/**
+ * Circular Buffer implementation that contains a fixed number of items.
+ */
 export class CircularBuffer {
     /**
-     * Creates a Circular Buffer.
+     * Creates a new Circular Buffer.
        * @param {number} maxSize Maximum number of nodes in buffer.
        * @param {CIRCULAR_BUFFER_MODE} mode Whether to throw error or overwrite old data when buffer is full.
      */

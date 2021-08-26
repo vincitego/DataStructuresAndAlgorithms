@@ -1,7 +1,10 @@
 import { defaultMinCompare } from "../utility/utility.js";
+/**
+ * Binary Heap implementation.
+ */
 export class BinaryHeap {
     /**
-     * Creates a new binary heap with a given comparison function.
+     * Creates a new binary heap.
      * Default comparison function is a min heap.
      * Can be used as a priority queue.
      * @param {function} comparisonFunction Function to use to compare node values.

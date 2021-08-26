@@ -1,3 +1,6 @@
+/**
+ * Linked List Node class to contain the data in a node.
+ */
 class LinkedListNode {
     /**
      * Creates a new node for a Linked List.
@@ -8,9 +11,12 @@ class LinkedListNode {
         this.next = undefined;
     }
 }
+/**
+ * Singly Linked List implementation that can also be used as a queue.
+ */
 export class LinkedList {
     /**
-     * Creates a Linked List.
+     * Creates a new Linked List.
      * Can be used as a Queue. For a Stack, use an Array.
      */
     constructor() {

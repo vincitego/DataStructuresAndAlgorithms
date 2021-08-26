@@ -14,9 +14,12 @@ export var THROTTLED_QUEUE_MODE;
     THROTTLED_QUEUE_MODE[THROTTLED_QUEUE_MODE["DELAY"] = 0] = "DELAY";
     THROTTLED_QUEUE_MODE[THROTTLED_QUEUE_MODE["ERROR"] = 1] = "ERROR";
 })(THROTTLED_QUEUE_MODE || (THROTTLED_QUEUE_MODE = {}));
+/**
+ * Throttled Queue implementation that will only allow N number of function executions per millisecond time period.
+ */
 export class ThrottledQueue {
     /**
-     * Creates new Throttled Queue that will only allow N number of function executions per MS time window.
+     * Creates new Throttled Queue.
      * @param {number} maxItems Max number of items per time window.
      * @param {number} timeWindow Length of time window in milliseconds.
      * @param {THROTTLED_QUEUE_MODE} mode Indicates whether to error out or delay execution of function when exceeding threshhold.

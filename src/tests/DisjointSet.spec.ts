@@ -26,7 +26,6 @@ describe('Test Disjoint Set', () => {
 		ok(ds.size() === 10);
 		ok(ds.componentCount() === 10);
 		ok(ds.componentSize(0) === 1);
-		ok(ds.getRoot(5) === 5);
 		ok(ds.findIndex(9) === 9);
 	});
 
@@ -117,7 +116,6 @@ describe('Test Disjoint Set', () => {
 		ok(ds.size() === 10);
 		ok(ds.componentCount() === 10);
 		ok(ds.componentSize(0) === 1);
-		ok(ds.getRoot(5) === 5);
 
 		ok(ds.findIndex(node => node.foo === 9) === 9);
 		ok(ds.findIndex(node => node.foo === 5) === 5);

@@ -1,5 +1,6 @@
-import { isIterable } from "../utility/utility";
-
+/**
+ * Disjoint Set or Union Find implementation.
+ */
 export class DisjointSet<T> implements Iterable<T> {
 	private _nodes: number[];
 	private _values: Map<T, number>;
@@ -36,29 +37,6 @@ export class DisjointSet<T> implements Iterable<T> {
 
 
 	/**
-	 * Find root node of component.
-	 * @param {number} index Index of item to find root node of.
-	 * @returns {number}
-	 */
-	getRoot(index: number): number {
-		let parentIndex = index;
-		let currentIndex = index;
-
-		while (parentIndex !== this._nodes[parentIndex]) {
-			parentIndex = this._nodes[parentIndex];
-		}
-
-		while (currentIndex !== parentIndex) {
-			const nextIndex = this._nodes[currentIndex];
-			this._nodes[currentIndex] = parentIndex;
-			currentIndex = nextIndex;
-		}
-
-		return parentIndex;
-	}
-
-
-	/**
 	 * Attempts to union two nodes together by index.
 	 * @param {number} index1 Index of first node to union.
 	 * @param {number} index2 Index of second node to union.
@@ -69,8 +47,8 @@ export class DisjointSet<T> implements Iterable<T> {
 		if (index1 === index2) throw new SyntaxError('Indexes should not be the same');
 		if (index1 < 0 || index1 >= this.size() || index2 < 0 || index2 >= this.size()) throw new RangeError('Index out of range.');
 		
-		const root1 = this.getRoot(index1);
-		const root2 = this.getRoot(index2);
+		const root1 = this._getRoot(index1);
+		const root2 = this._getRoot(index2);
 		if (root1 === root2) return false;
 		
 		this._componentCount--;
@@ -161,8 +139,31 @@ export class DisjointSet<T> implements Iterable<T> {
 		if (typeof index !== 'number') throw new TypeError('Index need to be number.');
 		if (index < 0 || index >= this.size()) throw new RangeError('Index out of range.');
 
-		const root = this.getRoot(index);
+		const root = this._getRoot(index);
 		return this._componentSizes[root];
+	}
+
+
+	/**
+	 * Utility function to find root node of component.
+	 * @param {number} index Index of item to find root node of.
+	 * @returns {number}
+	 */
+	private _getRoot(index: number): number {
+		let parentIndex = index;
+		let currentIndex = index;
+
+		while (parentIndex !== this._nodes[parentIndex]) {
+			parentIndex = this._nodes[parentIndex];
+		}
+
+		while (currentIndex !== parentIndex) {
+			const nextIndex = this._nodes[currentIndex];
+			this._nodes[currentIndex] = parentIndex;
+			currentIndex = nextIndex;
+		}
+
+		return parentIndex;
 	}
 
 
