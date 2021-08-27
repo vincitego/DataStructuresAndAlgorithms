@@ -1,14 +1,4 @@
 /**
- * Default equality function.
- * @param a First element.
- * @param b Second element.
- */
-export function defaultEquals<T>(a: T, b: T): boolean {
-  return a === b;
-}
-
-
-/**
  * Default minimum first comparison function.
  * @param a First element.
  * @param b Second element.

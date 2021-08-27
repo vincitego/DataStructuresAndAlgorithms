@@ -136,7 +136,7 @@ export class MinimumSpanningTree {
         return this._disjointSet.componentSize(index);
     }
     /**
-     * Returns array of all nodes of the disjoint set.
+     * Returns array of all nodes of the disjoint set. O(n)
      * @returns {T[]}
      */
     getNodes() {

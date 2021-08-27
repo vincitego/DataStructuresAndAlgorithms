@@ -8,19 +8,20 @@ Data Structures Implemented:
 * Circular Buffer
 * Binary Heap
 * Disjoint Set
+* Suffix Array / Longest Common Prefix Array
 
 
 Algorithms Implemented:
 * Throttled Queue
 * Kruskal's Minimum Spanning Tree
+* Unique Substrings
+* Longest Repeated Substrings
+* Longest Common Substrings
 
 
 To Do:
 * Binary Search Tree
 * Fenwick Tree
-* Suffix Array
-* Longest Common Prefix Array
-	* Longest Common Substring
 * AVL Tree
 * Indexed Priority Queue
 * Graphs

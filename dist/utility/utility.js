@@ -1,12 +1,4 @@
 /**
- * Default equality function.
- * @param a First element.
- * @param b Second element.
- */
-export function defaultEquals(a, b) {
-    return a === b;
-}
-/**
  * Default minimum first comparison function.
  * @param a First element.
  * @param b Second element.

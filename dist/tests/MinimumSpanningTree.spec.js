@@ -1,8 +1,8 @@
 import { ok } from 'assert';
-import { MinSpanTree } from '../index.js';
+import { MinimumSpanningTree } from '../index.js';
 describe('Test Minimum Spanning Tree', () => {
     it('New MinSpanTree should be initialized correctly', () => {
-        const mst = new MinSpanTree();
+        const mst = new MinimumSpanningTree();
         ok(mst.edgeCount() === 0);
         try {
             mst.findMinimum();
@@ -20,7 +20,7 @@ describe('Test Minimum Spanning Tree', () => {
         }
     });
     it('Pass through functions to disjoint set should work normally', () => {
-        const mst = new MinSpanTree();
+        const mst = new MinimumSpanningTree();
         mst.addNode(1);
         ok(mst.peekNode(0) === 1);
         ok(mst.findNodeIndex(1) === 0);
@@ -30,7 +30,7 @@ describe('Test Minimum Spanning Tree', () => {
         ok(mst.getNodes()[0] === 1);
     });
     it('Should add new edges correctly', () => {
-        const mst = new MinSpanTree();
+        const mst = new MinimumSpanningTree();
         mst.addNode(0);
         mst.addNode(1);
         mst.addEdge(0, 1, 3);
@@ -43,7 +43,7 @@ describe('Test Minimum Spanning Tree', () => {
         }
     });
     it('Should correctly find minimum spanning tree', () => {
-        const mst = new MinSpanTree();
+        const mst = new MinimumSpanningTree();
         for (let i = 0; i < 10; i++)
             mst.addNode(i);
         mst.addEdge(0, 4, 1);
@@ -77,15 +77,15 @@ describe('Test Minimum Spanning Tree', () => {
             [6, 8],
         ];
         const mstResults = mst.findMinimum();
-        ok(mst.minEdgeCount() === 9);
+        ok(mst.minEdgeCount() === expectedEdges.length);
         ok(mst.treeWeight() === 14);
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < expectedEdges.length; i++) {
             ok(mstResults[i][0] === expectedEdges[i][0]);
             ok(mstResults[i][1] === expectedEdges[i][1]);
         }
     });
     it('Trying to add invalid edges should error', () => {
-        const mst = new MinSpanTree();
+        const mst = new MinimumSpanningTree();
         mst.addNode(0);
         mst.addNode(1);
         try {

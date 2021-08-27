@@ -3,7 +3,8 @@ export { ThrottledQueue } from './algorithms/ThrottledQueue.js';
 export { CircularBuffer } from './DataStructures/CircularBuffer.js';
 export { BinaryHeap } from './DataStructures/BinaryHeap.js';
 export { DisjointSet } from './DataStructures/DisjointSet.js';
-export { MinimumSpanningTree as MinSpanTree } from './algorithms/MinSpanTree.js';
+export { MinimumSpanningTree } from './algorithms/MinimumSpanningTree.js';
+export { LongestCommonPrefix } from './DataStructures/LongestCommonPrefix.js';
 import { THROTTLED_QUEUE_MODE } from './algorithms/ThrottledQueue.js';
 import { CIRCULAR_BUFFER_MODE } from './DataStructures/CircularBuffer.js';
 export const enums = {

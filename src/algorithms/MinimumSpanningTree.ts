@@ -166,7 +166,7 @@ export class MinimumSpanningTree<T> implements Iterable<[number, number, number,
 
 
 	/**
-	 * Returns array of all nodes of the disjoint set.
+	 * Returns array of all nodes of the disjoint set. O(n)
 	 * @returns {T[]}
 	 */
 	getNodes(): T[] {
