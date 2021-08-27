@@ -7,11 +7,9 @@ export class LongestCommonPrefix {
         if (typeof string !== 'string')
             throw new TypeError('Input needs to be a string');
         const suffixes = [];
-        let substring = '';
         // rewrite this as a binary search tree for efficiency?
         for (let i = string.length - 1; i >= 0; i--) {
-            substring = string[i] + substring;
-            suffixes.push([i, 0, substring]);
+            suffixes.push([i, 0, string.slice(i)]);
         }
         suffixes.sort((a, b) => {
             if (a[2] > b[2])
@@ -61,6 +59,14 @@ export class LongestCommonPrefix {
             throw new TypeError('Index needs to be a number.');
         if (index >= this._string.length || index < 0)
             throw new RangeError('Index out of range.');
-        return this._string.substring(index);
+        return this._string.slice(index);
+    }
+    /**
+     * Iterator to allow looping.
+     */
+    *[Symbol.iterator]() {
+        for (const value of this._lcpArray) {
+            yield value;
+        }
     }
 }

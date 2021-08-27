@@ -12,6 +12,12 @@ describe('Test Longest Common Prefix', () => {
             ok(lcpArray[i][0] === expectedResults[i][0]);
             ok(lcpArray[i][1] === expectedResults[i][1]);
         }
+        let i = 0;
+        for (const [suffixIndex, numCommon] of lcp) {
+            ok(suffixIndex === expectedResults[i][0]);
+            ok(numCommon === expectedResults[i][1]);
+            i++;
+        }
     });
     it('Creating LongestCommonPrefix without passing string should error', () => {
         try {

@@ -1,4 +1,4 @@
-export class LongestCommonPrefix {
+export class LongestCommonPrefix implements Iterable<[number, number]> {
 	private _string: string;
 	private _lcpArray: [number, number][];
 
@@ -11,12 +11,10 @@ export class LongestCommonPrefix {
 		if (typeof string !== 'string') throw new TypeError('Input needs to be a string');
 
 		const suffixes: [number, number, string][] = [];
-		let substring = '';
 
 		// rewrite this as a binary search tree for efficiency?
 		for (let i = string.length - 1; i >= 0; i--) {
-			substring = string[i] + substring;
-			suffixes.push([i, 0, substring]);
+			suffixes.push([i, 0, string.slice(i)]);
 		}
 
 		suffixes.sort((a, b) => {
@@ -74,6 +72,16 @@ export class LongestCommonPrefix {
 	getSuffix(index: number): string {
     if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
     if (index >= this._string.length || index < 0) throw new RangeError('Index out of range.');
-		return this._string.substring(index);
+		return this._string.slice(index);
 	}
+
+
+  /**
+   * Iterator to allow looping.
+   */
+	 *[Symbol.iterator](): Iterator<[number, number]> {
+    for (const value of this._lcpArray) {
+      yield value;
+    }
+  }
 }
