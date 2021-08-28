@@ -2,7 +2,7 @@ import { LongestCommonPrefix } from "../index.js";
 
 
 /**
- * Find longest repeated substrings in a given input string.
+ * Find longest repeated substrings in a given input string. O(nlogn)
  * @param {string} string Input string
  * @returns {string[]}
  */

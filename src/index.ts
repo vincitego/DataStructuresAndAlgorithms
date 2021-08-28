@@ -11,6 +11,7 @@ export { MinimumSpanningTree } from './algorithms/MinimumSpanningTree.js';
 export { LongestCommonPrefix } from './DataStructures/LongestCommonPrefix.js';
 export { uniqueSubstrings } from './algorithms/uniqueSubstrings.js';
 export { longestRepeatedSubstrings } from './algorithms/longestRepeatedSubstrings.js';
+export { longestCommonSubstrings } from './algorithms/longestCommonSubstrings.js';
 
 
 import { THROTTLED_QUEUE_MODE } from './algorithms/ThrottledQueue.js';
