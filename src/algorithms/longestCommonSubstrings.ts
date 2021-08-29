@@ -13,7 +13,7 @@ export function longestCommonSubstrings(numPresent: number = 0, ...strings: stri
 	if (typeof numPresent !== 'number') throw new TypeError('numPresent needs to be a number.');
 	if (numStrings < 2) throw new RangeError('There needs to be at least 2 input strings.');
 	if (numPresent > numStrings) throw new RangeError('numPresent needs to be less than or equal to the number of input strings.');
-	if (numPresent < -1) throw new RangeError('numPresent needs to be greater than or equal to 0.');
+	if (numPresent < 0) throw new RangeError('numPresent needs to be greater than or equal to 0.');
 
 
 	if (numPresent === 0) numPresent = numStrings;
@@ -25,7 +25,7 @@ export function longestCommonSubstrings(numPresent: number = 0, ...strings: stri
 	let maxSentinel = String.fromCharCode(255);
 
 
-	for (let i = numStrings - 1; i >= 0; i--) {
+	for (let i = 0; i < numStrings; i++) {
 		const string = strings[i];
 
 		if (typeof string !== 'string') throw new TypeError('Inputs must be of type string.');
@@ -54,11 +54,11 @@ export function longestCommonSubstrings(numPresent: number = 0, ...strings: stri
 	colorTracker[previousColor] = 1;
 	
 	while (true) {
-		if (windowEnd >= lcpArray.length - 1) break;
 		const colorCount = colorTracker.filter(numColor => numColor > 0).length;
 
 		if (colorCount < numPresent) {
 			windowEnd++;
+			if (windowEnd === lcpArray.length) break;
 			colorTracker[getColor(lcpArray[windowEnd][0], colorIndexes)]++;
 
 		} else {

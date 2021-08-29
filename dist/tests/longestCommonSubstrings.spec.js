@@ -9,24 +9,59 @@ describe('Test Longest Common Substrings Algorithm', () => {
             ok(results[i] === expectedResults[i]);
         }
     });
-    // it('Should output all longest repeated substrings of ABABBAABAA', () => {
-    // 	const results = longestCommonSubstrings(0, 'ABABBAABAA');
-    // 	const expectedResults = ['ABA', 'BAA'];
-    // 	ok(results.length === expectedResults.length);
-    // 	for (let i = expectedResults.length - 1; i >= 0; i--) {
-    // 		ok(results[i] === expectedResults[i]);
-    // 	}
-    // });
-    // it('Should output empty array for string ABCD', () => {
-    // 	const results = longestCommonSubstrings(0, 'ABCD');
-    // 	ok(results.length === 0);
-    // });
-    // it('Should error when passing invalid parameters.', () => {
-    // 	try {
-    // 		const results = longestCommonSubstrings(1);
-    // 		ok(false);
-    // 	} catch (error) {
-    // 		ok(true);
-    // 	}
-    // });
+    it('Should output empty array', () => {
+        const results = longestCommonSubstrings(3, 'a', 'b', 'b');
+        ok(results.length === 0);
+    });
+    it('Should error when passing invalid parameters.', () => {
+        try {
+            const results = longestCommonSubstrings('a');
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const results = longestCommonSubstrings(1, '1');
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const results = longestCommonSubstrings(2, '1');
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const results = longestCommonSubstrings(-1, '1');
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const results = longestCommonSubstrings(1, 1);
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const results = longestCommonSubstrings(1, '');
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+        try {
+            const results = longestCommonSubstrings(1, String.fromCharCode(0));
+            ok(false);
+        }
+        catch (error) {
+            ok(true);
+        }
+    });
 });
