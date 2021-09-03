@@ -21,11 +21,6 @@ describe('Test Binary Heap', () => {
 		bh.add(-1);
 		ok(bh.peek() === -1);
 		ok(bh.size() === 4);
-
-		ok(bh.peekAt(0) === -1);
-		ok(bh.peekAt(1) === 1);
-		ok(bh.peekAt(2) === 2);
-		ok(bh.peekAt(3) === 3);
 	});
 
 	
@@ -78,32 +73,6 @@ describe('Test Binary Heap', () => {
 	});
 
 	
-	it('Should error out when peeking at invalid indexes', () => {
-		const bh = new BinaryHeap<number>();
-		
-		try {
-			bh.peekAt('a' as any);
-			ok(false);
-		} catch (error) {
-			ok(true);
-		}
-		
-		try {
-			bh.peekAt(-1);
-			ok(false);
-		} catch (error) {
-			ok(true);
-		}
-		
-		try {
-			bh.peekAt(0);
-			ok(false);
-		} catch (error) {
-			ok(true);
-		}
-	});
-
-	
 	it('Should error out when not passing a function to constructor', () => {
 		try {
 			const	bh = new BinaryHeap<number>('a' as any);
@@ -123,10 +92,11 @@ describe('Test Binary Heap', () => {
 	});
 
 	
-	it('Should correctly find value in middle of heap', () => {
+	it('Should correctly find or not find values in heap', () => {
 		const bh = new BinaryHeap<number>();
 		bh.add(1).add(5).add(1).add(8).add(6).add(2).add(2).add(13).add(12).add(11).add(7).add(2).add(15).add(3).add(10);
-		ok(bh.findIndex(12) === 8);
+		ok(bh.find(12) === 12);
+		ok(bh.find(100) === undefined);
 	});
 
 	
@@ -141,24 +111,32 @@ describe('Test Binary Heap', () => {
 		bh.add({foo: 5});
 		bh.add({foo: 1});
 
-		ok(bh.findIndex(node => node.foo === 5) === 1);
+		ok(bh.find({foo: 5})?.foo === 5);
+		ok(bh.find({foo: 100})?.foo === undefined);
 	});
 
 	
-	it('Should correctly remove at middle of heap', () => {
+	it('Should correctly remove values from heap', () => {
 		const bh = new BinaryHeap<number>();
-		bh.add(1).add(5).add(1).add(8).add(6).add(2).add(2).add(13).add(12).add(11).add(7).add(2).add(15).add(3).add(10);
+		bh.add(1).add(5).add(1).add(8).add(6).add(2).add(2).add(4).add(12).add(11).add(7).add(2).add(15).add(3).add(10);
 
-		ok(bh.removeAt(4) === 6);
-		ok(bh.peekAt(4) === 7);
-		ok(bh.peekAt(10) === 10);
+		ok(bh.remove(4) === 4);
+		ok(bh.remove(7) === 7);
+		ok(bh.remove(2) === 2);
+		ok(bh.size() === 12);
 
-		ok(bh.removeAt(7) === 13);
-		ok(bh.peekAt(1) === 3);
-		ok(bh.peekAt(3) === 5);
-		ok(bh.peekAt(7) === 8)
-
-		ok(bh.size() === 13);
+		ok(bh.poll() === 1);
+		ok(bh.poll() === 1);
+		ok(bh.poll() === 2);
+		ok(bh.poll() === 2);
+		ok(bh.poll() === 3);
+		ok(bh.poll() === 5);
+		ok(bh.poll() === 6);
+		ok(bh.poll() === 8);
+		ok(bh.poll() === 10);
+		ok(bh.poll() === 11);
+		ok(bh.poll() === 12);
+		ok(bh.poll() === 15);
 	});
 
 });

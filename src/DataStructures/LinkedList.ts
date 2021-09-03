@@ -12,7 +12,6 @@ class LinkedListNode<T> {
    */
   constructor(value: T) {
     this.value = value;
-    this.next = undefined;
   }
 }
 

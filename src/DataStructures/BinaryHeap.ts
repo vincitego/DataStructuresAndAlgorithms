@@ -55,18 +55,6 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Peek at value of heap at given index. O(1)
-	 * @param {number} index Index of heap to peek at.
-	 * @returns {T}
-	 */
-	peekAt(index: number): T {
-		if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
-		if (index < 0 || index >= this._size) throw new RangeError('Index out of range.');
-		return this._heap[index];
-	}
-
-
-	/**
 	 * Returns value at top of heap and removes the node. O(logn)
 	 * @returns {T | undefined}
 	 */
@@ -85,23 +73,28 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 	/**
 	 * Returns value at given index and removes the node. O(logn)
-	 * @param index 
+   * @param {T} value Value to find using comparison function defined at instantiation
 	 * @returns {T | undefined}
 	 */
-	removeAt(index: number): T | undefined {
-		if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
-		if (index < 0 || index >= this._size) throw new RangeError('Index out of range.');
-		if (index === 0) return this.poll();
+	remove(value: T): T | undefined {
+    if (this._size === 0) return undefined;
 
-		const value = this._heap[index];
-		this._size--;
-		this._heap[index] = this._heap[this._size];
+		for (let index = 0; index < this._size; index++) {
+			const currentValue = this._heap[index];
 
-		if (this._swim(index) === index) {
-			this._sink(index);
+      if (this._comparisonFunction(value, currentValue) === 0) {
+				this._size--;
+				this._heap[index] = this._heap[this._size];
+		
+				if (this._swim(index) === index) {
+					this._sink(index);
+				}
+
+        return currentValue;
+      }
 		}
 
-		return value;
+		return undefined;
 	}
 
 
@@ -127,25 +120,19 @@ export class BinaryHeap<T> implements Iterable<T> {
 
   /**
    * Find index of first value matching given value or where given callback evaluates to true. O(n)
-   * @param {} valueOrCallback 
+   * @param {T} value Value to find using comparison function specified at instantiation
    * @returns {number}
    */
-	findIndex(valueOrCallback: T | ((node: T) => boolean)): number {
-    if (this._size === 0) return -1;
-
-    let index = 0;
+	find(value: T): T | undefined {
+    if (this._size === 0) return undefined;
 
     for (const node of this) {
-      if (typeof valueOrCallback === 'function' && (valueOrCallback as (node: T) => boolean)(node)) {
-        return index;
-      } else if (valueOrCallback === node) {
-        return index;
+      if (this._comparisonFunction(value, node) === 0) {
+        return node;
       }
-      
-      index++;
     }
 
-    return -1;
+    return undefined;
 	}
 
 	

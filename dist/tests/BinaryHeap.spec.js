@@ -16,10 +16,6 @@ describe('Test Binary Heap', () => {
         bh.add(-1);
         ok(bh.peek() === -1);
         ok(bh.size() === 4);
-        ok(bh.peekAt(0) === -1);
-        ok(bh.peekAt(1) === 1);
-        ok(bh.peekAt(2) === 2);
-        ok(bh.peekAt(3) === 3);
     });
     it('Should correctly poll nodes from binary heap', () => {
         const bh = new BinaryHeap();
@@ -62,30 +58,6 @@ describe('Test Binary Heap', () => {
         ok(bh.poll().foo === 1);
         ok(bh.poll().foo === 5);
     });
-    it('Should error out when peeking at invalid indexes', () => {
-        const bh = new BinaryHeap();
-        try {
-            bh.peekAt('a');
-            ok(false);
-        }
-        catch (error) {
-            ok(true);
-        }
-        try {
-            bh.peekAt(-1);
-            ok(false);
-        }
-        catch (error) {
-            ok(true);
-        }
-        try {
-            bh.peekAt(0);
-            ok(false);
-        }
-        catch (error) {
-            ok(true);
-        }
-    });
     it('Should error out when not passing a function to constructor', () => {
         try {
             const bh = new BinaryHeap('a');
@@ -102,12 +74,14 @@ describe('Test Binary Heap', () => {
         bh.clear();
         ok(bh.size() === 0);
     });
-    it('Should correctly find value in middle of heap', () => {
+    it('Should correctly find or not find values in heap', () => {
         const bh = new BinaryHeap();
         bh.add(1).add(5).add(1).add(8).add(6).add(2).add(2).add(13).add(12).add(11).add(7).add(2).add(15).add(3).add(10);
-        ok(bh.findIndex(12) === 8);
+        ok(bh.find(12) === 12);
+        ok(bh.find(100) === undefined);
     });
     it('Should correctly find object in middle of heap', () => {
+        var _a, _b;
         const bh = new BinaryHeap((a, b) => {
             if (a.foo < b.foo)
                 return -1;
@@ -118,18 +92,27 @@ describe('Test Binary Heap', () => {
         bh.add({ foo: 1 });
         bh.add({ foo: 5 });
         bh.add({ foo: 1 });
-        ok(bh.findIndex(node => node.foo === 5) === 1);
+        ok(((_a = bh.find({ foo: 5 })) === null || _a === void 0 ? void 0 : _a.foo) === 5);
+        ok(((_b = bh.find({ foo: 100 })) === null || _b === void 0 ? void 0 : _b.foo) === undefined);
     });
-    it('Should correctly remove at middle of heap', () => {
+    it('Should correctly remove values from heap', () => {
         const bh = new BinaryHeap();
-        bh.add(1).add(5).add(1).add(8).add(6).add(2).add(2).add(13).add(12).add(11).add(7).add(2).add(15).add(3).add(10);
-        ok(bh.removeAt(4) === 6);
-        ok(bh.peekAt(4) === 7);
-        ok(bh.peekAt(10) === 10);
-        ok(bh.removeAt(7) === 13);
-        ok(bh.peekAt(1) === 3);
-        ok(bh.peekAt(3) === 5);
-        ok(bh.peekAt(7) === 8);
-        ok(bh.size() === 13);
+        bh.add(1).add(5).add(1).add(8).add(6).add(2).add(2).add(4).add(12).add(11).add(7).add(2).add(15).add(3).add(10);
+        ok(bh.remove(4) === 4);
+        ok(bh.remove(7) === 7);
+        ok(bh.remove(2) === 2);
+        ok(bh.size() === 12);
+        ok(bh.poll() === 1);
+        ok(bh.poll() === 1);
+        ok(bh.poll() === 2);
+        ok(bh.poll() === 2);
+        ok(bh.poll() === 3);
+        ok(bh.poll() === 5);
+        ok(bh.poll() === 6);
+        ok(bh.poll() === 8);
+        ok(bh.poll() === 10);
+        ok(bh.poll() === 11);
+        ok(bh.poll() === 12);
+        ok(bh.poll() === 15);
     });
 });

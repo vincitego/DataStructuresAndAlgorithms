@@ -8,6 +8,7 @@ export { LongestCommonPrefix } from './DataStructures/LongestCommonPrefix.js';
 export { uniqueSubstrings } from './algorithms/uniqueSubstrings.js';
 export { longestRepeatedSubstrings } from './algorithms/longestRepeatedSubstrings.js';
 export { longestCommonSubstrings } from './algorithms/longestCommonSubstrings.js';
+export { BinarySearchTree } from './DataStructures/BinarySearchTree.js';
 import { THROTTLED_QUEUE_MODE } from './algorithms/ThrottledQueue.js';
 import { CIRCULAR_BUFFER_MODE } from './DataStructures/CircularBuffer.js';
 export const enums = {

@@ -41,18 +41,6 @@ export class BinaryHeap {
         return this._heap[0];
     }
     /**
-     * Peek at value of heap at given index. O(1)
-     * @param {number} index Index of heap to peek at.
-     * @returns {T}
-     */
-    peekAt(index) {
-        if (typeof index !== 'number')
-            throw new TypeError('Index needs to be a number.');
-        if (index < 0 || index >= this._size)
-            throw new RangeError('Index out of range.');
-        return this._heap[index];
-    }
-    /**
      * Returns value at top of heap and removes the node. O(logn)
      * @returns {T | undefined}
      */
@@ -69,23 +57,24 @@ export class BinaryHeap {
     }
     /**
      * Returns value at given index and removes the node. O(logn)
-     * @param index
+   * @param {T} value Value to find using comparison function defined at instantiation
      * @returns {T | undefined}
      */
-    removeAt(index) {
-        if (typeof index !== 'number')
-            throw new TypeError('Index needs to be a number.');
-        if (index < 0 || index >= this._size)
-            throw new RangeError('Index out of range.');
-        if (index === 0)
-            return this.poll();
-        const value = this._heap[index];
-        this._size--;
-        this._heap[index] = this._heap[this._size];
-        if (this._swim(index) === index) {
-            this._sink(index);
+    remove(value) {
+        if (this._size === 0)
+            return undefined;
+        for (let index = 0; index < this._size; index++) {
+            const currentValue = this._heap[index];
+            if (this._comparisonFunction(value, currentValue) === 0) {
+                this._size--;
+                this._heap[index] = this._heap[this._size];
+                if (this._swim(index) === index) {
+                    this._sink(index);
+                }
+                return currentValue;
+            }
         }
-        return value;
+        return undefined;
     }
     /**
      * Get size of heap. O(1)
@@ -105,23 +94,18 @@ export class BinaryHeap {
     }
     /**
      * Find index of first value matching given value or where given callback evaluates to true. O(n)
-     * @param {} valueOrCallback
+     * @param {T} value Value to find using comparison function specified at instantiation
      * @returns {number}
      */
-    findIndex(valueOrCallback) {
+    find(value) {
         if (this._size === 0)
-            return -1;
-        let index = 0;
+            return undefined;
         for (const node of this) {
-            if (typeof valueOrCallback === 'function' && valueOrCallback(node)) {
-                return index;
+            if (this._comparisonFunction(value, node) === 0) {
+                return node;
             }
-            else if (valueOrCallback === node) {
-                return index;
-            }
-            index++;
         }
-        return -1;
+        return undefined;
     }
     /**
      * Utility function to move values down heap based on comparison function. O(logn)
