@@ -89,9 +89,85 @@ export class BinarySearchTree<T> {
 	}
 
 
-	remove(value: T): T {
-		this._size--;
-		return value;
+	/**
+	 * Removes a node matching given value using the comparison function given at initialization.
+	 * @param {T} value 
+	 * @returns {T | undefined}
+	 */
+	remove(value: T): T | undefined {
+		let currentNode = this._root;
+		let currentValue = this._root?.value;
+		let parentNode = this._root;
+		let wentLeft = false;
+
+		while (currentNode !== undefined) {
+			const comparison = this._comparisonFunction(value, currentNode.value);
+
+			if (comparison === 0) {
+				if (this._size === 1) {
+					this._root = undefined;
+
+				} else if (currentNode.left === undefined && currentNode.right === undefined) {
+					if (wentLeft) {
+						parentNode!.left = undefined;
+					} else {
+						parentNode!.right = undefined;
+					}
+
+				} else if (currentNode.left !== undefined && currentNode.right === undefined) {
+					const leftNode = currentNode.left;
+					currentNode.value = leftNode.value;
+					currentNode.left = leftNode.left;
+					currentNode.right = leftNode.right;
+
+				} else if (currentNode.left === undefined && currentNode.right !== undefined) {
+					const rightNode = currentNode.right;
+					currentNode.value = rightNode.value;
+					currentNode.left = rightNode.left;
+					currentNode.right = rightNode.right;
+
+				} else {
+					let replacementNode = currentNode.right!;
+					let replacementParent = currentNode;
+					let replaceLeft = false;
+
+					while (replacementNode.left !== undefined) {
+						replacementParent = replacementNode;
+						replacementNode = replacementNode.left;
+						replaceLeft = true;
+					}
+
+					currentNode.value = replacementNode.value;
+
+					if (replaceLeft) {
+						replacementParent.left = replacementNode.right;
+					} else {
+						replacementParent.right = replacementNode.right;
+					}
+				}
+
+				this._size--;
+				break;
+
+			} else if (comparison < 0) {
+				parentNode = currentNode;
+				currentNode = currentNode.left;
+				currentValue = currentNode?.value;
+				wentLeft = true;
+
+			} else if (comparison > 0) {
+				parentNode = currentNode;
+				currentNode = currentNode.right;
+				currentValue = currentNode?.value;
+				wentLeft = false;
+
+			} else {
+				currentNode = undefined;
+				currentValue = undefined;
+			}
+		}
+
+		return currentValue;
 	}
 
 
@@ -101,8 +177,6 @@ export class BinarySearchTree<T> {
 	 * @returns {T | undefined}
 	 */
 	find(value: T): T | undefined {
-		if (this._size === 0) return undefined;
-
 		let currentNode = this._root;
 
 		while (currentNode !== undefined) {
@@ -118,7 +192,6 @@ export class BinarySearchTree<T> {
 				currentNode = undefined;
 			}
 		}
-
 
 		return currentNode?.value;
 	}
@@ -144,17 +217,31 @@ export class BinarySearchTree<T> {
 	}
 
 
+	/**
+	 * Iterates tree in pre-order.
+	 * @returns {Generator<T>}
+	 */
   * preOrderTraversal(): Generator<T> {
+    if (this._size === 0) return;
+
+		const stack = [this._root!];
+
+		while (stack.length > 0) {
+			const node = stack.pop()!;
+			yield node.value;
+
+			if (node.right !== undefined) stack.push(node.right);
+			if (node.left !== undefined) stack.push(node.left);
+		}
+  }
+
+
+  * inOrderTraversal(): Generator<T> {
     if (this._size === 0) return;
   }
 
 
   * postOrderTraversal(): Generator<T> {
-    if (this._size === 0) return;
-  }
-
-
-  * inOrderTraversal(): Generator<T> {
     if (this._size === 0) return;
   }
 
@@ -166,13 +253,13 @@ export class BinarySearchTree<T> {
   * levelOrderTraversal(): Generator<T> {
     if (this._size === 0) return;
 
-		const stack = new LinkedList<BinarySearchTreeNode<T>>();
-		stack.addBack(this._root!);
+		const queue = new LinkedList<BinarySearchTreeNode<T>>();
+		queue.addBack(this._root!);
 
-    while(stack.size() > 0) {
-			const node = stack.removeFront()!;
-			if (node.left !== undefined) stack.addBack(node.left);
-			if (node.right !== undefined) stack.addBack(node.right);
+    while(queue.size() > 0) {
+			const node = queue.removeFront()!;
+			if (node.left !== undefined) queue.addBack(node.left);
+			if (node.right !== undefined) queue.addBack(node.right);
 			yield node.value;
 		}
   }
