@@ -1,4 +1,5 @@
 import { defaultMinCompare } from "../utility/utility.js";
+import { LinkedList } from '../index.js';
 
 
 /**
@@ -53,14 +54,14 @@ export class BinarySearchTree<T> {
 
 		if (this._size === 0) {
 			this._root = newNode;
-			this._size++;
+			this._size = 1;
 
 		} else {
 			let currentNode = this._root!;
 
 			while (true) {
 				const comparison = this._comparisonFunction(value, currentNode.value);
-
+				
 				if (comparison === 0) {
 					currentNode.value = value;
 					break;
@@ -88,8 +89,9 @@ export class BinarySearchTree<T> {
 	}
 
 
-	remove(value: T): this {
-		return this;
+	remove(value: T): T {
+		this._size--;
+		return value;
 	}
 
 
@@ -144,24 +146,34 @@ export class BinarySearchTree<T> {
 
   * preOrderTraversal(): Generator<T> {
     if (this._size === 0) return;
-
-    for (let curr = this._root; curr !== undefined; curr = curr.next) {
-      yield curr.value;
-    }
   }
 
 
-  * postOrderTraversal(): Iterator<T> {
+  * postOrderTraversal(): Generator<T> {
     if (this._size === 0) return;
   }
 
 
-  * inOrderTraversal(): Iterator<T> {
+  * inOrderTraversal(): Generator<T> {
     if (this._size === 0) return;
   }
 
 
-  * levelOrderTraversal(): Iterator<T> {
+	/**
+	 * Iterates tree in level order.
+	 * @returns {Generator<T>}
+	 */
+  * levelOrderTraversal(): Generator<T> {
     if (this._size === 0) return;
+
+		const stack = new LinkedList<BinarySearchTreeNode<T>>();
+		stack.addBack(this._root!);
+
+    while(stack.size() > 0) {
+			const node = stack.removeFront()!;
+			if (node.left !== undefined) stack.addBack(node.left);
+			if (node.right !== undefined) stack.addBack(node.right);
+			yield node.value;
+		}
   }
 }

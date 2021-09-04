@@ -1,4 +1,5 @@
 import { defaultMinCompare } from "../utility/utility.js";
+import { LinkedList } from '../index.js';
 /**
  * Binary Search Tree Node class to contain the data in a node.
  */
@@ -36,7 +37,7 @@ export class BinarySearchTree {
         const newNode = new BinarySearchTreeNode(value);
         if (this._size === 0) {
             this._root = newNode;
-            this._size++;
+            this._size = 1;
         }
         else {
             let currentNode = this._root;
@@ -67,7 +68,8 @@ export class BinarySearchTree {
         return this;
     }
     remove(value) {
-        return this;
+        this._size--;
+        return value;
     }
     /**
      * Finds a value in the tree using the comparison function at instantiation
@@ -114,9 +116,6 @@ export class BinarySearchTree {
     *preOrderTraversal() {
         if (this._size === 0)
             return;
-        for (let curr = this._root; curr !== undefined; curr = curr.next) {
-            yield curr.value;
-        }
     }
     *postOrderTraversal() {
         if (this._size === 0)
@@ -126,8 +125,22 @@ export class BinarySearchTree {
         if (this._size === 0)
             return;
     }
+    /**
+     * Iterates tree in level order.
+     * @returns {Generator<T>}
+     */
     *levelOrderTraversal() {
         if (this._size === 0)
             return;
+        const stack = new LinkedList();
+        stack.addBack(this._root);
+        while (stack.size() > 0) {
+            const node = stack.removeFront();
+            if (node.left !== undefined)
+                stack.addBack(node.left);
+            if (node.right !== undefined)
+                stack.addBack(node.right);
+            yield node.value;
+        }
     }
 }
