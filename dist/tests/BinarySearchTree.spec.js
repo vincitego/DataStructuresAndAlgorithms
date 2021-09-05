@@ -86,9 +86,9 @@ describe('Test Binary Search Tree', () => {
     });
     it('Should correctly traverse tree in order', () => {
         const bst = new BinarySearchTree();
-        const expectedResults = [0, 1, 5, 10, 11, 13];
+        const expectedResults = [1, 3, 5, 6, 8, 11, 12, 13, 14, 15, 17, 19];
         let i = 0;
-        bst.add(10).add(1).add(5).add(0).add(11).add(13);
+        bst.add(11).add(6).add(15).add(3).add(8).add(13).add(17).add(1).add(5).add(12).add(14).add(19);
         for (const nodeValue of bst.inOrderTraversal()) {
             ok(expectedResults[i] === nodeValue);
             i++;
@@ -96,9 +96,9 @@ describe('Test Binary Search Tree', () => {
     });
     it('Should correctly traverse tree in postorder', () => {
         const bst = new BinarySearchTree();
-        const expectedResults = [0, 1, 5, 10, 11, 13];
+        const expectedResults = [1, 5, 3, 8, 6, 12, 14, 13, 19, 17, 15, 11];
         let i = 0;
-        bst.add(10).add(1).add(5).add(0).add(11).add(13);
+        bst.add(11).add(6).add(15).add(3).add(8).add(13).add(17).add(1).add(5).add(12).add(14).add(19);
         for (const nodeValue of bst.postOrderTraversal()) {
             ok(expectedResults[i] === nodeValue);
             i++;

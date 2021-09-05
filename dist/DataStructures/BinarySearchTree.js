@@ -203,10 +203,50 @@ export class BinarySearchTree {
     *inOrderTraversal() {
         if (this._size === 0)
             return;
+        const stack = [[this._root, undefined]];
+        if (this._root.right !== undefined)
+            stack.unshift([this._root, this._root.right]);
+        if (this._root.left !== undefined)
+            stack.push([this._root, this._root.left]);
+        while (stack.length > 0) {
+            const [node, next] = stack.pop();
+            if (next === undefined) {
+                yield node.value;
+            }
+            else {
+                if (next.right !== undefined)
+                    stack.push([next, next.right]);
+                stack.push([next, undefined]);
+                if (next.left !== undefined)
+                    stack.push([next, next.left]);
+            }
+        }
     }
+    /**
+     * Iterates tree in post-order.
+     * @returns {Generator<T>}
+     */
     *postOrderTraversal() {
         if (this._size === 0)
             return;
+        const stack = [[this._root, undefined]];
+        if (this._root.right !== undefined)
+            stack.push([this._root, this._root.right]);
+        if (this._root.left !== undefined)
+            stack.push([this._root, this._root.left]);
+        while (stack.length > 0) {
+            const [node, next] = stack.pop();
+            if (next === undefined) {
+                yield node.value;
+            }
+            else {
+                stack.push([next, undefined]);
+                if (next.right !== undefined)
+                    stack.push([next, next.right]);
+                if (next.left !== undefined)
+                    stack.push([next, next.left]);
+            }
+        }
     }
     /**
      * Iterates tree in level order.

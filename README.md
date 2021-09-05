@@ -9,6 +9,7 @@ Data Structures Implemented:
 * Binary Heap
 * Disjoint Set
 * Suffix Array / Longest Common Prefix Array
+* Binary Search Tree
 
 
 Algorithms Implemented:
@@ -20,8 +21,7 @@ Algorithms Implemented:
 
 
 To Do:
-* Binary Search Tree
-* Fenwick Tree
 * AVL Tree
+* Fenwick Tree
 * Indexed Priority Queue
 * Graphs
