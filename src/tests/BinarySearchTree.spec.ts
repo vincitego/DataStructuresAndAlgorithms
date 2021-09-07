@@ -197,4 +197,60 @@ describe('Test Binary Search Tree', () => {
 		}
 	});
 
+
+	it('Should correctly balance right-right heavy tree', () => {
+		const bst = new BinarySearchTree<number>();
+		const expectedResults = [6, 5, 7];
+		let i = 0;
+
+		bst.add(5).add(6).add(7);
+
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue)
+			i++;
+		}
+	});
+
+
+	it('Should correctly balance left-left heavy tree', () => {
+		const bst = new BinarySearchTree<number>();
+		const expectedResults = [3, 2, 4];
+		let i = 0;
+
+		bst.add(4).add(3).add(2);
+
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue)
+			i++;
+		}
+	});
+
+
+	it('Should correctly balance right-left heavy tree', () => {
+		const bst = new BinarySearchTree<number>();
+		const expectedResults = [6, 5, 7];
+		let i = 0;
+
+		bst.add(5).add(7).add(6);
+
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue)
+			i++;
+		}
+	});
+
+
+	it('Should correctly balance left-right heavy tree', () => {
+		const bst = new BinarySearchTree<number>();
+		const expectedResults = [4, 3, 5];
+		let i = 0;
+
+		bst.add(5).add(3).add(4);
+
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue)
+			i++;
+		}
+	});
+
 });

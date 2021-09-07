@@ -9,6 +9,7 @@ import { LinkedList } from '../index.js';
   public value: T;
   public left: BinarySearchTreeNode<T> | undefined;
   public right: BinarySearchTreeNode<T> | undefined;
+	public height: number;
 
 
   /**
@@ -17,12 +18,14 @@ import { LinkedList } from '../index.js';
    */
   constructor(value: T) {
     this.value = value;
+		this.height = 0;
   }
 }
 
 
 /**
  * Binary Search Tree implementation.
+ * Balanced using AVL rotations.
  */
 export class BinarySearchTree<T> {
   private _root: BinarySearchTreeNode<T> | undefined;
@@ -57,6 +60,7 @@ export class BinarySearchTree<T> {
 			this._size = 1;
 
 		} else {
+			const nodesTraversed: [BinarySearchTreeNode<T>, boolean][] = [];
 			let currentNode = this._root!;
 
 			while (true) {
@@ -68,20 +72,35 @@ export class BinarySearchTree<T> {
 
 				} else if (comparison < 0 && currentNode.left === undefined) {
 					currentNode.left = newNode;
+					nodesTraversed.push([currentNode, true]);
 					this._size++;
 					break;
 
 				} else if (comparison < 0 && currentNode.left !== undefined) {
+					nodesTraversed.push([currentNode, true]);
 					currentNode = currentNode.left;
 
 				} else if (comparison > 0 && currentNode.right === undefined) {
 					currentNode.right = newNode;
+					nodesTraversed.push([currentNode, false]);
 					this._size++;
 					break;
 
 				} else if (comparison > 0 && currentNode.right !== undefined) {
+					nodesTraversed.push([currentNode, false]);
 					currentNode = currentNode.right;
 				}
+			}
+
+
+			for (let i = nodesTraversed.length - 1; i > 0; i--) {
+				this._updateHeight(nodesTraversed[i][0]);
+				this._balance(nodesTraversed[i][0], nodesTraversed[i - 1][0], nodesTraversed[i - 1][1]);
+			}
+
+			if (nodesTraversed.length > 0) {
+				this._updateHeight(nodesTraversed[0][0]);
+				this._balance(nodesTraversed[0][0]);
 			}
 		}
 
@@ -236,6 +255,10 @@ export class BinarySearchTree<T> {
   }
 
 
+	/**
+	 * Iterates tree in order.
+	 * @returns {Generator<T>}
+	 */
   * inOrderTraversal(): Generator<T> {
 		if (this._size === 0) return;
 
@@ -299,4 +322,103 @@ export class BinarySearchTree<T> {
 			yield node.value;
 		}
   }
+
+
+	/**
+	 * Utility function to rotate nodes to the right.
+	 * @param {BinarySearchTreeNode<T>} node Node to rotate to the right
+	 * @param {BinarySearchTreeNode<T>} parent Parent of node
+	 * @param {boolean} isLeft Indicates whether node is left or right child of parent
+	 * @returns {BinarySearchTreeNode<T>} The original left child of node
+	 */
+	private _rotateRight(node: BinarySearchTreeNode<T>, parent?: BinarySearchTreeNode<T>, isLeft?: boolean): BinarySearchTreeNode<T> {
+		const childNode = node.left!;
+		node.left = childNode.right;
+		childNode.right = node;
+
+		if (parent) {
+			if (isLeft) {
+				parent.left = childNode;
+			} else {
+				parent.right = childNode;
+			}
+		}
+
+		return childNode;
+	}
+
+
+	/**
+	 * Utility function to rotate nodes to the left.
+	 * @param {BinarySearchTreeNode<T>} node Node to rotate to the left
+	 * @param {BinarySearchTreeNode<T>} parent Parent of node
+	 * @param {boolean} isLeft Indicates whether node is left or right child of parent
+	 * @returns {BinarySearchTreeNode<T>} The original right child of node
+	 */
+	private _rotateLeft(node: BinarySearchTreeNode<T>, parent?: BinarySearchTreeNode<T>, isLeft?: boolean): BinarySearchTreeNode<T> {
+		const childNode = node.right!;
+		node.right = childNode.left;
+		childNode.left = node;
+
+		if (parent) {
+			if (isLeft) {
+				parent.left = childNode;
+			} else {
+				parent.right = childNode;
+			}
+		}
+
+		return childNode;
+	}
+
+
+	/**
+	 * Updates the height of the nodes beneath a given node
+	 * @param {BinarySearchTreeNode<T>} node Node to update height of
+	 */
+	private _updateHeight(node: BinarySearchTreeNode<T>): void {
+		const heightLeft = node?.left?.height ?? -1;
+		const heightRight = node?.right?.height ?? -1;
+		node.height = 1 + Math.max(heightLeft, heightRight);
+	}
+
+
+	/**
+	 * Utility function to calculate the balance factor of a given node
+	 * @param {BinarySearchTreeNode<T>} node Node to use in calculation
+	 * @returns {number}
+	 */
+	private _calcBalanceFactor(node?: BinarySearchTreeNode<T>): number {
+		const heightLeft = node?.left?.height ?? -1;
+		const heightRight = node?.right?.height ?? -1;
+		return heightRight - heightLeft;
+	}
+
+
+	/**
+	 * Utility function to balance tree using rotations
+	 * @param {BinarySearchTreeNode<T>} node Node to rotate to the left
+	 * @param {BinarySearchTreeNode<T>} parent Parent of node
+	 * @param {boolean} isLeft Indicates whether node is left or right child of parent
+	 */
+	private _balance(node: BinarySearchTreeNode<T>, parent?: BinarySearchTreeNode<T>, isLeft?: boolean): void {
+		const balanceFactor = this._calcBalanceFactor(node);
+
+		if (balanceFactor < -1) {
+			const childBalanceFactor = this._calcBalanceFactor(node.left);
+			if (childBalanceFactor > 0) {
+				this._rotateLeft(node.left!, node, true);
+			}
+			const rotateResult = this._rotateRight(node, parent, isLeft);
+			if (node === this._root) this._root = rotateResult;
+
+		} else if (balanceFactor > 1) {
+			const childBalanceFactor = this._calcBalanceFactor(node.right);
+			if (childBalanceFactor < 0) {
+				this._rotateRight(node.right!, node, false);
+			}
+			const rotateResult = this._rotateLeft(node, parent, isLeft);
+			if (node === this._root) this._root = rotateResult;
+		}
+	}
 }
