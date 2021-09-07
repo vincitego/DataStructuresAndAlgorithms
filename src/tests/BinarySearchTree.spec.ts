@@ -34,11 +34,21 @@ describe('Test Binary Search Tree', () => {
 		ok(bst.remove(100) === undefined);
 		ok(bst.size() === 10);
 
+		
+		// initial tree
+		let expectedResults = [5, 0, 12, -1, 1, 10, 13, 2, 6, 11];
+		let i = 0;
+		ok(bst.size() === expectedResults.length);
+		for (const value of bst.levelOrderTraversal()) {
+			ok(value === expectedResults[i]);
+			i++;
+		}
+
 
 		// both undefined
-		let expectedResults = [10, 1, 12, 0, 5, 11, 13, -1, 6];
-		let i = 0;
-		ok(bst.remove(2) === 2);
+		expectedResults = [5, 0, 12, -1, 1, 10, 13, 2, 6];
+		i = 0;
+		ok(bst.remove(11) === 11);
 		ok(bst.size() === expectedResults.length);
 		for (const value of bst.levelOrderTraversal()) {
 			ok(value === expectedResults[i]);
@@ -47,9 +57,9 @@ describe('Test Binary Search Tree', () => {
 
 
 		// right undefined
-		expectedResults = [10, 1, 12, -1, 5, 11, 13, 6];
+		expectedResults = [5, 0, 12, -1, 1, 6, 13, 2];
 		i = 0;
-		ok(bst.remove(0) === 0);
+		ok(bst.remove(10) === 10);
 		ok(bst.size() === expectedResults.length);
 		for (const value of bst.levelOrderTraversal()) {
 			ok(value === expectedResults[i]);
@@ -58,9 +68,8 @@ describe('Test Binary Search Tree', () => {
 
 
 		// left undefined, right contains subtree
-		expectedResults = [10, 5, 12, 6, 11, 13];
+		expectedResults = [5, 0, 12, -1, 2, 6, 13];
 		i = 0;
-		ok(bst.remove(-1) === -1);
 		ok(bst.remove(1) === 1);
 		ok(bst.size() === expectedResults.length);
 		for (const value of bst.levelOrderTraversal()) {
@@ -70,18 +79,18 @@ describe('Test Binary Search Tree', () => {
 
 
 		// both defined
-		expectedResults = [11, 5, 12, 6, 13];
+		expectedResults = [5, 0, 13, -1, 2, 6];
 		i = 0;
-		ok(bst.remove(10) === 10);
+		ok(bst.remove(12) === 12);
 		ok(bst.size() === expectedResults.length);
 		for (const value of bst.levelOrderTraversal()) {
 			ok(value === expectedResults[i]);
 			i++;
 		}
 		
-		expectedResults = [12, 5, 13, 6];
+		expectedResults = [6, 0, 13, -1, 2];
 		i = 0;
-		ok(bst.remove(11) === 11);
+		ok(bst.remove(5) === 5);
 		ok(bst.size() === expectedResults.length);
 		for (const value of bst.levelOrderTraversal()) {
 			ok(value === expectedResults[i]);
@@ -103,13 +112,13 @@ describe('Test Binary Search Tree', () => {
 
 	it('Should correctly traverse tree in preorder', () => {
 		const bst = new BinarySearchTree<number>();
-		const expectedResults = [10, 1, 0, 5, 11, 13];
+		const expectedResults = [5, 1, 0, 11, 10, 13];
 		let i = 0;
 
 		bst.add(10).add(1).add(5).add(0).add(11).add(13);
 
 		for (const nodeValue of bst.preOrderTraversal()) {
-			ok(expectedResults[i] === nodeValue)
+			ok(expectedResults[i] === nodeValue);
 			i++;
 		}
 	});
@@ -123,7 +132,7 @@ describe('Test Binary Search Tree', () => {
 		bst.add(11).add(6).add(15).add(3).add(8).add(13).add(17).add(1).add(5).add(12).add(14).add(19);
 
 		for (const nodeValue of bst.inOrderTraversal()) {
-			ok(expectedResults[i] === nodeValue)
+			ok(expectedResults[i] === nodeValue);
 			i++;
 		}
 	});
@@ -137,7 +146,7 @@ describe('Test Binary Search Tree', () => {
 		bst.add(11).add(6).add(15).add(3).add(8).add(13).add(17).add(1).add(5).add(12).add(14).add(19);
 
 		for (const nodeValue of bst.postOrderTraversal()) {
-			ok(expectedResults[i] === nodeValue)
+			ok(expectedResults[i] === nodeValue);
 			i++;
 		}
 	});
@@ -145,13 +154,13 @@ describe('Test Binary Search Tree', () => {
 
 	it('Should correctly traverse tree in level order', () => {
 		const bst = new BinarySearchTree<number>();
-		const expectedResults = [10, 1, 11, 0, 5, 13];
+		const expectedResults = [5, 1, 11, 0, 10, 13];
 		let i = 0;
 
 		bst.add(10).add(1).add(5).add(0).add(11).add(13);
 
 		for (const nodeValue of bst.levelOrderTraversal()) {
-			ok(expectedResults[i] === nodeValue)
+			ok(expectedResults[i] === nodeValue);
 			i++;
 		}
 	});
@@ -159,16 +168,27 @@ describe('Test Binary Search Tree', () => {
 
 	it('Should treat object values correctly', () => {
 		const bst = new BinarySearchTree<{foo: number}>((a, b) => a.foo - b.foo);
+		bst.add({foo: 10});
 		bst.add({foo: 1});
 		bst.add({foo: 5});
 
-		ok(bst.size() === 2);
+
+		const expectedResults = [5, 1, 10];
+		let i = 0;
+
+		for (const { foo: nodeValue } of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue)
+			i++;
+		}
+
+
+		ok(bst.size() === 3);
 		ok(bst.find({foo: 5})?.foo === 5);
 		ok(bst.find({foo: 100})?.foo === undefined);
 
 		ok(bst.remove({foo: 5})?.foo === 5);
 		ok(bst.remove({foo: 100})?.foo === undefined);
-		ok(bst.size() === 1);
+		ok(bst.size() === 2);
 	});
 
 	
@@ -206,7 +226,7 @@ describe('Test Binary Search Tree', () => {
 		bst.add(5).add(6).add(7);
 
 		for (const nodeValue of bst.levelOrderTraversal()) {
-			ok(expectedResults[i] === nodeValue)
+			ok(expectedResults[i] === nodeValue);
 			i++;
 		}
 	});
@@ -220,7 +240,7 @@ describe('Test Binary Search Tree', () => {
 		bst.add(4).add(3).add(2);
 
 		for (const nodeValue of bst.levelOrderTraversal()) {
-			ok(expectedResults[i] === nodeValue)
+			ok(expectedResults[i] === nodeValue);
 			i++;
 		}
 	});
@@ -234,7 +254,7 @@ describe('Test Binary Search Tree', () => {
 		bst.add(5).add(7).add(6);
 
 		for (const nodeValue of bst.levelOrderTraversal()) {
-			ok(expectedResults[i] === nodeValue)
+			ok(expectedResults[i] === nodeValue);
 			i++;
 		}
 	});
@@ -248,7 +268,67 @@ describe('Test Binary Search Tree', () => {
 		bst.add(5).add(3).add(4);
 
 		for (const nodeValue of bst.levelOrderTraversal()) {
-			ok(expectedResults[i] === nodeValue)
+			ok(expectedResults[i] === nodeValue);
+			i++;
+		}
+	});
+
+
+	it('Should correctly add and balance more complicated tree', () => {
+		const bst = new BinarySearchTree<number>();
+		const expectedResults = [5, 4, 7, 6, 8];
+		let i = 0;
+
+		bst.add(5).add(6).add(4).add(7).add(8);
+
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue);
+			i++;
+		}
+	});
+
+
+	it('Should correctly delete and balance tree', () => {
+		const bst = new BinarySearchTree<number>();
+		bst.add(10).add(5).add(20).add(3).add(8).add(15).add(25).add(30).add(1);
+
+		bst.remove(15);
+		let expectedResults = [10, 5, 25, 3, 8, 20, 30, 1];
+		let i = 0;
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue);
+			i++;
+		}
+
+		bst.remove(8);
+		expectedResults = [10, 3, 25, 1, 5, 20, 30];
+		i = 0;
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue);
+			i++;
+		}
+
+		bst.add(19).add(32).add(0).add(29).add(31).add(33);
+		expectedResults = [10, 3, 25, 1, 5, 20, 30, 0, 19, 29, 32, 31, 33];
+		i = 0;
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue);
+			i++;
+		}
+
+		bst.remove(30);
+		expectedResults = [10, 3, 25, 1, 5, 20, 31, 0, 19, 29, 32, 33];
+		i = 0;
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue);
+			i++;
+		}
+
+		bst.remove(0);
+		expectedResults = [25, 10, 31, 3, 20, 29, 32, 1, 5, 19, 33];
+		i = 0;
+		for (const nodeValue of bst.levelOrderTraversal()) {
+			ok(expectedResults[i] === nodeValue);
 			i++;
 		}
 	});

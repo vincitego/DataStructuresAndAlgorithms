@@ -47,7 +47,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Adds new node to tree.
+	 * Adds new node to tree. O(logn)
 	 * If value already exists, replaces the value at the node.
 	 * @param {T} value 
 	 * @returns {this}
@@ -109,13 +109,14 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Removes a node matching given value using the comparison function given at initialization.
+	 * Removes a node matching given value using the comparison function given at initialization. O(logn)
 	 * @param {T} value 
 	 * @returns {T | undefined}
 	 */
 	remove(value: T): T | undefined {
+		const nodesTraversed: [BinarySearchTreeNode<T>, boolean][] = [];
 		let currentNode = this._root;
-		let currentValue = this._root?.value;
+		let currentValue: T | undefined = undefined;
 		let parentNode = this._root;
 		let wentLeft = false;
 
@@ -123,27 +124,22 @@ export class BinarySearchTree<T> {
 			const comparison = this._comparisonFunction(value, currentNode.value);
 
 			if (comparison === 0) {
+				currentValue = currentNode.value;
+
 				if (this._size === 1) {
 					this._root = undefined;
 
 				} else if (currentNode.left === undefined && currentNode.right === undefined) {
-					if (wentLeft) {
-						parentNode!.left = undefined;
-					} else {
-						parentNode!.right = undefined;
-					}
+					if (wentLeft) parentNode!.left = undefined;
+					else parentNode!.right = undefined;
 
 				} else if (currentNode.left !== undefined && currentNode.right === undefined) {
-					const leftNode = currentNode.left;
-					currentNode.value = leftNode.value;
-					currentNode.left = leftNode.left;
-					currentNode.right = leftNode.right;
+					if (wentLeft) parentNode!.left = currentNode.left;
+					else parentNode!.right = currentNode.left;
 
 				} else if (currentNode.left === undefined && currentNode.right !== undefined) {
-					const rightNode = currentNode.right;
-					currentNode.value = rightNode.value;
-					currentNode.left = rightNode.left;
-					currentNode.right = rightNode.right;
+					if (wentLeft) parentNode!.left = currentNode.right;
+					else parentNode!.right = currentNode.right;
 
 				} else {
 					let replacementNode = currentNode.right!;
@@ -151,6 +147,7 @@ export class BinarySearchTree<T> {
 					let replaceLeft = false;
 
 					while (replacementNode.left !== undefined) {
+						nodesTraversed.push([replacementNode, replaceLeft]);
 						replacementParent = replacementNode;
 						replacementNode = replacementNode.left;
 						replaceLeft = true;
@@ -171,19 +168,27 @@ export class BinarySearchTree<T> {
 			} else if (comparison < 0) {
 				parentNode = currentNode;
 				currentNode = currentNode.left;
-				currentValue = currentNode?.value;
 				wentLeft = true;
+				nodesTraversed.push([parentNode, wentLeft]);
 
 			} else if (comparison > 0) {
 				parentNode = currentNode;
 				currentNode = currentNode.right;
-				currentValue = currentNode?.value;
 				wentLeft = false;
+				nodesTraversed.push([parentNode, wentLeft]);
 
-			} else {
-				currentNode = undefined;
-				currentValue = undefined;
 			}
+		}
+
+
+		for (let i = nodesTraversed.length - 1; i > 0; i--) {
+			this._updateHeight(nodesTraversed[i][0]);
+			this._balance(nodesTraversed[i][0], nodesTraversed[i - 1][0], nodesTraversed[i - 1][1]);
+		}
+
+		if (nodesTraversed.length > 0) {
+			this._updateHeight(nodesTraversed[0][0]);
+			this._balance(nodesTraversed[0][0]);
 		}
 
 		return currentValue;
@@ -191,7 +196,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Finds a value in the tree using the comparison function at instantiation
+	 * Finds a value in the tree using the comparison function at instantiation. O(logn)
 	 * @param {T} value Value to find
 	 * @returns {T | undefined}
 	 */
@@ -217,7 +222,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Get size of tree.
+	 * Get size of tree. O(1)
 	 * @returns {number}
 	 */
 	size(): number {
@@ -226,7 +231,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Removes all nodes from tree.
+	 * Removes all nodes from tree. O(1)
 	 * @returns {this}
 	 */
 	clear(): this {
@@ -237,7 +242,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Iterates tree in pre-order.
+	 * Iterates tree in pre-order. O(n)
 	 * @returns {Generator<T>}
 	 */
   * preOrderTraversal(): Generator<T> {
@@ -256,7 +261,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Iterates tree in order.
+	 * Iterates tree in order. O(n)
 	 * @returns {Generator<T>}
 	 */
   * inOrderTraversal(): Generator<T> {
@@ -281,7 +286,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Iterates tree in post-order.
+	 * Iterates tree in post-order. O(n)
 	 * @returns {Generator<T>}
 	 */
   * postOrderTraversal(): Generator<T> {
@@ -306,7 +311,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Iterates tree in level order.
+	 * Iterates tree in level order. O(n)
 	 * @returns {Generator<T>}
 	 */
   * levelOrderTraversal(): Generator<T> {
@@ -325,7 +330,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Utility function to rotate nodes to the right.
+	 * Utility function to rotate nodes to the right. O(1)
 	 * @param {BinarySearchTreeNode<T>} node Node to rotate to the right
 	 * @param {BinarySearchTreeNode<T>} parent Parent of node
 	 * @param {boolean} isLeft Indicates whether node is left or right child of parent
@@ -336,6 +341,10 @@ export class BinarySearchTree<T> {
 		node.left = childNode.right;
 		childNode.right = node;
 
+		if (node.left) this._updateHeight(node.left);
+		this._updateHeight(node);
+		this._updateHeight(childNode);
+
 		if (parent) {
 			if (isLeft) {
 				parent.left = childNode;
@@ -349,7 +358,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Utility function to rotate nodes to the left.
+	 * Utility function to rotate nodes to the left. O(1)
 	 * @param {BinarySearchTreeNode<T>} node Node to rotate to the left
 	 * @param {BinarySearchTreeNode<T>} parent Parent of node
 	 * @param {boolean} isLeft Indicates whether node is left or right child of parent
@@ -359,6 +368,10 @@ export class BinarySearchTree<T> {
 		const childNode = node.right!;
 		node.right = childNode.left;
 		childNode.left = node;
+		
+		if (node.right) this._updateHeight(node.right);
+		this._updateHeight(node);
+		this._updateHeight(childNode);
 
 		if (parent) {
 			if (isLeft) {
@@ -373,7 +386,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Updates the height of the nodes beneath a given node
+	 * Updates the height of the nodes beneath a given node.  O(1)
 	 * @param {BinarySearchTreeNode<T>} node Node to update height of
 	 */
 	private _updateHeight(node: BinarySearchTreeNode<T>): void {
@@ -384,7 +397,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Utility function to calculate the balance factor of a given node
+	 * Utility function to calculate the balance factor of a given node. O(1)
 	 * @param {BinarySearchTreeNode<T>} node Node to use in calculation
 	 * @returns {number}
 	 */
@@ -396,7 +409,7 @@ export class BinarySearchTree<T> {
 
 
 	/**
-	 * Utility function to balance tree using rotations
+	 * Utility function to balance tree using rotations. O(1)
 	 * @param {BinarySearchTreeNode<T>} node Node to rotate to the left
 	 * @param {BinarySearchTreeNode<T>} parent Parent of node
 	 * @param {boolean} isLeft Indicates whether node is left or right child of parent

@@ -72,7 +72,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Returns value at given index and removes the node. O(logn)
+	 * Returns original value from given value and removes the node. O(logn)
    * @param {T} value Value to find using comparison function defined at instantiation
 	 * @returns {T | undefined}
 	 */
@@ -119,7 +119,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
   /**
-   * Find index of first value matching given value or where given callback evaluates to true. O(n)
+   * Find node of first matching given value. O(n)
    * @param {T} value Value to find using comparison function specified at instantiation
    * @returns {number}
    */
