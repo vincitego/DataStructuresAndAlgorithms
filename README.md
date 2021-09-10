@@ -10,6 +10,7 @@ Data Structures Implemented:
 * Disjoint Set
 * Suffix Array / Longest Common Prefix Array
 * Balanced Binary Search Tree
+* Indexed Priority Queue
 
 
 Algorithms Implemented:
@@ -22,5 +23,4 @@ Algorithms Implemented:
 
 To Do:
 * Fenwick Tree
-* Indexed Priority Queue
 * Graphs

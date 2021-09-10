@@ -72,7 +72,7 @@ export class BinaryHeap<T> implements Iterable<T> {
 
 
 	/**
-	 * Returns original value from given value and removes the node. O(logn)
+	 * Returns original value from given value and removes the node. O(n)
    * @param {T} value Value to find using comparison function defined at instantiation
 	 * @returns {T | undefined}
 	 */
@@ -236,9 +236,9 @@ export class BinaryHeap<T> implements Iterable<T> {
   /**
    * Iterator to allow looping.
    */
-	 *[Symbol.iterator](): Iterator<T> {
-    for (const value of this._heap) {
-      yield value;
+	*[Symbol.iterator](): Iterator<T> {
+    for (let i = 0; i < this._size; i++) {
+      yield this._heap[i];
     }
   }
 }

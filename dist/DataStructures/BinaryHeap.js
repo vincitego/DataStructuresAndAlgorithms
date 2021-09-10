@@ -56,7 +56,7 @@ export class BinaryHeap {
         return value;
     }
     /**
-     * Returns original value from given value and removes the node. O(logn)
+     * Returns original value from given value and removes the node. O(n)
    * @param {T} value Value to find using comparison function defined at instantiation
      * @returns {T | undefined}
      */
@@ -190,8 +190,8 @@ export class BinaryHeap {
      * Iterator to allow looping.
      */
     *[Symbol.iterator]() {
-        for (const value of this._heap) {
-            yield value;
+        for (let i = 0; i < this._size; i++) {
+            yield this._heap[i];
         }
     }
 }

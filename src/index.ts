@@ -4,6 +4,7 @@ export { ThrottledQueue } from './algorithms/ThrottledQueue.js';
 export { CircularBuffer } from './DataStructures/CircularBuffer.js';
 
 export { BinaryHeap } from './DataStructures/BinaryHeap.js';
+export { IndexedPriorityQueue } from './DataStructures/IndexedPriorityQueue.js';
 
 export { DisjointSet } from './DataStructures/DisjointSet.js';
 export { MinimumSpanningTree } from './algorithms/MinimumSpanningTree.js';
