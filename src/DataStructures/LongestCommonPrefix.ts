@@ -11,23 +11,28 @@ export class LongestCommonPrefix<T> implements Iterable<[number, number]> {
 		let comparisonFunction: undefined | ((a: any, b: any) => number);
 
 		if (typeof stringOrArray === 'string') {
-			comparisonFunction = (a: string, b: string) => {
-				if (a[2] > b[2]) return 1;
-				if (a[2] === b[2]) return 0;
+			comparisonFunction = (a: [number, number, string], b: [number, number, string]) => {
+				const subA = stringOrArray.slice(a[0]);
+				const subB = stringOrArray.slice(b[0]);
+
+				if (subA > subB) return 1;
+				if (subA === subB) return 0;
 				return -1;
 			};
 
 		} else if (Array.isArray(stringOrArray)) {
-			comparisonFunction = (a: number[][], b: number[][]) => {
-				const minLength = Math.min(a.length, b.length);
+			comparisonFunction = (a: [number, number, number[]], b: [number, number, number[]]) => {
+				const subA = stringOrArray.slice(a[0]);
+				const subB = stringOrArray.slice(b[0]);
+				const minLength = Math.min(subA.length, subB.length);
 
 				for (let i = 0; i < minLength; i++) {
-					if (a[2][i] > b[2][i]) return 1;
-					if (a[2][i] < b[2][i]) return -1;
+					if (subA[i] > subB[i]) return 1;
+					if (subA[i] < subB[i]) return -1;
 				}
 
-				if (a[2].length > b[2].length) return 1;
-				if (a[2].length < b[2].length) return -1;
+				if (subA.length > subB.length) return 1;
+				if (subA.length < subB.length) return -1;
 				return 0;
 			};
 		}
@@ -36,20 +41,22 @@ export class LongestCommonPrefix<T> implements Iterable<[number, number]> {
 		if (stringOrArray.length === 0) throw new RangeError('Input must be non-empty');
 
 
-		const suffixes: [number, number, string | number[]][] = [];
+		const suffixes: [number, number][] = [];
 
 		for (let i = stringOrArray.length - 1; i >= 0; i--) {
-			suffixes.push([i, 0, stringOrArray.slice(i)]);
+			suffixes.push([i, 0]);
 		}
 
 		suffixes.sort(comparisonFunction);
 
 		for (let i = stringOrArray.length - 1; i > 0; i--) {
+			const previsouElement = stringOrArray.slice(suffixes[i - 1][0]);
+			const currentElement = stringOrArray.slice(suffixes[i][0]);
 			let matchCount = 0;
-			let suffixLength = suffixes[i - 1][2].length;
+			let suffixLength = previsouElement.length;
 
 			for (let elementIndex = 0; elementIndex < suffixLength; elementIndex++) {
-				if (suffixes[i - 1][2][elementIndex] === suffixes[i][2][elementIndex]) {
+				if (previsouElement[elementIndex] === currentElement[elementIndex]) {
 					matchCount++;
 				} else {
 					break;
@@ -61,7 +68,7 @@ export class LongestCommonPrefix<T> implements Iterable<[number, number]> {
 
 
 		this._original = stringOrArray;
-		this._lcpArray = suffixes.map(([suffixIndex, lcp]) => [suffixIndex, lcp]);
+		this._lcpArray = suffixes;
 	}
 
 

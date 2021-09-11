@@ -79,7 +79,6 @@ describe('Test Longest Common Substrings Algorithm', () => {
 		const expectedResults = [[2, 3, 4], [3, 4, 5]];
 
 		ok(results.length === expectedResults.length);
-		console.log(results);
 		
 		for (let i = expectedResults.length - 1; i >= 0; i--) {
 			for (let j = expectedResults.length - 1; j >= 0; j--) {

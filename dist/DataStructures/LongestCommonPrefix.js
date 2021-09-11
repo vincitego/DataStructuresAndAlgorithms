@@ -7,25 +7,29 @@ export class LongestCommonPrefix {
         let comparisonFunction;
         if (typeof stringOrArray === 'string') {
             comparisonFunction = (a, b) => {
-                if (a[2] > b[2])
+                const subA = stringOrArray.slice(a[0]);
+                const subB = stringOrArray.slice(b[0]);
+                if (subA > subB)
                     return 1;
-                if (a[2] === b[2])
+                if (subA === subB)
                     return 0;
                 return -1;
             };
         }
         else if (Array.isArray(stringOrArray)) {
             comparisonFunction = (a, b) => {
-                const minLength = Math.min(a.length, b.length);
+                const subA = stringOrArray.slice(a[0]);
+                const subB = stringOrArray.slice(b[0]);
+                const minLength = Math.min(subA.length, subB.length);
                 for (let i = 0; i < minLength; i++) {
-                    if (a[2][i] > b[2][i])
+                    if (subA[i] > subB[i])
                         return 1;
-                    if (a[2][i] < b[2][i])
+                    if (subA[i] < subB[i])
                         return -1;
                 }
-                if (a[2].length > b[2].length)
+                if (subA.length > subB.length)
                     return 1;
-                if (a[2].length < b[2].length)
+                if (subA.length < subB.length)
                     return -1;
                 return 0;
             };
@@ -36,14 +40,16 @@ export class LongestCommonPrefix {
             throw new RangeError('Input must be non-empty');
         const suffixes = [];
         for (let i = stringOrArray.length - 1; i >= 0; i--) {
-            suffixes.push([i, 0, stringOrArray.slice(i)]);
+            suffixes.push([i, 0]);
         }
         suffixes.sort(comparisonFunction);
         for (let i = stringOrArray.length - 1; i > 0; i--) {
+            const previsouElement = stringOrArray.slice(suffixes[i - 1][0]);
+            const currentElement = stringOrArray.slice(suffixes[i][0]);
             let matchCount = 0;
-            let suffixLength = suffixes[i - 1][2].length;
+            let suffixLength = previsouElement.length;
             for (let elementIndex = 0; elementIndex < suffixLength; elementIndex++) {
-                if (suffixes[i - 1][2][elementIndex] === suffixes[i][2][elementIndex]) {
+                if (previsouElement[elementIndex] === currentElement[elementIndex]) {
                     matchCount++;
                 }
                 else {
@@ -53,7 +59,7 @@ export class LongestCommonPrefix {
             suffixes[i][1] = matchCount;
         }
         this._original = stringOrArray;
-        this._lcpArray = suffixes.map(([suffixIndex, lcp]) => [suffixIndex, lcp]);
+        this._lcpArray = suffixes;
     }
     /**
      * Get the Longest Common Prefix Array
