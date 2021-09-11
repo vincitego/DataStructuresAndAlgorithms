@@ -1,33 +1,55 @@
-export class LongestCommonPrefix implements Iterable<[number, number]> {
-	private _string: string;
+export class LongestCommonPrefix<T> implements Iterable<[number, number]> {
+	private _original: string | number[];
 	private _lcpArray: [number, number][];
 
 
 	/**
 	 * Suffix and Longest Common Prefix Array implementation. O(nlogn)
-	 * @param {string} string String to build arrays from.
+	 * @param {string} stringOrArray String or array of values to build prefixes from.
 	 */
-	constructor(string: string) {
-		if (typeof string !== 'string') throw new TypeError('Input needs to be a string');
+	constructor(stringOrArray: string | number[], ) {
+		let comparisonFunction: undefined | ((a: any, b: any) => number);
 
-		const suffixes: [number, number, string][] = [];
+		if (typeof stringOrArray === 'string') {
+			comparisonFunction = (a: string, b: string) => {
+				if (a[2] > b[2]) return 1;
+				if (a[2] === b[2]) return 0;
+				return -1;
+			};
 
-		// rewrite this as a binary search tree for efficiency?
-		for (let i = string.length - 1; i >= 0; i--) {
-			suffixes.push([i, 0, string.slice(i)]);
+		} else if (Array.isArray(stringOrArray)) {
+			comparisonFunction = (a: number[][], b: number[][]) => {
+				const minLength = Math.min(a.length, b.length);
+
+				for (let i = 0; i < minLength; i++) {
+					if (a[2][i] > b[2][i]) return 1;
+					if (a[2][i] < b[2][i]) return -1;
+				}
+
+				if (a[2].length > b[2].length) return 1;
+				if (a[2].length < b[2].length) return -1;
+				return 0;
+			};
 		}
 
-		suffixes.sort((a, b) => {
-			if (a[2] > b[2]) return 1;
-			return -1;
-		});
+		if (comparisonFunction === undefined) throw new TypeError('Input needs to be a string or array');
+		if (stringOrArray.length === 0) throw new RangeError('Input must be non-empty');
 
-		for (let i = string.length - 1; i > 0; i--) {
+
+		const suffixes: [number, number, string | number[]][] = [];
+
+		for (let i = stringOrArray.length - 1; i >= 0; i--) {
+			suffixes.push([i, 0, stringOrArray.slice(i)]);
+		}
+
+		suffixes.sort(comparisonFunction);
+
+		for (let i = stringOrArray.length - 1; i > 0; i--) {
 			let matchCount = 0;
 			let suffixLength = suffixes[i - 1][2].length;
 
-			for (let letterIndex = 0; letterIndex < suffixLength; letterIndex++) {
-				if (suffixes[i - 1][2][letterIndex] === suffixes[i][2][letterIndex]) {
+			for (let elementIndex = 0; elementIndex < suffixLength; elementIndex++) {
+				if (suffixes[i - 1][2][elementIndex] === suffixes[i][2][elementIndex]) {
 					matchCount++;
 				} else {
 					break;
@@ -38,7 +60,7 @@ export class LongestCommonPrefix implements Iterable<[number, number]> {
 		}
 
 
-		this._string = string;
+		this._original = stringOrArray;
 		this._lcpArray = suffixes.map(([suffixIndex, lcp]) => [suffixIndex, lcp]);
 	}
 
@@ -56,23 +78,23 @@ export class LongestCommonPrefix implements Iterable<[number, number]> {
 
 
 	/**
-	 * Get original string. O(1)
-	 * @returns {string}
+	 * Get original input value. O(1)
+	 * @returns {string | number[]}
 	 */
-	getString(): string {
-		return this._string;
+	getOriginalInput(): string | number[] {
+		return this._original;
 	}
 
 
 	/**
-	 * Get the suffix from the original string given a starting index. O(n)
-	 * @param {number} index Start index of suffix in original string
+	 * Get the suffix from the original input given a starting index. O(n)
+	 * @param {number} start Start index of suffix in original input
 	 * @returns {string}
 	 */
-	getSuffix(index: number): string {
-    if (typeof index !== 'number') throw new TypeError('Index needs to be a number.');
-    if (index >= this._string.length || index < 0) throw new RangeError('Index out of range.');
-		return this._string.slice(index);
+	getSuffix(start: number): string | number[] {
+    if (typeof start !== 'number') throw new TypeError('Index needs to be a number.');
+    if (start >= this._original.length || start < 0) throw new RangeError('Index out of range.');
+		return this._original.slice(start);
 	}
 
 

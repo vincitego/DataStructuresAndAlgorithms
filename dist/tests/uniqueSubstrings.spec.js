@@ -18,4 +18,14 @@ describe('Test Unique Substrings Algorithm', () => {
             ok(true);
         }
     });
+    it('Should output all unique substrings when given array', () => {
+        const results = uniqueSubstrings([1, 2, 1, 2, 1]);
+        const expectedResults = [[1], [1, 2, 1], [1, 2], [1, 2, 1, 2, 1], [1, 2, 1, 2], [2, 1], [2], [2, 1, 2, 1], [2, 1, 2]];
+        ok(results.length === expectedResults.length);
+        for (let i = expectedResults.length - 1; i >= 0; i--) {
+            for (let j = expectedResults.length - 1; j >= 0; j--) {
+                ok(results[i][j] === expectedResults[i][j]);
+            }
+        }
+    });
 });

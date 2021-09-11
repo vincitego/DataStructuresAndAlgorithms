@@ -2,21 +2,21 @@ import { LongestCommonPrefix } from "../index.js";
 
 
 /**
- * Finds all unique substrings of a given input string. O(nlogn)
- * @param {string} string Input string
- * @returns {string[]}
+ * Finds all unique substrings of a given input string or array. O(nlogn)
+ * @param {string | number[]} stringOrArray Input string
+ * @returns {string[] | number[][]}
  */
-export function uniqueSubstrings(string: string): string[] {
-	if (typeof string !== 'string') throw new TypeError('Input needs to be a string.');
+export function uniqueSubstrings(stringOrArray: string | number[]): string[] | number[][] {
+	if (typeof stringOrArray !== 'string' && !Array.isArray(stringOrArray)) throw new TypeError('Input needs to be a string or array.');
 
-	const lcp = new LongestCommonPrefix(string);
-	const results: string[] = [];
+	const lcp = new LongestCommonPrefix(stringOrArray);
+	const results: string[] | number[][] = [];
 
 	for (const [suffixIndex, numRepeated] of lcp) {
 		const substring = lcp.getSuffix(suffixIndex);
 		
 		for (let i = substring.length; i > numRepeated ; i--) {
-			results.push(substring.slice(0, i));
+			results.push(substring.slice(0, i) as any);
 		}
 	}
 
