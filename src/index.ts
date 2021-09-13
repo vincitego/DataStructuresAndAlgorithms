@@ -16,6 +16,8 @@ export { longestCommonElements } from './algorithms/longestCommonSubstrings.js';
 
 export { BinarySearchTree } from './DataStructures/BinarySearchTree.js';
 
+export { FenwickTree } from './DataStructures/FenwickTree.js';
+
 
 import { THROTTLED_QUEUE_MODE } from './algorithms/ThrottledQueue.js';
 import { CIRCULAR_BUFFER_MODE } from './DataStructures/CircularBuffer.js';
