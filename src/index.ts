@@ -1,7 +1,9 @@
 export { LinkedList } from './DataStructures/LinkedList.js';
 export { ThrottledQueue } from './algorithms/ThrottledQueue.js';
+import { THROTTLED_QUEUE_MODE } from './algorithms/ThrottledQueue.js';
 
 export { CircularBuffer } from './DataStructures/CircularBuffer.js';
+import { CIRCULAR_BUFFER_MODE } from './DataStructures/CircularBuffer.js';
 
 export { BinaryHeap } from './DataStructures/BinaryHeap.js';
 export { IndexedPriorityQueue } from './DataStructures/IndexedPriorityQueue.js';
@@ -18,9 +20,7 @@ export { BinarySearchTree } from './DataStructures/BinarySearchTree.js';
 
 export { FenwickTree } from './DataStructures/FenwickTree.js';
 
-
-import { THROTTLED_QUEUE_MODE } from './algorithms/ThrottledQueue.js';
-import { CIRCULAR_BUFFER_MODE } from './DataStructures/CircularBuffer.js';
+export { connectedComponents } from './algorithms/connectedComponents.js'
 
 export const enums = {
 	THROTTLED_QUEUE_MODE,
