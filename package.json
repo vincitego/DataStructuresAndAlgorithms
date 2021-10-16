@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "node .",
+    "build": "tsc",
     "test": "mocha ./dist/tests/"
   },
   "keywords": [
