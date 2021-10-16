@@ -20,7 +20,8 @@ export { BinarySearchTree } from './DataStructures/BinarySearchTree.js';
 
 export { FenwickTree } from './DataStructures/FenwickTree.js';
 
-export { connectedComponents } from './algorithms/connectedComponents.js'
+export { connectedComponents } from './algorithms/connectedComponents.js';
+export { shortestPath } from './algorithms/shortestPath.js';
 
 export const enums = {
 	THROTTLED_QUEUE_MODE,
