@@ -30,27 +30,39 @@ export class AdjacencyList {
 
 	/**
 	 * Add new node to the adjacency list.
-	 * @returns {this}
+	 * @returns {number} Node id of new node
 	 */
-	addNode(): this {
+	addNode(): number {
 		this._nodes.set(this._nextId, new Map<number, number>());
 		this._nextId++;
-		return this;
+		return this._nextId - 1;
 	}
 
 
 	/**
-	 * Delete node at given index
-	 * @param {number} node Index of node to delete
+	 * Delete node at given id
+	 * @param {number} node id of node to delete
 	 * @returns {Map<number, number> | undefined} Map of connected node => weight
 	 */
 	deleteNode(node: number): Map<number, number> | undefined {
 		const nodeToDelete = this._nodes.get(node);
 		this._nodes.delete(node);
+
+		for (const edge of this._nodes.values()) {
+			if (edge.has(node)) edge.delete(node);
+		}
+
 		return nodeToDelete;
 	}
 
 
+	/**
+	 * Add new edge connecting 2 nodes with an optional weight.
+	 * @param {number} nodeFrom Start node id of edge.
+	 * @param {number} nodeTo Connected node id of edge.
+	 * @param {number} weight Weight for the edge. Default 1.
+	 * @returns {this}
+	 */
 	addEdge(nodeFrom: number, nodeTo: number, weight: number = 1): this {
 		if (!this._nodes.has(nodeFrom)) throw new EvalError(`Node From does not exist. Got ${nodeFrom}`);
 		if (!this._nodes.has(nodeTo)) throw new EvalError(`Node To does not exist. Got ${nodeTo}`);
@@ -61,6 +73,12 @@ export class AdjacencyList {
 	}
 
 
+	/**
+	 * Delete edge connecting 2 nodes.
+	 * @param {number} nodeFrom Start node id of edge.
+	 * @param {number} nodeTo Connected node id of edge.
+	 * @returns {this}
+	 */
 	deleteEdge(nodeFrom: number, nodeTo: number): number {
 		if (!this._nodes.has(nodeFrom)) throw new EvalError(`Node From does not exist. Got ${nodeFrom}`);
 		const nodeToDeleteFrom = this._nodes.get(nodeFrom)!;
@@ -103,9 +121,9 @@ export class AdjacencyList {
 
 
 	/**
-	 * Get edges for a given node index.
+	 * Get edges for a given node id.
 	 * @param {number} node 
-	 * @returns {[number, number][]}
+	 * @returns {[number, number][]} Array of nodes connected to given node id and the edge weight
 	 */
 	getEdges(node: number): [number, number][] | undefined {
 		if (!this._nodes.has(node)) return undefined;
