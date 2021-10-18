@@ -1,13 +1,13 @@
 import { LinkedList } from '../index.js';
 /**
  * Finds shortest path between a given start node and end node.
- * @param {number[][]} graph Graph represented as adjacency list
+ * @param {AdjacencyList} graph Graph represented as adjacency list
  * @param {number} start Node index to start path on
  * @param {number} end Node index to end path on
  * @returns {number[] | undefined} Path of nodes to traverse if a path exists
  */
 export function shortestPath(graph, start, end) {
-    const nodeCount = graph.length;
+    const nodeCount = graph.numNodes();
     if (typeof start !== 'number')
         throw new TypeError(`Start node id ${start} needs to be numeric.`);
     if (start !== Math.floor(start))
@@ -32,7 +32,7 @@ export function shortestPath(graph, start, end) {
             throw new TypeError(`Node id ${currentNode} needs to be an integer.`);
         if (currentNode >= nodeCount)
             throw new RangeError(`Node id ${currentNode} is out of range.`);
-        for (const connectedNode of graph[currentNode]) {
+        for (const [connectedNode] of graph.getEdges(currentNode)) {
             if (previousNode[connectedNode] >= 0)
                 continue;
             previousNode[connectedNode] = currentNode;

@@ -13,6 +13,7 @@ export { longestRepeatedSubstrings } from './algorithms/longestRepeatedSubstring
 export { longestCommonElements } from './algorithms/longestCommonSubstrings.js';
 export { BinarySearchTree } from './DataStructures/BinarySearchTree.js';
 export { FenwickTree } from './DataStructures/FenwickTree.js';
+export { AdjacencyList } from './DataStructures/AdjacencyList.js';
 export { connectedComponents } from './algorithms/connectedComponents.js';
 export { shortestPath } from './algorithms/shortestPath.js';
 export const enums = {
