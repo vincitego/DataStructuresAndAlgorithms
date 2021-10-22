@@ -26,7 +26,7 @@ export function connectedComponents(graph: AdjacencyList): number[] {
  * @param {AdjacencyList} graph Graph represented as adjacency list
  * @param {number} node Index of node to start search at
  * @param {number} color Number representing component to label nodes
- * @param {number} components Array representing component that nodes belong to
+ * @param {number[]} components Array representing component that nodes belong to
  */
 function depthFirst(graph: AdjacencyList, node: number, color: number, components: number[]): void {
 	components[node] = color;

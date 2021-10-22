@@ -16,6 +16,8 @@ export { FenwickTree } from './DataStructures/FenwickTree.js';
 export { AdjacencyList } from './DataStructures/AdjacencyList.js';
 export { connectedComponents } from './algorithms/connectedComponents.js';
 export { shortestPath } from './algorithms/shortestPath.js';
+export { topologicalSort } from './algorithms/topologicalSort.js';
+export { shortestPathDAG, longestPathDAG } from './algorithms/shortestPathDAG.js';
 export const enums = {
     THROTTLED_QUEUE_MODE,
     CIRCULAR_BUFFER_MODE,
