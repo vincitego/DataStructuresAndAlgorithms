@@ -1,14 +1,14 @@
 /**
  * Find and label connected components of the given graph.
  * @param {AdjacencyList} graph Graph represented as adjacency list
- * @returns {number[]} Array representing component that nodes belong to
+ * @returns {Map<number, number>} Array representing component that nodes belong to
  */
 export function connectedComponents(graph) {
-    const nodeCount = graph.numNodes();
-    const components = new Array(nodeCount).fill(0);
+    const nodes = graph.getNodes();
+    const components = new Map(nodes.map(node => [node, 0]));
     let color = 0;
-    for (let node = 0; node < nodeCount; node++) {
-        if (components[node] > 0)
+    for (const node of nodes) {
+        if (components.get(node) > 0)
             continue;
         color++;
         depthFirst(graph, node, color, components);
@@ -23,9 +23,9 @@ export function connectedComponents(graph) {
  * @param {number[]} components Array representing component that nodes belong to
  */
 function depthFirst(graph, node, color, components) {
-    components[node] = color;
+    components.set(node, color);
     for (const [connectedNode] of graph.getEdges(node)) {
-        if (components[connectedNode] > 0)
+        if (components.get(connectedNode) > 0)
             continue;
         depthFirst(graph, connectedNode, color, components);
     }

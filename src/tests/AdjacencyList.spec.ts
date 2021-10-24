@@ -21,6 +21,32 @@ describe('Test Adjacency List', () => {
 	});
 
 
+	it('Should add new nodes correctly', () => {
+		const graph = new AdjacencyList();
+		ok(graph.addNode() === 0);
+		ok(graph.addNode() === 1);
+		ok(graph.numNodes() === 2);
+	});
+
+
+	it('Should delete nodes correctly', () => {
+		const graph = new AdjacencyList(true, 3);
+		graph.addEdge(0, 2);
+		graph.addEdge(0, 1);
+		graph.addEdge(1, 2);
+		ok(graph.numEdges() === 3);
+
+		graph.deleteNode(1);
+		ok(graph.numEdges() === 1);
+	});
+
+
+	it('Geting edges of a nonexistent node should return undefined', () => {
+		const graph = new AdjacencyList();
+		ok(graph.getEdges(0) === undefined);
+	});
+
+
 	it('Should add new edges to undirected graph correctly', () => {
 		const graph = new AdjacencyList(false, 3);
 		graph.addEdge(0, 2);
@@ -69,17 +95,6 @@ describe('Test Adjacency List', () => {
 		for (let i = 0; i < expectedResults.length; i++) {
 			ok(edges[i][0] === expectedResults[i][0]);
 			ok(edges[i][1] === expectedResults[i][1]);
-		}
-	});
-
-	
-	it('Geting edges of a nonexistent node should error', () => {
-		try {
-			const graph = new AdjacencyList();
-			graph.getEdges(0);
-			ok(false);
-		} catch (err) {
-			ok(true);
 		}
 	});
 
@@ -137,6 +152,24 @@ describe('Test Adjacency List', () => {
 
 		try {
 			graph.deleteEdge(0, 1);
+			ok(false);
+		} catch (err) {
+			ok(true);
+		}
+	});
+
+	
+	it('Deleting nonexistent node should return undefined', () => {
+		const graph = new AdjacencyList();
+		ok(graph.deleteNode(0) === undefined);
+	});
+
+	
+	it('Adding edge with invalid weight should error', () => {
+		const graph = new AdjacencyList();
+
+		try {
+			graph.addEdge(0, 1, 'a' as any);
 			ok(false);
 		} catch (err) {
 			ok(true);

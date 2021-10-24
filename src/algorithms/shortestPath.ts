@@ -9,34 +9,28 @@ import { LinkedList } from '../index.js';
  * @returns {number[] | undefined} Path of nodes to traverse if a path exists
  */
 export function shortestPath(graph: AdjacencyList, start: number, end: number): number[] | undefined {
-	const nodeCount = graph.numNodes();
+	const graphMap = graph.getGraph();
+	const nodes = graph.getNodes();
 
 	if (typeof start !== 'number') throw new TypeError(`Start node id ${start} needs to be numeric.`);
-	if (start !== Math.floor(start)) throw new TypeError(`Start node id ${start} needs to be an integer.`);
-	if (start >= nodeCount) throw new RangeError(`Start node id ${start} is out of range.`);
+	if (!graphMap.has(start)) throw new TypeError(`Start node id ${start} not found in graph.`);
 	
 	if (typeof end !== 'number') throw new TypeError(`End node id ${end} needs to be numeric.`);
-	if (end !== Math.floor(end)) throw new TypeError(`End node id ${end} needs to be an integer.`);
-	if (end >= nodeCount) throw new RangeError(`End node id ${end} is out of range.`);
+	if (!graphMap.has(end)) throw new TypeError(`End node id ${end} not found in graph.`);
 
-	const previousNode = new Array(nodeCount).fill(-1);
+	const previousNode = new Map<number, number>(nodes.map(node => [node, -1]));
 	const queue = new LinkedList<number>();
 
-	previousNode[start] = start;
+	previousNode.set(start, start);
 	queue.addBack(start);
 
 
 	while (queue.size() > 0) {
 		const currentNode = queue.removeFront()!;
 
-		if (typeof currentNode !== 'number') throw new TypeError(`Node id ${currentNode} needs to be numeric.`);
-		if (currentNode !== Math.floor(currentNode)) throw new TypeError(`Node id ${currentNode} needs to be an integer.`);
-		if (currentNode >= nodeCount) throw new RangeError(`Node id ${currentNode} is out of range.`);
-
-
 		for (const [ connectedNode ] of graph.getEdges(currentNode)!) {
-			if (previousNode[connectedNode] >= 0) continue;
-			previousNode[connectedNode] = currentNode;
+			if (previousNode.get(connectedNode)! >= 0) continue;
+			previousNode.set(connectedNode, currentNode);
 
 			if (currentNode === end) {
 				queue.clear();
@@ -48,14 +42,14 @@ export function shortestPath(graph: AdjacencyList, start: number, end: number): 
 	}
 
 
-	if (previousNode[end] < 0) return;
+	if (previousNode.get(end)! < 0) return;
 
 	const path: number[] = [];
 	let pathNode = end;
 	path.push(pathNode);
 
 	while (pathNode !== start) {
-		pathNode = previousNode[pathNode];
+		pathNode = previousNode.get(pathNode)!;
 		path.push(pathNode);
 	}
 

@@ -8,12 +8,11 @@ import { AdjacencyList } from '../index.js';
  */
 export function topologicalSort(graph: AdjacencyList): number[] {
 	const nodes = graph.getNodes();
-	const numNodes = nodes.length;
-	const visited: boolean[] = new Array(numNodes).fill(false);
+	const visited = new Map<number, boolean>(nodes.map(node => [node, false]));
 	const topSortResults: number[] = [];
 
 	for (const node of nodes) {
-		if (visited[node]) continue;
+		if (visited.get(node)) continue;
 		depthFirst(graph, node, visited, topSortResults);
 	}
 
@@ -28,11 +27,11 @@ export function topologicalSort(graph: AdjacencyList): number[] {
  * @param {boolean[]} visited 
  * @param {number[]} topSortResults 
  */
-function depthFirst(graph: AdjacencyList, node: number, visited: boolean[], topSortResults: number[]) {
-	visited[node] = true;
+function depthFirst(graph: AdjacencyList, node: number, visited: Map<number, boolean>, topSortResults: number[]) {
+	visited.set(node, true);
 
 	for (const [ connectedNode ] of graph.getEdges(node)!) {
-		if (visited[connectedNode]) continue;
+		if (visited.get(connectedNode)) continue;
 		depthFirst(graph, connectedNode, visited, topSortResults);
 	}
 

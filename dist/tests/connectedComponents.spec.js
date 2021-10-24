@@ -16,7 +16,7 @@ describe('Test Connected Components Algorithm', () => {
         graph.addEdge(9, 15);
         graph.addEdge(10, 15);
         graph.addEdge(13, 14);
-        const components = connectedComponents(graph);
+        const components = [...connectedComponents(graph).values()];
         const expectedResults = [1, 2, 3, 3, 1, 2, 4, 4, 1, 3, 3, 4, 5, 1, 1, 3, 2, 2];
         ok(expectedResults.length === components.length);
         for (let i = expectedResults.length - 1; i >= 0; i--) {
