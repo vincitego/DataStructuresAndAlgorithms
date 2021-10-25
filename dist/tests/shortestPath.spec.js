@@ -13,21 +13,6 @@ describe('Test Shortest Path Algorithm', () => {
         graph.addEdge(7, 11);
         graph.addEdge(8, 9).addEdge(8, 12);
         graph.addEdge(9, 10);
-        // const graph = [
-        // 	[9, 7, 11],
-        // 	[10, 8],
-        // 	[12, 3],
-        // 	[2, 4, 7],
-        // 	[3],
-        // 	[6],
-        // 	[5, 7],
-        // 	[0, 11, 3, 6],
-        // 	[1, 9, 12],
-        // 	[10, 8, 0],
-        // 	[1, 9],
-        // 	[0, 7],
-        // 	[2, 8],
-        // ];
         const path = shortestPath(graph, 0, 4);
         const expectedResults = [0, 7, 3, 4];
         ok(expectedResults.length === path.length);
@@ -49,21 +34,6 @@ describe('Test Shortest Path Algorithm', () => {
         graph.addEdge(7, 11);
         graph.addEdge(8, 9).addEdge(8, 12);
         graph.addEdge(9, 10);
-        // const graph = [
-        // 	[9, 7, 11],
-        // 	[10, 8],
-        // 	[12, 3],
-        // 	[2, 7],
-        // 	[],
-        // 	[6],
-        // 	[5, 7],
-        // 	[0, 11, 3, 6],
-        // 	[1, 9, 12],
-        // 	[10, 8, 0],
-        // 	[1, 9],
-        // 	[0, 7],
-        // 	[2, 8],
-        // ];
         const path = shortestPath(graph, 0, 4);
         ok(path === undefined);
     });

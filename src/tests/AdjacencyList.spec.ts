@@ -23,8 +23,7 @@ describe('Test Adjacency List', () => {
 
 	it('Should add new nodes correctly', () => {
 		const graph = new AdjacencyList();
-		ok(graph.addNode() === 0);
-		ok(graph.addNode() === 1);
+		graph.addNode(0).addNode(1);
 		ok(graph.numNodes() === 2);
 	});
 

@@ -16,6 +16,7 @@ export class IndexedPriorityQueue {
         this._comparisonFunction = comparisonFunction;
         this._currentKeyIndex = 0;
         this._keyToKeyIndex = new Map();
+        this._keyIndexToKey = new Map();
         this._keyIndexToHeapIndex = [];
         this._heapIndexToKeyIndex = [];
     }
@@ -38,6 +39,7 @@ export class IndexedPriorityQueue {
             this._heapIndexToKeyIndex[heapIndex] = this._currentKeyIndex;
         }
         this._keyToKeyIndex.set(key, this._currentKeyIndex);
+        this._keyIndexToKey.set(this._currentKeyIndex, key);
         this._keyIndexToHeapIndex.push(heapIndex);
         this._size++;
         this._currentKeyIndex++;
@@ -68,7 +70,8 @@ export class IndexedPriorityQueue {
      * @returns {T}
      */
     peek() {
-        return this._heap[0];
+        const key = this._keyIndexToKey.get(this._heapIndexToKeyIndex[0]);
+        return [key, this._heap[0]];
     }
     /**
      * Returns value at top of heap and removes the node. O(logn)
@@ -78,6 +81,7 @@ export class IndexedPriorityQueue {
         if (this._size === 0)
             return undefined;
         this._size--;
+        const key = this._keyIndexToKey.get(this._heapIndexToKeyIndex[0]);
         const value = this._heap[0];
         const polledKeyIndex = this._heapIndexToKeyIndex[0];
         const replacementKeyIndex = this._heapIndexToKeyIndex[this._size];
@@ -87,9 +91,9 @@ export class IndexedPriorityQueue {
         this._keyIndexToHeapIndex[polledKeyIndex] = -1;
         this._keyIndexToHeapIndex[replacementKeyIndex] = 0;
         if (this._size === 0)
-            return value;
+            return [key, value];
         this._sink(0);
-        return value;
+        return [key, value];
     }
     /**
      * Returns original value from given value and removes the node. O(logn)
@@ -134,6 +138,7 @@ export class IndexedPriorityQueue {
         this._size = 0;
         this._currentKeyIndex = 0;
         this._keyToKeyIndex.clear();
+        this._keyIndexToKey.clear();
         this._keyIndexToHeapIndex = [];
         this._heapIndexToKeyIndex = [];
         return this;

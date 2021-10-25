@@ -11,6 +11,7 @@ export class IndexedPriorityQueue<K, T> implements Iterable<T> {
 
 	private _currentKeyIndex: number;
 	private _keyToKeyIndex: Map<K, number>;
+	private _keyIndexToKey: Map<number, K>;
 	private _keyIndexToHeapIndex: number[];
 	private _heapIndexToKeyIndex: number[];
 
@@ -29,6 +30,7 @@ export class IndexedPriorityQueue<K, T> implements Iterable<T> {
 
 		this._currentKeyIndex = 0;
 		this._keyToKeyIndex = new Map<K, number>();
+		this._keyIndexToKey = new Map<number, K>();
 		this._keyIndexToHeapIndex = [];
 		this._heapIndexToKeyIndex = [];
 	}
@@ -54,6 +56,7 @@ export class IndexedPriorityQueue<K, T> implements Iterable<T> {
 		}
 
 		this._keyToKeyIndex.set(key, this._currentKeyIndex);
+		this._keyIndexToKey.set(this._currentKeyIndex, key);
 		this._keyIndexToHeapIndex.push(heapIndex);
 
 		this._size++;
@@ -90,8 +93,9 @@ export class IndexedPriorityQueue<K, T> implements Iterable<T> {
 	 * Peek at value at top of heap. O(1)
 	 * @returns {T}
 	 */
-	peek(): T {
-		return this._heap[0];
+	peek(): [K, T] {
+		const key = this._keyIndexToKey.get(this._heapIndexToKeyIndex[0])!;
+		return [key, this._heap[0]];
 	}
 
 
@@ -99,10 +103,11 @@ export class IndexedPriorityQueue<K, T> implements Iterable<T> {
 	 * Returns value at top of heap and removes the node. O(logn)
 	 * @returns {T | undefined}
 	 */
-	poll(): T | undefined {
+	poll(): [K, T] | undefined {
 		if (this._size === 0) return undefined;
 		this._size--;
 
+		const key = this._keyIndexToKey.get(this._heapIndexToKeyIndex[0])!;
 		const value = this._heap[0];
 		const polledKeyIndex = this._heapIndexToKeyIndex[0];
 		const replacementKeyIndex = this._heapIndexToKeyIndex[this._size];
@@ -113,9 +118,9 @@ export class IndexedPriorityQueue<K, T> implements Iterable<T> {
 		this._keyIndexToHeapIndex[polledKeyIndex] = -1;
 		this._keyIndexToHeapIndex[replacementKeyIndex] = 0;
 
-		if (this._size === 0) return value;
+		if (this._size === 0) return [key, value];
 		this._sink(0);
-		return value;
+		return [key, value];
 	}
 
 
@@ -171,6 +176,7 @@ export class IndexedPriorityQueue<K, T> implements Iterable<T> {
 		this._size = 0;
 		this._currentKeyIndex = 0;
 		this._keyToKeyIndex.clear();
+		this._keyIndexToKey.clear();
 		this._keyIndexToHeapIndex = [];
 		this._heapIndexToKeyIndex = [];
 		return this;

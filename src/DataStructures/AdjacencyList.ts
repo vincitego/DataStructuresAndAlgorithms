@@ -4,7 +4,6 @@
 export class AdjacencyList {
 	private _nodes: Map<number, Map<number, number>>;
 	private _directed: boolean;
-	private _nextId: number;
 
 
 	/**
@@ -19,7 +18,6 @@ export class AdjacencyList {
 
 
 		this._directed = directed;
-		this._nextId = numNodes;
 		this._nodes = new Map<number, Map<number, number>>();
 
 		for (let i = 0; i < numNodes; i++) {
@@ -30,12 +28,11 @@ export class AdjacencyList {
 
 	/**
 	* Add new node to the adjacency list.
-	* @returns {number} Node id of new node
+	* @returns {this}
 	*/
- addNode(): number {
-	 this._nodes.set(this._nextId, new Map<number, number>());
-	 this._nextId++;
-	 return this._nextId - 1;
+ addNode(id: number): this {
+	 this._nodes.set(id, new Map<number, number>());
+	 return this;
  }
 
 
