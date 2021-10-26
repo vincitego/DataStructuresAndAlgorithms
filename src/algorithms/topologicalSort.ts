@@ -30,7 +30,7 @@ export function topologicalSort(graph: AdjacencyList): number[] {
 function depthFirst(graph: AdjacencyList, node: number, visited: Map<number, boolean>, topSortResults: number[]) {
 	visited.set(node, true);
 
-	for (const [ connectedNode ] of graph.getEdges(node)!) {
+	for (const [ connectedNode ] of graph.getEdgesOfNode(node)!) {
 		if (visited.get(connectedNode)) continue;
 		depthFirst(graph, connectedNode, visited, topSortResults);
 	}

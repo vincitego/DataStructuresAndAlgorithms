@@ -2,6 +2,13 @@ import { AdjacencyList } from '../index.js';
 import { IndexedPriorityQueue } from '../index.js';
 
 
+/**
+ * Finds shortest path between a given start node and end node.
+ * @param {AdjacencyList} graph Graph represented as adjacency list
+ * @param {number} start Node index to start path on
+ * @param {number} end Node index to end path on
+ * @returns {number[]} Path of nodes to traverse if a path exists
+ */
 export function djikstra(graph: AdjacencyList, start: number, end: number): number[] {
 	const nodes = graph.getNodes();
 	const visited = new Map<number, boolean>(nodes.map(node => [node, false]));
@@ -17,7 +24,7 @@ export function djikstra(graph: AdjacencyList, start: number, end: number): numb
 		const [ node, currentDistance ] = queue.poll()!;
 		visited.set(node, true);
 
-		for (const [ neighbor, weight ] of graph.getEdges(node)!) {
+		for (const [ neighbor, weight ] of graph.getEdgesOfNode(node)!) {
 			const newPathWeight = currentDistance + weight;
 
 			if (newPathWeight < bestDistance.get(neighbor)!) {

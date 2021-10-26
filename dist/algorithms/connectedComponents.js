@@ -24,7 +24,7 @@ export function connectedComponents(graph) {
  */
 function depthFirst(graph, node, color, components) {
     components.set(node, color);
-    for (const [connectedNode] of graph.getEdges(node)) {
+    for (const [connectedNode] of graph.getEdgesOfNode(node)) {
         if (components.get(connectedNode) > 0)
             continue;
         depthFirst(graph, connectedNode, color, components);

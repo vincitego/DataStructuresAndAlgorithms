@@ -31,7 +31,7 @@ export function connectedComponents(graph: AdjacencyList): Map<number, number> {
 function depthFirst(graph: AdjacencyList, node: number, color: number, components: Map<number, number>): void {
 	components.set(node, color);
 	
-	for (const [ connectedNode ] of graph.getEdges(node)!) {
+	for (const [ connectedNode ] of graph.getEdgesOfNode(node)!) {
 		if (components.get(connectedNode)! > 0) continue;
 		depthFirst(graph, connectedNode, color, components);
 	}

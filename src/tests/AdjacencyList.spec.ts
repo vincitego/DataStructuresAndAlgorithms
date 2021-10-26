@@ -40,9 +40,9 @@ describe('Test Adjacency List', () => {
 	});
 
 
-	it('Geting edges of a nonexistent node should return undefined', () => {
+	it('Getting edges of a nonexistent node should return undefined', () => {
 		const graph = new AdjacencyList();
-		ok(graph.getEdges(0) === undefined);
+		ok(graph.getEdgesOfNode(0) === undefined);
 	});
 
 
@@ -58,7 +58,7 @@ describe('Test Adjacency List', () => {
 		graph.addEdge(0, 2);
 		graph.addEdge(0, 2, 3);
 		ok(graph.numEdges() === 1);
-		ok(graph.getEdges(0)![0][1] === 3);
+		ok(graph.getEdgesOfNode(0)![0][1] === 3);
 	});
 
 
@@ -87,8 +87,25 @@ describe('Test Adjacency List', () => {
 		graph.addEdge(0, 2);
 		graph.addEdge(0, 1, 3);
 
-		const edges = graph.getEdges(0)!;
+		const edges = graph.getEdgesOfNode(0)!;
 		const expectedResults = [[2, 1], [1, 3]];
+
+		ok(edges.length === expectedResults.length);
+		for (let i = 0; i < expectedResults.length; i++) {
+			ok(edges[i][0] === expectedResults[i][0]);
+			ok(edges[i][1] === expectedResults[i][1]);
+		}
+	});
+
+	
+	it('Get edges should return all edges with their weights', () => {
+		const graph = new AdjacencyList(true, 3);
+		graph.addEdge(0, 2);
+		graph.addEdge(0, 1, 3);
+		graph.addEdge(1, 2, -3);
+
+		const edges = graph.getEdges();
+		const expectedResults = [[0, 2, 1], [0, 1, 3], [1, 2, -3]];
 
 		ok(edges.length === expectedResults.length);
 		for (let i = 0; i < expectedResults.length; i++) {
@@ -172,6 +189,31 @@ describe('Test Adjacency List', () => {
 			ok(false);
 		} catch (err) {
 			ok(true);
+		}
+	});
+
+	
+	it('Get adjacency matrix should graph represented as an adjacency matrix', () => {
+		const graph = new AdjacencyList(true, 3);
+		graph.addEdge(0, 2);
+		graph.addEdge(0, 1, 3);
+		graph.addEdge(1, 2, -3);
+
+		const matrix = graph.getAdjacencyMatrix();
+		const expectedResults = [
+			[0, 3, 1],
+			[0, 0, -3],
+			[0, 0, 0]
+		];
+
+		ok(matrix.length === expectedResults.length);
+
+		for (let i = 0; i < expectedResults.length; i++) {
+			ok(matrix[i].length === expectedResults[i].length);
+
+			for (let j = 0; j < expectedResults[i].length; j++) {
+				ok(matrix[i][j] === expectedResults[i][j]);
+			}
 		}
 	});
 

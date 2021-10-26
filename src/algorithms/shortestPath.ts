@@ -28,7 +28,7 @@ export function shortestPath(graph: AdjacencyList, start: number, end: number): 
 	while (queue.size() > 0) {
 		const currentNode = queue.removeFront()!;
 
-		for (const [ connectedNode ] of graph.getEdges(currentNode)!) {
+		for (const [ connectedNode ] of graph.getEdgesOfNode(currentNode)!) {
 			if (previousNode.get(connectedNode)! >= 0) continue;
 			previousNode.set(connectedNode, currentNode);
 

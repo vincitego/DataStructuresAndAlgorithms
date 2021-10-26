@@ -23,7 +23,7 @@ export function shortestPath(graph, start, end) {
     queue.addBack(start);
     while (queue.size() > 0) {
         const currentNode = queue.removeFront();
-        for (const [connectedNode] of graph.getEdges(currentNode)) {
+        for (const [connectedNode] of graph.getEdgesOfNode(currentNode)) {
             if (previousNode.get(connectedNode) >= 0)
                 continue;
             previousNode.set(connectedNode, currentNode);

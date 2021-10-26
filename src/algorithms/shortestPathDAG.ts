@@ -22,7 +22,7 @@ export function shortestPathDAG(graph: AdjacencyList, start: number, end: number
 		const node = topSortResults[i];
 		const currentDistance = bestDistance.get(node)!;
 
-		for (const [ neighbor, weight ] of graph.getEdges(node)!) {
+		for (const [ neighbor, weight ] of graph.getEdgesOfNode(node)!) {
 			const newPathWeight = currentDistance + weight;
 
 			if (newPathWeight < bestDistance.get(neighbor)!) {
@@ -71,7 +71,7 @@ export function longestPathDAG(graph: AdjacencyList, start: number, end: number)
 		const node = topSortResults[i];
 		const currentDistance = bestDistance.get(node)!;
 
-		for (const [ neighbor, originalWeight ] of graph.getEdges(node)!) {
+		for (const [ neighbor, originalWeight ] of graph.getEdgesOfNode(node)!) {
 			const weight = originalWeight * -1;
 			const newPathWeight = currentDistance + weight;
 

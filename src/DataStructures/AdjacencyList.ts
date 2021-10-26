@@ -120,6 +120,27 @@ export class AdjacencyList {
 
 
 	/**
+	 * Get graph data represented as an adjacency matrix.
+	 * @returns {number[][]}
+	 */
+	getAdjacencyMatrix(): number[][] {
+		const numNodes = this.numNodes();
+		const edges = this.getEdges();
+		const matrix: number[][] = [];
+
+		for (let i = 0; i < numNodes; i++) {
+			matrix.push(new Array(numNodes).fill(0));
+		}
+
+		for (const [ from, to, weight ] of edges) {
+			matrix[from][to] = weight;
+		}
+
+		return matrix;
+	}
+
+
+	/**
 	 * Get all node ids in graph.
 	 * @returns {number[]}
 	 */
@@ -129,11 +150,28 @@ export class AdjacencyList {
 
 
 	/**
+	 * Get all edges in graph.
+	 * @returns {[number, number, number][]}
+	 */
+	getEdges(): [number, number, number][] {
+		const edges: [number, number, number][] = [];
+
+		for (const node of this.getNodes()) {
+			for (const [ connectedNode, weight ] of this.getEdgesOfNode(node)!) {
+				edges.push([node, connectedNode, weight]);
+			}
+		}
+
+		return edges;
+	}
+
+
+	/**
 	 * Get edges for a given node id.
 	 * @param {number} node 
 	 * @returns {[number, number][]} Array of nodes connected to given node id and the edge weight
 	 */
-	getEdges(node: number): [number, number][] | undefined {
+	getEdgesOfNode(node: number): [number, number][] | undefined {
 		if (!this._nodes.has(node)) return undefined;
 		return [...this._nodes.get(node)!.entries()];
 	}
