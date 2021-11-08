@@ -129,7 +129,7 @@ export class AdjacencyList {
 		const matrix: number[][] = [];
 
 		for (let i = 0; i < numNodes; i++) {
-			matrix.push(new Array(numNodes).fill(0));
+			matrix.push(new Array(numNodes).fill(Infinity));
 		}
 
 		for (const [ from, to, weight ] of edges) {

@@ -27,6 +27,7 @@ export { topologicalSort } from './algorithms/topologicalSort.js';
 export { shortestPathDAG, longestPathDAG } from './algorithms/shortestPathDAG.js';
 export { djikstra } from './algorithms/djikstra.js';
 export { negativeCycles } from './algorithms/negativeCycles.js';
+export { floydWarshall } from './algorithms/floydWarshall.js';
 
 
 export const enums = {
