@@ -2,9 +2,9 @@ import { AdjacencyList } from '../index.js';
 
 
 /**
- * Finds all pair shortest paths using Floyd Warshall algorithm.
+ * Finds all pair shortest paths using Floyd Warshall algorithm. Only use with a graph that has no gaps in the node ids.
  * @param {AdjacencyList} graph Graph represented as adjacency list
- * @returns {number[][]} Path of nodes to traverse if a path exists
+ * @returns {number[][]} Path of next nodes to traverse if a path exists for all pairs of nodes
  */
  export function floydWarshall(graph: AdjacencyList): number[][] {
 	 const numNodes = graph.numNodes();
