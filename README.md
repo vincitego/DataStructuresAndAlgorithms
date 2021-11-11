@@ -12,6 +12,7 @@ Data Structures Implemented:
 * Balanced Binary Search Tree
 * Indexed Priority Queue
 * Fenwick Tree
+* Graph (Adjacency List)
 
 
 Algorithms Implemented:
@@ -22,5 +23,26 @@ Algorithms Implemented:
 * Longest Common Substrings
 
 
-To Do:
-* Graphs
+Graph Algorithms Implemented:
+* Bridges
+* Articulation Points
+* Floyd Warshall
+* Djikstra
+* Connected Components
+* Negative Cycles
+* Single Source Shortest Path
+* Single Source Shortest Path on Directed Acyclic Graph
+
+
+Graph Algorithms To Be Implemented:
+* Tarjans Strongly Connected Components
+* Traveling Salesman
+* Eulerian Path
+* Prim's Minimum Spanning Tree
+* Ford Fulkerson Max Flow
+* Unweighted Bipartite Matching
+* Mice and Owls
+* Elementary Math
+* Edmonds Karp
+* Capacity Scaling
+* Dinic's Algorithm

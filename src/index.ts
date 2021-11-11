@@ -29,6 +29,7 @@ export { djikstra } from './algorithms/djikstra.js';
 export { negativeCycles } from './algorithms/negativeCycles.js';
 export { floydWarshall } from './algorithms/floydWarshall.js';
 export { findBridges } from './algorithms/bridges.js';
+export { findArticulationPoints } from './algorithms/articulationPoints.js';
 
 
 export const enums = {
