@@ -32,17 +32,12 @@ Graph Algorithms Implemented:
 * Negative Cycles
 * Single Source Shortest Path
 * Single Source Shortest Path on Directed Acyclic Graph
+* Tarjans Strongly Connected Components
 
 
 Graph Algorithms To Be Implemented:
-* Tarjans Strongly Connected Components
 * Traveling Salesman
-* Eulerian Path
+* Eulerian Path/Circuit
 * Prim's Minimum Spanning Tree
 * Ford Fulkerson Max Flow
-* Unweighted Bipartite Matching
-* Mice and Owls
-* Elementary Math
-* Edmonds Karp
-* Capacity Scaling
-* Dinic's Algorithm
+	* Dinic's Algorithm
