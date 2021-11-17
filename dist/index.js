@@ -24,6 +24,7 @@ export { floydWarshall } from './algorithms/floydWarshall.js';
 export { findBridges } from './algorithms/bridges.js';
 export { findArticulationPoints } from './algorithms/articulationPoints.js';
 export { stronglyConnectedComponents } from './algorithms/stronglyConnectedComponents.js';
+export { travellingSalesman as travelingSalesman } from './algorithms/travellingSalesman.js';
 export const enums = {
     THROTTLED_QUEUE_MODE,
     CIRCULAR_BUFFER_MODE,

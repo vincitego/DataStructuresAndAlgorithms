@@ -33,11 +33,10 @@ Graph Algorithms Implemented:
 * Single Source Shortest Path
 * Single Source Shortest Path on Directed Acyclic Graph
 * Tarjans Strongly Connected Components
+* Travelling Salesman
 
 
 Graph Algorithms To Be Implemented:
-* Traveling Salesman
-* Eulerian Path/Circuit
-* Prim's Minimum Spanning Tree
+* Eulerian Path
 * Ford Fulkerson Max Flow
 	* Dinic's Algorithm
