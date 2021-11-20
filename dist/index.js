@@ -26,6 +26,7 @@ export { findArticulationPoints } from './algorithms/articulationPoints.js';
 export { stronglyConnectedComponents } from './algorithms/stronglyConnectedComponents.js';
 export { travellingSalesman } from './algorithms/travellingSalesman.js';
 export { eulerianPath } from './algorithms/eulerianPath.js';
+export { FlowAdjacencyList, maxFlow } from './algorithms/maxFlow.js';
 export const enums = {
     THROTTLED_QUEUE_MODE,
     CIRCULAR_BUFFER_MODE,

@@ -2,7 +2,7 @@
  * Graph represented as an adjacency list.
  */
 export class AdjacencyList {
-	private _nodes: Map<number, Map<number, number>>;
+	protected _nodes: Map<number, Map<number, number>>;
 	private _directed: boolean;
 
 

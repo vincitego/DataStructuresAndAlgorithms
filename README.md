@@ -35,8 +35,4 @@ Graph Algorithms Implemented:
 * Tarjans Strongly Connected Components
 * Travelling Salesman
 * Eulerian Path
-
-
-Graph Algorithms To Be Implemented:
-* Ford Fulkerson Max Flow
-	* Dinic's Algorithm
+* Max Flow
